@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mathematix</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    <div class="navbar">
+        <span style="display: inline; float: left;" class="material-symbols-outlined">
+            calculate
+        </span>
+        <p style="display: inline" >Mathematix / Untitled-1</p>
+    </div>
+    
+    <div class="editor-container">
+        <div class="sidebar left">
+            <h3>Properties</h3>
+            <ul>
+                <li>This is a placeholder lol</li>
+                <li>This is a placeholder lol</li>
+                <li>This is a placeholder lol</li>
+                <li>This is a placeholder lol</li>
+            </ul>
+        </div>
+        <canvas id="gridCanvas" width="795" height="905" style="padding-right: 2px"></canvas>
+        <canvas id="graphCanvas" width="795" height="905"></canvas>
+        
+        <!--
+            FIREFOX
+            <canvas id="gridCanvas" width="820" height="820" style="padding-right: 2px"></canvas>
+            <canvas id="graphCanvas" width="820" height="820"></canvas>
+        -->
+        <!-- <canvas id="gridCanvas" width="795" height="905" style="padding-right: 2px"></canvas> -->
+    </div>
+    <script src="editor/actions.js"></script>
+    <script src="editor/draw.js"></script>
+    <script src="editor/main.js"></script>
+    <script src="editor/events.js"></script>
+
+    <script src="grapher/draw.js"></script>
+    <script src="grapher/main.js"></script>
+    <script src="grapher/events.js"></script>
+</body>
+</html>

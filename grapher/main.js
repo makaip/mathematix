@@ -1,0 +1,36 @@
+// Define rcanvas and context
+const rcanvas = document.getElementById('graphCanvas');
+const rctx = rcanvas.getContext('2d');
+
+// Set the rcanvas resolution to match its CSS size
+rcanvas.width = rcanvas.clientWidth;
+rcanvas.height = rcanvas.clientHeight;
+
+// Initial grid size and rcanvas dimensions
+let rgridSize = 20;
+const rcanvasWidth = rcanvas.width;
+const rcanvasHeight = rcanvas.height;
+
+// Offset values for panning
+let roffsetX = 0;
+let roffsetY = 0;
+
+const functionsToPlot = [];
+
+// Set the rcanvas rendering mode to "crisp edges" to make it look sharper
+rctx.imageSmoothingEnabled = false;
+
+
+function evaluateFunction(funcString, x) {
+    return eval(funcString);
+}
+
+// Push mathematical functions as strings to the functionsToPlot array
+functionsToPlot.push("(x ** 3) * 0.001");
+functionsToPlot.push("Math.sin(x * 0.0525) * 50");
+
+// Initial drawing of the grid
+drawGridRenderer();
+
+
+
