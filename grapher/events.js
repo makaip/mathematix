@@ -1,5 +1,6 @@
 // Function to handle mouse wheel events (zoom in/out)
 function handleMouseWheelRenderer(event) {
+    /* DO NOT DELETE
     const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1; // Zoom in or out based on scroll direction
 
     // Calculate the center of the canvas
@@ -20,8 +21,8 @@ function handleMouseWheelRenderer(event) {
     }
 
     drawGridRenderer();
+    */
 }
-
 
 // Function to handle middle mouse button drag (panning)
 function handleMiddleMouseDragRenderer(event) {
@@ -32,8 +33,6 @@ function handleMiddleMouseDragRenderer(event) {
         drawGridRenderer();
     }
 }
-
-
 
 // Add event listeners for wheel and mousemove events
 rcanvas.addEventListener('wheel', handleMouseWheelRenderer);

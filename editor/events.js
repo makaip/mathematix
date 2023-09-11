@@ -1,4 +1,7 @@
+
+
 function handleMouseWheel(event) {
+    /* DO NOT DELETE
     const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1; // Zoom in or out based on scroll direction
     gridSize *= zoomFactor;
 
@@ -10,6 +13,7 @@ function handleMouseWheel(event) {
     }
 
     drawGrid();
+    */
 }
 
 function handleMiddleMouseDrag(event) {
@@ -23,6 +27,10 @@ function handleMiddleMouseDrag(event) {
     }
 }
 
+canvas.addEventListener('wheel', handleMouseWheel);
+
+canvas.addEventListener('mousemove', handleMiddleMouseDrag);
+
 function showMenu(x, y) {
     isMenuVisible = true;
     menuX = x;
@@ -35,40 +43,43 @@ function hideMenu() {
     drawGrid();
 }
 
-canvas.addEventListener('wheel', handleMouseWheel);
-canvas.addEventListener('mousemove', handleMiddleMouseDrag);
-
 canvas.addEventListener('mousedown', (event) => {
-    startX = event.clientX - canvas.getBoundingClientRect().left;
-    startY = event.clientY - canvas.getBoundingClientRect().top;
+    if (event.button == 0) {
+        mouseDown = true;
+        startX = event.clientX - canvas.getBoundingClientRect().left;
+        startY = event.clientY - canvas.getBoundingClientRect().top;
 
-    // Check if the click is inside a node block
-    let clickedNodeBlock = null;
-    for (const nodeBlock of nodeBlocks) {
-        const x = nodeBlock.x;
-        const y = nodeBlock.y;
-        const blockWidth = 150; // Replace with the width of your node block
-        const blockHeight = 200; // Replace with the height of your node block
-        if (
-            startX >= x &&
-            startX <= x + blockWidth &&
-            startY >= y &&
-            startY <= y + blockHeight
-        ) {
-            clickedNodeBlock = nodeBlock; // Store the clicked node block
-            //break; // No need to check other node blocks
+        handleMenuItemClick(getMenuItemAtPosition(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top));
+
+        // Check if the click is inside a node block
+        let clickedNodeBlock = null;
+        selectedNodeBlock = null;
+        for (const nodeBlock of nodeBlocks) {
+            const x = nodeBlock.x;
+            const y = nodeBlock.y;
+            const blockWidth = 150; // Replace with the width of your node block
+            const blockHeight = 200; // Replace with the height of your node block
+            if (
+                startX >= x + offsetX &&
+                startX <= x + blockWidth + offsetX &&
+                startY >= y + offsetY &&
+                startY <= y + blockHeight + offsetY
+            ) {
+                clickedNodeBlock = nodeBlock; // Store the clicked node block
+            }
         }
-    }
 
-    if (clickedNodeBlock) {
-        // If a node block is clicked, select it for dragging
-        selectedNodeBlock = clickedNodeBlock;
-    }
-    if (clickedNodeBlock == null) {
-        isDragging = true;
-        endX = startX;
-        endY = startY;
-        hideMenu(); // Hide the menu when starting a drag
+        if (clickedNodeBlock) {
+            // If a node block is clicked, select it for dragging
+            selectedNodeBlock = clickedNodeBlock;
+        }
+        if (clickedNodeBlock == null) {
+            isDragging = true;
+            endX = startX;
+            endY = startY;
+            // Hide the menu when starting a drag
+        }
+        hideMenu();
     }
     drawGrid();
 });
@@ -77,7 +88,6 @@ canvas.addEventListener('mousedown', (event) => {
     endX = event.clientX - canvas.getBoundingClientRect().left;
     endY = event.clientY - canvas.getBoundingClientRect().top;
 */
-
 
 canvas.addEventListener('mousemove', (event) => {
     endX = event.clientX - canvas.getBoundingClientRect().left;
@@ -99,7 +109,7 @@ canvas.addEventListener('mousemove', (event) => {
         }
 
         drawGrid();
-    } else if (selectedNodeBlock && !isDragging) {
+    } else if (selectedNodeBlock && !isDragging && mouseDown == 1) {
         // Handle node block dragging
         // Calculate the movement of the cursor
         const deltaX = cursorX - startX;
@@ -124,7 +134,8 @@ canvas.addEventListener('mousemove', (event) => {
 });
 
 document.addEventListener('mouseup', (event) => {
-    selectedNodeBlock = null;
+    mouseDown = false;
+
     if (isDragging) {
         isDragging = false;
         drawGrid();
@@ -137,8 +148,6 @@ document.addEventListener('mouseup', (event) => {
     const endY = event.clientY - canvas.getBoundingClientRect().top;
 
     // Determine selected node blocks within the box
-    var selectedBlocks = [];
-    let boxSelectStartX, boxSelectStartY;
     for (const nodeBlock of nodeBlocks) {
         const x = nodeBlock.x;
         const y = nodeBlock.y;
@@ -155,7 +164,7 @@ document.addEventListener('mouseup', (event) => {
     }
 
     // Update the selected node blocks
-    selectedNodeBlock = null; // Clear previous selection
+    //selectedNodeBlock = null; // Clear previous selection
     if (selectedBlocks.length > 0) {
         // Select the nodes within the box
         selectedNodeBlock = selectedBlocks;
@@ -170,46 +179,72 @@ canvas.addEventListener('mouseout', () => {
     }
 });
 
-canvas.addEventListener('contextmenu', (event) => {
-    event.preventDefault(); // Prevent the default context menu
-    showMenu(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
-});
-
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         hideMenu(); // Hide the menu when pressing ESC
     }
     if (event.key === "A") {
-        executeFunction();
+        showMenu(endX, endY);
+    }
+    if (event.key === "F") {
+        newFunction();
+    }
+    if (event.key === "R") {
+        newInput();
+    }
+    if (event.key === "C") {
+        newOutput();
+    }
+    if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
+        console.log("Deleted Block");
+        nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
+        drawGrid();
     }
 });
 
 canvas.addEventListener('contextmenu', (event) => {
     event.preventDefault(); // Prevent the default context menu
     showMenu(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
-    let menuItemText = getMenuItemAtPosition(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
-    if (menuItemText) {
-        handleMenuItemClick(menuItemText);
-    }
 });
 
-function handleMenuItemClick(itemText) {
-    switch (itemText) {
-        case 'Function':
-            executeFunction(); // Call the executeFunction from actions.js
-            break;
-        case 'Input':
-            executeInput(); // Call the executeInput from actions.js
-            break;
-        case 'Output':
-            executeOutput(); // Call the executeOutput from actions.js
-            break;
-        // Add more cases for other menu items if needed
+function getMenuItemAtPosition(x, y) {
+    // Define the menu item dimensions and spacing
+    const menuItemWidth = 150; // Adjust as needed
+    const menuItemHeight = 30; // Adjust as needed
 
-        default:
-            break;
+    // Calculate the index of the clicked menu item based on the mouse position
+    const menuItemIndex = Math.floor((y - menuY) / menuItemHeight);
+
+    // Check if the mouse click is within the bounds of a menu item
+    if (
+        x >= menuX &&
+        x <= menuX + menuItemWidth &&
+        y >= menuY + menuItemIndex * menuItemHeight &&
+        y <= menuY + (menuItemIndex + 1) * menuItemHeight
+    ) {
+        // Return the text of the clicked menu item
+        return menuItems[menuItemIndex];
+    } else {
+        // If no menu item was clicked, return null
+        return null;
     }
+    
 }
 
-
-
+function handleMenuItemClick(itemText) {
+    if (isMenuVisible == true) {
+        switch (itemText) {
+            case 'Function':
+                newFunction();
+                break;
+            case 'Input':
+                newInput();
+                break;
+            case 'Output':
+                newOutput();
+                break;
+            default:
+                break;
+        }
+    }
+}

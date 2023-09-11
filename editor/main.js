@@ -30,7 +30,11 @@ let isDraggingNodeBlock = false; // Flag to track node block dragging
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
+const selectedBlocks = [];
+let boxSelectStartX, boxSelectStartY;
+
 // Set the canvas rendering mode to "crisp edges" to make it look sharper
 ctx.imageSmoothingEnabled = false;
 
 drawGrid();
+

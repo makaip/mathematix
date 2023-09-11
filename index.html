@@ -14,25 +14,39 @@
     </div>
     
     <div class="editor-container">
-        <div class="sidebar left">
+        <div id="sidebarleft" class="sidebar left" style="width: 250px;">
+            <button hidden class="icon-button" style="float: right; padding-left: 20px;"><span class="material-symbols-outlined" onclick="togglePanel()">
+                arrow_back_ios
+                </span></button>
             <h3>Properties</h3>
-            <ul>
-                <li>This is a placeholder lol</li>
-                <li>This is a placeholder lol</li>
-                <li>This is a placeholder lol</li>
-                <li>This is a placeholder lol</li>
-            </ul>
+            <h5>Function</h5>
+            
         </div>
-        <canvas id="gridCanvas" width="795" height="905" style="padding-right: 2px"></canvas>
-        <canvas id="graphCanvas" width="795" height="905"></canvas>
-        
+        <canvas id="gridCanvas" width="620" height="710" style="padding-right: 2px"></canvas>
+        <canvas id="graphCanvas" width="710" height="710"></canvas>
+
+        <button id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;" hidden><span class="material-symbols-outlined" onclick="togglePanel()">
+            arrow_forward_ios
+        </span></button>
+
         <!--
             FIREFOX
             <canvas id="gridCanvas" width="820" height="820" style="padding-right: 2px"></canvas>
             <canvas id="graphCanvas" width="820" height="820"></canvas>
+
+            PANEL
+            <canvas id="gridCanvas" width="844" height="905" style="padding-right: 2px"></canvas>
+            <canvas id="graphCanvas" width="844" height="905"></canvas>
+
+            <button id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;" hidden><span class="material-symbols-outlined" onclick="togglePanel()">
+                arrow_forward_ios
+            </span></button>
         -->
         <!-- <canvas id="gridCanvas" width="795" height="905" style="padding-right: 2px"></canvas> -->
     </div>
+    
+    <script src="script.js"></script>
+
     <script src="editor/actions.js"></script>
     <script src="editor/draw.js"></script>
     <script src="editor/main.js"></script>

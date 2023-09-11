@@ -7,6 +7,28 @@ body {
     background-color: #181818;
 }
 
+button {
+    color: white;
+    background-color: #3c3c3c;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    vertical-align: middle;
+
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.2s;
+}
+
+.icon-button {
+    
+    position: relative;
+    margin-top: 5px;
+}
+button:hover {
+    background-color: #00C49A;
+}
+
 .navbar {
     background-color: #3c3c3c;
     color: white;
@@ -16,21 +38,21 @@ body {
     border-bottom: solid 1px; */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     justify-content:space-between;
+    z-index: 2;
 }
 
 .editor-container {
     display: flex;
     height: calc(100vh - 60px); /* Adjust for navbar height */
+    z-index: 1;
 }
 
 .sidebar {
-    width: 250px;
     padding: 10px 40px;
     background-color: #2c2c2c;
     overflow-y: auto;
     color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    z-index: -1;
+    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); */
 }
 
 .left {

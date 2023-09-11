@@ -11,7 +11,7 @@ function drawGridRenderer() {
     rctx.lineWidth = 1;
 
     // Draw vertical grid lines
-    for (let x = -rgridSize; x < rcanvasWidth; x += rgridSize) {
+    for (let x = -rgridSize - 3; x < rcanvasWidth; x += rgridSize) {
         rctx.beginPath();
         rctx.moveTo(x - roffsetX % rgridSize, 0);
         rctx.lineTo(x - roffsetX % rgridSize, rcanvasHeight);
@@ -19,7 +19,7 @@ function drawGridRenderer() {
     }
 
     // Draw horizontal grid lines
-    for (let y = -rgridSize; y < rcanvasHeight; y += rgridSize) {
+    for (let y = -rgridSize + 10; y < rcanvasHeight; y += rgridSize) {
         rctx.beginPath();
         rctx.moveTo(0, y - roffsetY % rgridSize);
         rctx.lineTo(rcanvasWidth, y - roffsetY % rgridSize);
@@ -50,8 +50,8 @@ function drawGridRenderer() {
 
         // Plot the function points within the canvas bounds
         for (let x = 0; x < rcanvasWidth; x++) {
-            const realX = x - rcanvasWidth / 2 + roffsetX;
-            const realY = -evaluateFunction(funcString, realX) + rcanvasHeight / 2 - roffsetY;
+            const realX = (x - rcanvasWidth / 2 + roffsetX) * 0.025;
+            const realY = -evaluateFunction(funcString, realX) * 40 + (rcanvasHeight / 2 - roffsetY);
 
             if (x === 0) {
                 rctx.moveTo(x, realY);
