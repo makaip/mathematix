@@ -12,6 +12,7 @@ function newFunction() {
         type: 'Function', // Replace with the appropriate node type
         inputs: ['Value', 'Value'],
         outputs: ['Value'],
+        outputvalues: [""],
         operation: 'Add'
     };
 
@@ -37,6 +38,7 @@ function newInput() {
         type: 'Input', // Replace with the appropriate node type
         inputs: [],
         outputs: ['Value'],
+        outputvalues: ["0.000"],
         operation: null
     };
 
@@ -62,6 +64,7 @@ function newOutput() {
         type: 'Output', // Replace with the appropriate node type
         inputs: ['Value'],
         outputs: [],
+        outputvalues: [""],
         operation: null
     };
 

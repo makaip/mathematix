@@ -14,16 +14,18 @@
     </div>
     
     <div class="editor-container">
-        <div id="sidebarleft" class="sidebar left" style="width: 250px;">
-            <button hidden class="icon-button" style="float: right; padding-left: 20px;"><span class="material-symbols-outlined" onclick="togglePanel()">
+        <div id="sidebarleft" class="sidebar left" style="width: 250px; padding-right: 10px;">
+            <button class="icon-button" style="float: right; padding-left: 20px; margin: 0px;" onclick="togglePanel()"><span class="material-symbols-outlined">
                 arrow_back_ios
                 </span></button>
+            <br>
+            <br>
             <h3>Properties</h3>
             <h5>Function</h5>
             
         </div>
-        <canvas id="gridCanvas" width="620" height="710" style="padding-right: 2px"></canvas>
-        <canvas id="graphCanvas" width="710" height="710"></canvas>
+        <canvas id="gridCanvas" width="720" height="770" style="padding-right: 2px"></canvas>
+        <canvas id="graphCanvas" width="720" height="770"></canvas>
 
         <button id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;" hidden><span class="material-symbols-outlined" onclick="togglePanel()">
             arrow_forward_ios
@@ -44,7 +46,7 @@
         -->
         <!-- <canvas id="gridCanvas" width="795" height="905" style="padding-right: 2px"></canvas> -->
     </div>
-    
+
     <script src="script.js"></script>
 
     <script src="editor/actions.js"></script>

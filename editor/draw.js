@@ -31,6 +31,7 @@ function drawCircle(ctx, x, y, radius) {
     ctx.stroke(); // You can also use fill() if you want to fill the circle
 }
 
+
 function drawGrid() {
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, canvasWidth + 5, canvasHeight + 5);
@@ -90,7 +91,7 @@ function drawGrid() {
         ctx.fillStyle = '#9f9f9f';
 
         nodeBlock.inputs.forEach(function (item, index) {
-            drawCircle(ctx, x + 1, y + ( 25 * index ) + 55, 6);
+            drawCircle(ctx, x + 1, y + ( -25 * index ) + blockHeight - 30, 6);
             ctx.fill();
             ctx.stroke();
         })
@@ -99,7 +100,43 @@ function drawGrid() {
             drawCircle(ctx, x + 149, y + ( 25 * index ) + 55, 6);
             ctx.fill();
             ctx.stroke();
+
+            ctx.fillStyle = 'white'; // Text color
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item, x + 135, y + ( 25 * index ) + 55);
         })
+        //
+        if (nodeBlock.type === "Input") {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#3f3f3f';
+            ctx.fillStyle = '#555555';
+            drawRoundedRect(ctx, x + 15, y + 75, blockWidth - 30, blockHeight - 170, 5); // Adjust cornerRadius as needed
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = 'white'; // Text color
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(nodeBlock.outputvalues, x + 75, y + 90);
+        }
+
+        if (nodeBlock.type === "Function") {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#3d3d3d';
+            ctx.fillStyle = '#282828';
+            drawRoundedRect(ctx, x + 15, y + 75, blockWidth - 30, blockHeight - 170, 5); // Adjust cornerRadius as needed
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = 'white'; // Text color
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(nodeBlock.operation, x + 27, y + 90);
+        }
     }
 
     ///SELECTION
@@ -134,4 +171,5 @@ function drawGrid() {
             ctx.fillText(item, menuX + 10, menuY + 30 * (index + 1));
         });
     }
+    
 }

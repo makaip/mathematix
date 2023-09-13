@@ -248,3 +248,4 @@ function handleMenuItemClick(itemText) {
         }
     }
 }
+
