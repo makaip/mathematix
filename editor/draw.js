@@ -31,7 +31,6 @@ function drawCircle(ctx, x, y, radius) {
     ctx.stroke(); // You can also use fill() if you want to fill the circle
 }
 
-
 function drawGrid() {
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, canvasWidth + 5, canvasHeight + 5);

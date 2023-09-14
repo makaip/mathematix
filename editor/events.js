@@ -28,7 +28,6 @@ function handleMiddleMouseDrag(event) {
 }
 
 canvas.addEventListener('wheel', handleMouseWheel);
-
 canvas.addEventListener('mousemove', handleMiddleMouseDrag);
 
 function showMenu(x, y) {
