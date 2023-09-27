@@ -19,6 +19,11 @@ let isMenuVisible = false; // Flag to track if the menu is visible
 let menuX = 0;
 let menuY = 0;
 
+let nodeSelected = null;
+let isDraggingLine = false; // Flag to track if the user is dragging a line
+let lineStartX, lineStartY; // Coordinates of the line starting point
+let lineEndX, lineEndY; // Coordinates of the line ending point
+
 const menuItems = ['Function', 'Input', 'Output']; // Replace with your menu items
 const functionMenuItems = [
     [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent"]],

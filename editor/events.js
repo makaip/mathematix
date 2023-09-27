@@ -1,3 +1,17 @@
+function isOutputNoduleClicked(nodeBlock, x, y) {
+    let noduleClicked = null;
+    
+    for (let index = 0; index < nodeBlock.outputs.length; index++) {
+        if (x >= nodeBlock.x + 145 + offsetX &&
+            x <= nodeBlock.x + 155 + offsetX &&
+            y >= nodeBlock.y + (25 * index) + 50 + offsetY &&
+            y <= nodeBlock.y + (25 * index) + 65 + offsetY) {
+                noduleClicked = index;
+                break;
+            }
+    }
+    return noduleClicked;
+}
 
 
 function handleMouseWheel(event) {
@@ -71,12 +85,22 @@ canvas.addEventListener('mousedown', (event) => {
         if (clickedNodeBlock) {
             // If a node block is clicked, select it for dragging
             selectedNodeBlock = clickedNodeBlock;
+            const nodeSelected = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
+            console.log(nodeSelected);
         }
         if (clickedNodeBlock == null) {
             isDragging = true;
             endX = startX;
             endY = startY;
             // Hide the menu when starting a drag
+        }
+
+        if (nodeSelected !== null) {
+            // Start drawing a line from the selected output nodule
+            console.log("Output Nodule Clicked")
+            isDraggingLine = true;
+            lineStartX = selectedNodeBlock.x + 149 + offsetX; // X coordinate of the output nodule
+            lineStartY = startY;
         }
         hideMenu();
     }
@@ -94,7 +118,10 @@ canvas.addEventListener('mousemove', (event) => {
     const cursorX = event.clientX - canvas.getBoundingClientRect().left;
     const cursorY = event.clientY - canvas.getBoundingClientRect().top;
 
-    if (isDragging) {
+    if (isDraggingLine) {
+        
+        drawGrid();
+    } else if (isDragging) {
         // Calculate the movement of the cursor
         const deltaX = cursorX - startX;
         const deltaY = cursorY - startY;
@@ -124,10 +151,8 @@ canvas.addEventListener('mousemove', (event) => {
             selectedNodeBlock.x += deltaX;
             selectedNodeBlock.y += deltaY;
         }
-
         startX = cursorX;
         startY = cursorY;
-        
         drawGrid();
     }
 });

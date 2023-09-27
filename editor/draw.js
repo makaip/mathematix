@@ -42,10 +42,6 @@ function drawGrid() {
     // Set dot color to #282828
     ctx.fillStyle = '#282828'; // Darker gray
 
-    // Calculate the number of dots to draw based on the canvas size and gridSize
-    const numHorizontalDots = Math.ceil(canvasWidth / gridSize);
-    const numVerticalDots = Math.ceil(canvasHeight / gridSize);
-
     // Draw dots at grid intersections
     for (let y = offsetY % gridSize; y < canvasHeight; y += gridSize) {
         for (let x = offsetX % gridSize; x < canvasWidth; x += gridSize) {
@@ -53,6 +49,16 @@ function drawGrid() {
             ctx.arc(x, y, 2, 0, Math.PI * 2);
             ctx.fill();
         }
+    }
+
+    if (isDraggingLine) {
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        
+        ctx.beginPath();
+        ctx.moveTo(lineStartX, lineStartY);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
     }
 
     //NODEBLOCKS
@@ -105,6 +111,8 @@ function drawGrid() {
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
             ctx.fillText(item, x + 135, y + ( 25 * index ) + 55);
+
+            
         })
         //
         if (nodeBlock.type === "Input") {
@@ -153,6 +161,9 @@ function drawGrid() {
         ctx.stroke();
     }
 
+
+    
+
     // Draw the menu with rounded corners
     if (isMenuVisible) {
         ctx.fillStyle = '#181818'; // Menu background color
@@ -170,5 +181,4 @@ function drawGrid() {
             ctx.fillText(item, menuX + 10, menuY + 30 * (index + 1));
         });
     }
-    
 }
