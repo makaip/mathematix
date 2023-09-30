@@ -1,18 +1,37 @@
 function isOutputNoduleClicked(nodeBlock, x, y) {
     let noduleClicked = null;
     
-    for (let index = 0; index < nodeBlock.outputs.length; index++) {
-        if (x >= nodeBlock.x + 145 + offsetX &&
-            x <= nodeBlock.x + 155 + offsetX &&
-            y >= nodeBlock.y + (25 * index) + 50 + offsetY &&
-            y <= nodeBlock.y + (25 * index) + 65 + offsetY) {
-                noduleClicked = index;
-                break;
-            }
+    if (nodeBlock !== null && x !== null && y !== null) {
+        for (let index = 0; index < nodeBlock.outputs.length; index++) {
+            if (x >= nodeBlock.x + 145 + offsetX &&
+                x <= nodeBlock.x + 155 + offsetX &&
+                y >= nodeBlock.y + (25 * index) + 50 + offsetY &&
+                y <= nodeBlock.y + (25 * index) + 65 + offsetY) {
+                    noduleClicked = index;
+                    break;
+                }
+        }
+        return noduleClicked;
     }
-    return noduleClicked;
 }
 
+/*
+function isInputNoduleOver(nodeBlock, x, y) {
+    let noduleReleased = null;
+    if (nodeBlock !== null && x !== null && y !== null) {
+        for (let index = 0; index < nodeBlock.outputs.length; index++) {
+            if (x >= nodeBlock.x + offsetX - 5 &&
+                x <= nodeBlock.x + offsetX + 5 &&
+                y >= nodeBlock.y + ( -25 * index ) + 200 - 25 + offsetY &&
+                y <= nodeBlock.y + ( -25 * index ) + 200 - 35 + offsetY) {
+                    noduleReleased = index;
+                    break;
+                }
+        }
+        return noduleReleased;
+    }
+}
+*/
 
 function handleMouseWheel(event) {
     /* DO NOT DELETE
@@ -74,7 +93,7 @@ canvas.addEventListener('mousedown', (event) => {
             const blockHeight = 200; // Replace with the height of your node block
             if (
                 startX >= x + offsetX &&
-                startX <= x + blockWidth + offsetX &&
+                startX <= x + blockWidth + offsetX + 5 &&
                 startY >= y + offsetY &&
                 startY <= y + blockHeight + offsetY
             ) {
@@ -85,8 +104,6 @@ canvas.addEventListener('mousedown', (event) => {
         if (clickedNodeBlock) {
             // If a node block is clicked, select it for dragging
             selectedNodeBlock = clickedNodeBlock;
-            const nodeSelected = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
-            console.log(nodeSelected);
         }
         if (clickedNodeBlock == null) {
             isDragging = true;
@@ -95,12 +112,13 @@ canvas.addEventListener('mousedown', (event) => {
             // Hide the menu when starting a drag
         }
 
-        if (nodeSelected !== null) {
+        const nodeSelected = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
+        if (Number.isInteger(nodeSelected)) {
             // Start drawing a line from the selected output nodule
-            console.log("Output Nodule Clicked")
+            console.log("Output Nodule Clicked " + nodeSelected)
             isDraggingLine = true;
             lineStartX = selectedNodeBlock.x + 149 + offsetX; // X coordinate of the output nodule
-            lineStartY = startY;
+            lineStartY = selectedNodeBlock.y + offsetY + 55 + (25 * nodeSelected);
         }
         hideMenu();
     }
@@ -119,7 +137,8 @@ canvas.addEventListener('mousemove', (event) => {
     const cursorY = event.clientY - canvas.getBoundingClientRect().top;
 
     if (isDraggingLine) {
-        
+        lineEndX = endX;
+        lineEndY = endY;
         drawGrid();
     } else if (isDragging) {
         // Calculate the movement of the cursor
@@ -160,6 +179,11 @@ canvas.addEventListener('mousemove', (event) => {
 document.addEventListener('mouseup', (event) => {
     mouseDown = false;
 
+    if (isDraggingLine) {
+        isDraggingLine = false;
+        drawGrid();
+    }
+
     if (isDragging) {
         isDragging = false;
         drawGrid();
@@ -186,6 +210,8 @@ document.addEventListener('mouseup', (event) => {
             selectedBlocks.push(nodeBlock);
         }
     }
+    // const nodeOver = isInputNoduleOver(selectedNodeBlock, endX, endY);
+    // console.log(nodeOver);
 
     // Update the selected node blocks
     //selectedNodeBlock = null; // Clear previous selection

@@ -161,9 +161,6 @@ function drawGrid() {
         ctx.stroke();
     }
 
-
-    
-
     // Draw the menu with rounded corners
     if (isMenuVisible) {
         ctx.fillStyle = '#181818'; // Menu background color
