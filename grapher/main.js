@@ -31,6 +31,7 @@ function evaluateFunction(funcString, x) {
 //functionsToPlot.push("x - 1")
 functionsToPlot.push("Math.sin(x)")
 functionsToPlot.push("(x ** 4) - 2 * (x ** 2) - 5")
+functionsToPlot.push("x ** 2")
 
 // Initial drawing of the grid
 drawGridRenderer();

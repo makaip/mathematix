@@ -33,7 +33,7 @@ const functionMenuItems = [
 
     //["Calculus", ["Limit", "Integral", "Derivative", "Gradient", "Summation", "Product"]],
 
-    [["Boolean Logic"], ["And", "Or", "Exclusive Or", "Logical Implies", "Negotiation", "Less Than", "Greater Than", "Equal"]],
+    // [["Boolean Logic"], ["And", "Or", "Exclusive Or", "Logical Implies", "Negotiation", "Less Than", "Greater Than", "Equal"]],
 
     //["Set", ["Union", "Intersection", "Set Difference", "Subset", "Superset", "Proper Superset", "Element Of"]],
 
