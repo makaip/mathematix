@@ -11,7 +11,7 @@ function drawGridRenderer() {
     rctx.lineWidth = 1;
 
     // Draw vertical grid lines
-    for (let x = -rgridSize - 3; x < rcanvasWidth; x += rgridSize) {
+    for (let x = -rgridSize + 2; x < rcanvasWidth; x += rgridSize) {
         rctx.beginPath();
         rctx.moveTo(x - roffsetX % rgridSize, 0);
         rctx.lineTo(x - roffsetX % rgridSize, rcanvasHeight);
@@ -27,7 +27,7 @@ function drawGridRenderer() {
     }
 
     // Draw X-axis
-    rctx.strokeStyle = '#fff'; // Red
+    rctx.strokeStyle = '#fff';
     rctx.lineWidth = 2;
     rctx.beginPath();
     rctx.moveTo(0, rcanvasHeight / 2 - roffsetY);
@@ -35,14 +35,14 @@ function drawGridRenderer() {
     rctx.stroke();
 
     // Draw Y-axis
-    rctx.strokeStyle = '#fff'; // Green
+    rctx.strokeStyle = '#fff';
     rctx.lineWidth = 2;
     rctx.beginPath();
     rctx.moveTo(rcanvasWidth / 2 - roffsetX, 0);
     rctx.lineTo(rcanvasWidth / 2 - roffsetX, rcanvasHeight);
     rctx.stroke();
 
-    rctx.strokeStyle = '#00C49A'; // Purple color for function plots
+    rctx.strokeStyle = '#00C49A';
     rctx.lineWidth = 2.25;
 
     for (const funcString of functionsToPlot) {

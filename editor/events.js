@@ -15,23 +15,27 @@ function isOutputNoduleClicked(nodeBlock, x, y) {
     }
 }
 
-/*
-function isInputNoduleOver(nodeBlock, x, y) {
-    let noduleReleased = null;
+function isMouseOverNodule(nodeBlock, x, y) {
     if (nodeBlock !== null && x !== null && y !== null) {
         for (let index = 0; index < nodeBlock.outputs.length; index++) {
-            if (x >= nodeBlock.x + offsetX - 5 &&
-                x <= nodeBlock.x + offsetX + 5 &&
-                y >= nodeBlock.y + ( -25 * index ) + 200 - 25 + offsetY &&
-                y <= nodeBlock.y + ( -25 * index ) + 200 - 35 + offsetY) {
-                    noduleReleased = index;
-                    break;
-                }
+            const noduleX = nodeBlock.x + offsetX + 1; // X coordinate of the nodule
+            const noduleY = nodeBlock.y + ( -25 * index ) + 200 - 30 + offsetY; // Y coordinate of the nodule
+            const noduleWidth = 10; // Adjust as needed
+            const noduleHeight = 10; // Adjust as needed
+
+            if (
+                x >= noduleX &&
+                x <= noduleX + noduleWidth &&
+                y >= noduleY &&
+                y <= noduleY + noduleHeight
+            ) {
+                return index; // Mouse is over this nodule
+            }
         }
-        return noduleReleased;
     }
+    return null; // Mouse is not over any nodule
 }
-*/
+
 
 function handleMouseWheel(event) {
     /* DO NOT DELETE
@@ -50,7 +54,7 @@ function handleMouseWheel(event) {
 }
 
 function handleMiddleMouseDrag(event) {
-    if (event.buttons === 4) {
+    if (event.buttons === 4 | (event.buttons === 1 && event.shiftKey)) {
         //all-scroll
         document.getElementsByTagName("body")[0].style.cursor = "all-scroll";
         // Middle mouse button (button code 4)
@@ -105,7 +109,7 @@ canvas.addEventListener('mousedown', (event) => {
             // If a node block is clicked, select it for dragging
             selectedNodeBlock = clickedNodeBlock;
         }
-        if (clickedNodeBlock == null) {
+        if (clickedNodeBlock == null && !event.shiftKey) {
             isDragging = true;
             endX = startX;
             endY = startY;
@@ -154,7 +158,7 @@ canvas.addEventListener('mousemove', (event) => {
         }
 
         drawGrid();
-    } else if (selectedNodeBlock && !isDragging && mouseDown == 1) {
+    } else if (selectedNodeBlock && !isDragging && mouseDown == 1 && !event.shiftKey) {
         // Handle node block dragging
         // Calculate the movement of the cursor
         const deltaX = cursorX - startX;
@@ -176,9 +180,10 @@ canvas.addEventListener('mousemove', (event) => {
     }
 });
 
+
 document.addEventListener('mouseup', (event) => {
     mouseDown = false;
-
+    document.getElementsByTagName("body")[0].style.cursor = "auto";
     if (isDraggingLine) {
         isDraggingLine = false;
         drawGrid();
@@ -187,9 +192,6 @@ document.addEventListener('mouseup', (event) => {
     if (isDragging) {
         isDragging = false;
         drawGrid();
-    }
-    if (event.button == "1") {
-        document.getElementsByTagName("body")[0].style.cursor = "auto";
     }
 
     const endX = event.clientX - canvas.getBoundingClientRect().left;

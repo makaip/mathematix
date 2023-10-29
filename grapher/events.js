@@ -26,7 +26,7 @@ function handleMouseWheelRenderer(event) {
 
 // Function to handle middle mouse button drag (panning)
 function handleMiddleMouseDragRenderer(event) {
-    if (event.buttons === 4) {
+    if (event.buttons === 4 | (event.buttons === 1 && event.shiftKey)) {
         // Middle mouse button (button code 4)
         roffsetX -= event.movementX;
         roffsetY -= event.movementY;
