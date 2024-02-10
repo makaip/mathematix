@@ -38,19 +38,20 @@ function isMouseOverNodule(nodeBlock, x, y) {
 
 
 function handleMouseWheel(event) {
-    /* DO NOT DELETE
+
     const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1; // Zoom in or out based on scroll direction
     gridSize *= zoomFactor;
+    scale = gridSize / 20;
 
     // Limit the minimum and maximum grid size
-    if (gridSize < 5) {
-        gridSize = 5; // Minimum grid size
+    if (gridSize < 10) {
+        gridSize = 10; // Minimum grid size
     } else if (gridSize > 100) {
         gridSize = 100; // Maximum grid size
     }
 
     drawGrid();
-    */
+
 }
 
 function handleMiddleMouseDrag(event) {

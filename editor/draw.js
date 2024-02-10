@@ -66,9 +66,9 @@ function drawGrid() {
     for (const nodeBlock of nodeBlocks) {
         const x = nodeBlock.x + offsetX;
         const y = nodeBlock.y + offsetY;
-        const blockWidth = 150; // Replace with the width of your node block
-        const blockHeight = 200; // Replace with the height of your node block
-        
+        let blockWidth = 150; // Replace with the width of your node block
+        let blockHeight = 200; // Replace with the height of your node block
+        console.log(blockWidth, blockHeight);
         // Draw a rounded rectangle representing the node block
         ctx.fillStyle = '#343434'; // Replace with the color you want for node blocks
         if (nodeBlock === selectedNodeBlock) {
@@ -111,15 +111,13 @@ function drawGrid() {
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
             ctx.fillText(item, x + 135, y + ( 25 * index ) + 55);
-
-            
         })
-        //
-        if (nodeBlock.type === "Input") {
+
+        if (nodeBlock.type === "Input" | nodeBlock.type === "Variable") {
             ctx.lineWidth = 1;
             ctx.strokeStyle = '#3f3f3f';
             ctx.fillStyle = '#555555';
-            drawRoundedRect(ctx, x + 15, y + 75, blockWidth - 30, blockHeight - 170, 5); // Adjust cornerRadius as needed
+            drawRoundedRect(ctx, x + 15, y + 155, blockWidth - 30, blockHeight - 170, 5); // Adjust cornerRadius as needed
             ctx.fill();
             ctx.stroke();
 
@@ -127,7 +125,7 @@ function drawGrid() {
             ctx.font = '14px Poppins';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(nodeBlock.outputvalues, x + 75, y + 90);
+            ctx.fillText(nodeBlock.outputs[0].value, x + 75, y + 170);
         }
 
         if (nodeBlock.type === "Function") {

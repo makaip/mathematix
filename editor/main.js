@@ -6,6 +6,8 @@ canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
 let gridSize = 20; // Initial size of each grid cell
+let zoomFactor = 1;
+let scale = 1;
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
 
@@ -23,7 +25,7 @@ let nodeSelected, nodeOver = null;
 let isDraggingLine = false; // Flag to track if the user is dragging a line
 let lineStartX, lineStartY, lineEndX, lineEndY;
 
-const menuItems = ['Function', 'Input', 'Output']; // Replace with your menu items
+const menuItems = ['Function', 'Input', 'Output', 'Variable']; // Replace with your menu items
 const functionMenuItems = [
     [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent"]],
 
@@ -54,6 +56,8 @@ const nodeBlocks = []; // Store information about node blocks
 let selectedNodeBlock = null; // Variable to keep track of the selected node block
 let isBoxSelecting = false; // Flag to track box selection
 let isDraggingNodeBlock = false; // Flag to track node block dragging
+
+
 
 // Set the canvas resolution to match its CSS size
 canvas.width = canvas.clientWidth;

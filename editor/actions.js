@@ -10,11 +10,15 @@ function newFunction() {
         x: cursorX - offsetX,
         y: cursorY - offsetY,
         type: 'Function', // Replace with the appropriate node type
-        inputs: ['Value', 'Value'],
-        outputs: ['Value'],
-        outputvalues: [""],
-        operation: 'Add'
+        inputs: [],
+        outputs: [],
+        operation: null
     };
+
+    newNodeBlock.inputs.push(newNodule("input", null, "borrower", null));
+    newNodeBlock.inputs.push(newNodule("input", null, "borrower", null));
+    newNodeBlock.outputs.push(newNodule("output", newNodeBlock.operation, "lender", null));
+    newNodeBlock.operation = newNodeBlock.inputs[0].value + newNodeBlock.inputs[1].value;
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -37,10 +41,11 @@ function newInput() {
         y: cursorY - offsetY,
         type: 'Input', // Replace with the appropriate node type
         inputs: [],
-        outputs: ['Value'],
-        outputvalues: ["0.000"],
+        outputs: [],
         operation: null
     };
+
+    newNodeBlock.outputs.push(newNodule("output", 5, "lender", null));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -64,9 +69,10 @@ function newOutput() {
         type: 'Output', // Replace with the appropriate node type
         inputs: ['Value'],
         outputs: [],
-        outputvalues: [""],
         operation: null
     };
+
+    newNodeBlock.inputs.push(newNodule("input", null, "borrower", null));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -89,10 +95,11 @@ function newVaraible() {
         y: cursorY - offsetY,
         type: 'Variable', // Replace with the appropriate node type
         inputs: [],
-        outputs: ['Value'],
-        outputvalues: ["x"],
+        outputs: [],
         operation: null
     };
+
+    newNodeBlock.outputs.push(newNodule("output", "x", "lender", null));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -103,10 +110,12 @@ function newVaraible() {
     drawGrid();
 }
 
-function newInputNodule() {
-
-}
-
-function newOutputNodule() {
-    
+function newNodule(type, value, relation, connection) {
+    const newNodule = {
+        type: type, //input, output
+        value: value, //[x, y, z, ...] | null
+        relation: relation, //borrower, lender
+        connection: connection //null
+    }
+    return newNodule;
 }
