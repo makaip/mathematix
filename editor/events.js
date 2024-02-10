@@ -247,6 +247,9 @@ window.addEventListener('keydown', (event) => {
     if (event.key === "C") {
         newOutput();
     }
+    if (event.key === "V") {
+        newVaraible();
+    }
     if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
         console.log("Deleted Block");
         nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
@@ -294,6 +297,9 @@ function handleMenuItemClick(itemText) {
                 break;
             case 'Output':
                 newOutput();
+                break;
+            case 'Variable':
+                newVaraible();
                 break;
             default:
                 break;
