@@ -126,7 +126,7 @@ canvas.addEventListener('mousedown', (event) => {
         }
 
         if (clickedNodeBlock) {
-            let operations = ["Add", "Subtract", "Multiply", "Divide", "Exponent", "RESET"];
+            let operations = ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Radical", "RESET"];
             //x + 15, y + 75, blockWidth - 30, blockHeight - 170
             if (clickedNodeBlock.type == "Function") {
                 if (startX >= clickedNodeBlock.x + 15 + offsetX &&
@@ -138,13 +138,9 @@ canvas.addEventListener('mousedown', (event) => {
                         } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
                             clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
                         }
-
-                        
                 }
             }
         }
-
-        
 
         resultOfOutputNoduleClicked = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
 
@@ -286,19 +282,22 @@ document.addEventListener('mouseup', (event) => {
             console.log(nodeBlock.operationtype);
             switch (nodeBlock.operationtype) {
                 case 'Add':
-                    functionPrediction = nodeBlock.inputs[0].value + " + " + nodeBlock.inputs[1].value;
+                    functionPrediction = (nodeBlock.inputs[0].value + " + " + nodeBlock.inputs[1].value);
                     break;
                 case 'Subtract':
-                    functionPrediction = nodeBlock.inputs[0].value + " - " + nodeBlock.inputs[1].value;
+                    functionPrediction = (nodeBlock.inputs[0].value + " - " + nodeBlock.inputs[1].value);
                     break;
                 case 'Multiply':
-                    functionPrediction = nodeBlock.inputs[0].value + " * " + nodeBlock.inputs[1].value;
+                    functionPrediction = (nodeBlock.inputs[0].value + " * " + nodeBlock.inputs[1].value);
                     break;
                 case 'Divide':
-                    functionPrediction = nodeBlock.inputs[0].value + " / " + nodeBlock.inputs[1].value;
+                    functionPrediction = (nodeBlock.inputs[0].value + " / " + nodeBlock.inputs[1].value);
                     break;
                 case 'Exponent':
-                    functionPrediction = nodeBlock.inputs[0].value + " ** " + nodeBlock.inputs[1].value;
+                    functionPrediction = (nodeBlock.inputs[0].value + " ** " + nodeBlock.inputs[1].value);
+                    break;
+                case 'Radical':
+                    functionPrediction = ( nodeBlock.inputs[0].value + " ** " + ( 1 / nodeBlock.inputs[1].value ));
                     break;
             }
             
