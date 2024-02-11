@@ -25,7 +25,7 @@ let nodeSelected, nodeOver = null;
 let isDraggingLine = false; // Flag to track if the user is dragging a line
 let lineStartX, lineStartY, lineEndX, lineEndY;
 
-const menuItems = ['Function', 'Input', 'Output', 'Variable']; // Replace with your menu items
+const menuItems = ['Variable', 'Arithmetic', 'Trigonometry', 'Input', 'Output']; // Replace with your menu items
 const functionMenuItems = [
     [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Radical"]],
     [["Algebra"], [, "Logarithm", "Natural Logarithm", "Absolute Value", "Factorial"]], 

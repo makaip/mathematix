@@ -10,6 +10,7 @@ function newFunction() {
         x: cursorX - offsetX,
         y: cursorY - offsetY,
         type: 'Function', // Replace with the appropriate node type
+        category: 'Arithmetic',
         inputs: [],
         outputs: [],
         operationtype: "Add",
@@ -18,6 +19,36 @@ function newFunction() {
 
     newNodeBlock.inputs.push(newNodule("input", "Input 1", null, "borrower", null, newNodeBlock));
     newNodeBlock.inputs.push(newNodule("input", "Input 2", null, "borrower", null, newNodeBlock));
+    
+    newNodeBlock.outputs.push(newNodule("output", "Output", newNodeBlock.operation, "lender", null, newNodeBlock));
+
+    // Add the new node block to the array
+    nodeBlocks.push(newNodeBlock);
+    console.log(newNodeBlock);
+
+    hideMenu();
+    // Redraw the grid to include the new node block
+    drawGrid();
+}
+
+function newTrigFunction() {
+    console.log("Function menu item clicked");
+    const cursorX = endX; // Get the X coordinate of the cursor
+    const cursorY = endY; // Get the Y coordinate of the cursor
+
+    // Create a new node block with the cursor's position and type (you can define types as needed)
+    const newNodeBlock = {
+        x: cursorX - offsetX,
+        y: cursorY - offsetY,
+        type: 'Function', // Replace with the appropriate node type
+        category: 'Trigonometry',
+        inputs: [],
+        outputs: [],
+        operationtype: "Sine",
+        operation: null
+    };
+
+    newNodeBlock.inputs.push(newNodule("input", "Input 1", null, "borrower", null, newNodeBlock));
     
     newNodeBlock.outputs.push(newNodule("output", "Output", newNodeBlock.operation, "lender", null, newNodeBlock));
 
@@ -41,9 +72,9 @@ function newInput() {
         x: cursorX - offsetX,
         y: cursorY - offsetY,
         type: 'Input', // Replace with the appropriate node type
+        category: 'Input',
         inputs: [],
         outputs: [],
-        operation: null
     };
 
     newNodeBlock.outputs.push(newNodule("output", "Value", "5", "lender", null, newNodeBlock));
@@ -68,9 +99,9 @@ function newOutput() {
         x: cursorX - offsetX,
         y: cursorY - offsetY,
         type: 'Output', // Replace with the appropriate node type
+        category: 'Output',
         inputs: [],
         outputs: [],
-        operation: null
     };
 
     newNodeBlock.inputs.push(newNodule("input", "Graph", null, "borrower", null, newNodeBlock));
@@ -95,9 +126,9 @@ function newVaraible() {
         x: cursorX - offsetX,
         y: cursorY - offsetY,
         type: 'Variable', // Replace with the appropriate node type
+        category: 'Variable',
         inputs: [],
         outputs: [],
-        operation: null
     };
 
     newNodeBlock.outputs.push(newNodule("output", "Value", "x", "lender", null, newNodeBlock));

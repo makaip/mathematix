@@ -126,17 +126,28 @@ canvas.addEventListener('mousedown', (event) => {
         }
 
         if (clickedNodeBlock) {
-            let operations = ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Radical", "RESET"];
+            
             //x + 15, y + 75, blockWidth - 30, blockHeight - 170
             if (clickedNodeBlock.type == "Function") {
                 if (startX >= clickedNodeBlock.x + 15 + offsetX &&
                     startX <= clickedNodeBlock.x + 150 - 15 + offsetX &&
                     startY >= clickedNodeBlock.y + 75 + offsetY &&
                     startY <= clickedNodeBlock.y + 200 - 100 + offsetY) {
-                        if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
-                            clickedNodeBlock.operationtype = operations[0]
-                        } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
-                            clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
+                        if (clickedNodeBlock.category == "Arithmetic") {
+                            let operations = ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Radical", "RESET"];
+                            if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
+                                clickedNodeBlock.operationtype = operations[0]
+                            } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
+                                clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
+                            }
+                        }
+                        if (clickedNodeBlock.category == "Trigonometry") {
+                            let operations = ["Sine", "Cosine", "Tangent", "Cosecant", "Secant", "Cotangent", "RESET"];
+                            if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
+                                clickedNodeBlock.operationtype = operations[0]
+                            } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
+                                clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
+                            }
                         }
                 }
             }
@@ -249,7 +260,6 @@ canvas.addEventListener('mousemove', (event) => {
     }
 });
 
-
 document.addEventListener('mouseup', (event) => {
     mouseDown = false;
     
@@ -299,6 +309,40 @@ document.addEventListener('mouseup', (event) => {
                 case 'Radical':
                     functionPrediction = ( nodeBlock.inputs[0].value + " ** " + ( 1 / nodeBlock.inputs[1].value ));
                     break;
+
+                case 'Logarithm':
+                    functionPrediction = ("Math.log(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Natural Logarithm':
+                    functionPrediction = ("Math.log(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Absolute Value':
+                    functionPrediction = ("Math.abs(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Factorial':
+                    functionPrediction = ("Math.factorial(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                
+                case 'Sine':
+                    functionPrediction = ("Math.sin(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Cosine':
+                    functionPrediction = ("Math.cos(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Tangent':
+                    functionPrediction = ("Math.tan(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Cosecant':
+                    functionPrediction = ("1 / Math.sin(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Secant':
+                    functionPrediction = ("1 / Math.cos(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Cotangent':
+                    functionPrediction = ("1 / Math.tan(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                
+                
             }
             
             nodeBlock.operation = functionPrediction;
@@ -417,6 +461,12 @@ function handleMenuItemClick(itemText) {
                 break;
             case 'Variable':
                 newVaraible();
+                break;
+            case 'Arithmetic':
+                newFunction();
+                break;
+            case 'Trigonometry':
+                newTrigFunction();
                 break;
             default:
                 break;

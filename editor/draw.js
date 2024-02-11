@@ -109,7 +109,7 @@ function drawGrid() {
         ctx.font = '16px Poppins';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
-        ctx.fillText(nodeBlock.type, x + 10, y + 25);
+        ctx.fillText(nodeBlock.category, x + 10, y + 25);
 
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#141414';
