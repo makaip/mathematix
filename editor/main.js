@@ -57,7 +57,8 @@ let selectedNodeBlock = null; // Variable to keep track of the selected node blo
 let isBoxSelecting = false; // Flag to track box selection
 let isDraggingNodeBlock = false; // Flag to track node block dragging
 
-
+let resultOfOutputNoduleClicked = [];
+let resultOfMouseOverNodule = [];
 
 // Set the canvas resolution to match its CSS size
 canvas.width = canvas.clientWidth;

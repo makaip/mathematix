@@ -1,5 +1,6 @@
 function isOutputNoduleClicked(nodeBlock, x, y) {
     let noduleClicked = null;
+    let noduleClickedIndex = null;
     
     if (nodeBlock !== null && x !== null && y !== null) {
         for (let index = 0; index < nodeBlock.outputs.length; index++) {
@@ -7,38 +8,45 @@ function isOutputNoduleClicked(nodeBlock, x, y) {
                 x <= nodeBlock.x + 155 + offsetX &&
                 y >= nodeBlock.y + (25 * index) + 50 + offsetY &&
                 y <= nodeBlock.y + (25 * index) + 65 + offsetY) {
-                    noduleClicked = index;
+                    noduleClicked = nodeBlock.outputs[index];
+                    noduleClickedIndex = index;
                     break;
                 }
         }
-        return noduleClicked;
+        return [noduleClicked, noduleClickedIndex];
     }
 }
 
 function isMouseOverNodule(nodeBlock, x, y) {
+    let noduleOver = null;
+    let noduleOverIndex = null;
+
     if (nodeBlock !== null && x !== null && y !== null) {
-        for (let index = 0; index < nodeBlock.outputs.length; index++) {
-            const noduleX = nodeBlock.x + offsetX + 1; // X coordinate of the nodule
-            const noduleY = nodeBlock.y + ( -25 * index ) + 200 - 30 + offsetY; // Y coordinate of the nodule
+        for (let index = 0; index < nodeBlock.inputs.length; index++) {
+            const noduleX = nodeBlock.x + offsetX - 5; // X coordinate of the nodule
+            const noduleY = nodeBlock.y + ( -25 * index ) + 200 - 35 + offsetY; // Y coordinate of the nodule
+
+            console.log(noduleX, noduleY);
             const noduleWidth = 10; // Adjust as needed
             const noduleHeight = 10; // Adjust as needed
-
             if (
                 x >= noduleX &&
                 x <= noduleX + noduleWidth &&
                 y >= noduleY &&
                 y <= noduleY + noduleHeight
             ) {
-                return index; // Mouse is over this nodule
+                noduleOver = nodeBlock.inputs[index];
+                noduleOverIndex = index;
+                break;
             }
         }
+        return [noduleOver, noduleOverIndex];
     }
-    return null; // Mouse is not over any nodule
 }
 
 
 function handleMouseWheel(event) {
-
+/* DO NOT DELETE | IF YOU DELETE THIS YOU WILL GET DELETED
     const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1; // Zoom in or out based on scroll direction
     gridSize *= zoomFactor;
     scale = gridSize / 20;
@@ -51,7 +59,7 @@ function handleMouseWheel(event) {
     }
 
     drawGrid();
-
+*/
 }
 
 function handleMiddleMouseDrag(event) {
@@ -117,13 +125,23 @@ canvas.addEventListener('mousedown', (event) => {
             // Hide the menu when starting a drag
         }
 
-        const nodeSelected = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
-        if (Number.isInteger(nodeSelected)) {
+        resultOfOutputNoduleClicked = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
+
+        let nodeSelected, nodeSelectedIndex;
+
+        try {
+            nodeSelected = resultOfOutputNoduleClicked[0];
+            nodeSelectedIndex = resultOfOutputNoduleClicked[1];
+        } catch {
+        }
+
+        if (typeof nodeSelected === "object" && nodeSelected !== undefined && nodeSelected !== null) {
             // Start drawing a line from the selected output nodule
-            console.log("Output Nodule Clicked " + nodeSelected)
+            console.log("Output Nodule Clicked " + nodeSelected.name);
             isDraggingLine = true;
-            lineStartX = selectedNodeBlock.x + 149 + offsetX; // X coordinate of the output nodule
-            lineStartY = selectedNodeBlock.y + offsetY + 55 + (25 * nodeSelected);
+            lineStartX = clickedNodeBlock.x + 149 + offsetX; // X coordinate of the output nodule
+            lineStartY = clickedNodeBlock.y + offsetY + 55 + (25 * nodeSelectedIndex);
+            //console.log(clickedNodeBlock, lineStartX, lineStartY);
         }
         hideMenu();
     }
@@ -141,9 +159,42 @@ canvas.addEventListener('mousemove', (event) => {
     const cursorX = event.clientX - canvas.getBoundingClientRect().left;
     const cursorY = event.clientY - canvas.getBoundingClientRect().top;
 
+    let overNodeBlock = null;
+    overNodeBlock = null;
+    for (const nodeBlock of nodeBlocks) {
+        const x = nodeBlock.x;
+        const y = nodeBlock.y;
+        const blockWidth = 150; // Replace with the width of your node block
+        const blockHeight = 200; // Replace with the height of your node block
+        if (
+            cursorX >= x + offsetX - 5 &&
+            cursorX <= x + blockWidth + offsetX + 5 &&
+            cursorY >= y + offsetY &&
+            cursorY <= y + blockHeight + offsetY
+        ) {
+            overNodeBlock = nodeBlock; // Store the clicked node block
+        }
+    }
+
     if (isDraggingLine) {
         lineEndX = endX;
         lineEndY = endY;
+        
+        if (overNodeBlock !== null) {
+            resultOfMouseOverNodule = isMouseOverNodule(overNodeBlock, cursorX, cursorY);
+            let nodeOver, nodeOverIndex;
+            try {
+                nodeOver = resultOfMouseOverNodule[0];
+                nodeOverIndex = resultOfMouseOverNodule[1];
+            } catch {
+            }
+            console.log(nodeOver);
+            if (typeof nodeOver === "object" && nodeOver !== undefined && nodeOver !== null) {
+                //console.log("Output Nodule Over " + nodeOver.name);
+                //console.log(nodeOver, lineStartX, lineStartY);
+            }
+            
+        }
         drawGrid();
     } else if (isDragging) {
         // Calculate the movement of the cursor
@@ -187,6 +238,9 @@ document.addEventListener('mouseup', (event) => {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     if (isDraggingLine) {
         isDraggingLine = false;
+        console.log(resultOfOutputNoduleClicked[0].name + " to " + resultOfMouseOverNodule[0].name);
+        resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
+        resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
         drawGrid();
     }
 
@@ -213,6 +267,9 @@ document.addEventListener('mouseup', (event) => {
             selectedBlocks.push(nodeBlock);
         }
     }
+
+    
+
     // const nodeOver = isInputNoduleOver(selectedNodeBlock, endX, endY);
     // console.log(nodeOver);
 
