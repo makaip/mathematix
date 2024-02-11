@@ -125,6 +125,27 @@ canvas.addEventListener('mousedown', (event) => {
             // Hide the menu when starting a drag
         }
 
+        if (clickedNodeBlock) {
+            let operations = ["Add", "Subtract", "Multiply", "Divide", "Exponent", "RESET"];
+            //x + 15, y + 75, blockWidth - 30, blockHeight - 170
+            if (clickedNodeBlock.type == "Function") {
+                if (startX >= clickedNodeBlock.x + 15 + offsetX &&
+                    startX <= clickedNodeBlock.x + 150 - 15 + offsetX &&
+                    startY >= clickedNodeBlock.y + 75 + offsetY &&
+                    startY <= clickedNodeBlock.y + 200 - 100 + offsetY) {
+                        if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
+                            clickedNodeBlock.operationtype = operations[0]
+                        } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
+                            clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
+                        }
+
+                        
+                }
+            }
+        }
+
+        
+
         resultOfOutputNoduleClicked = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
 
         let nodeSelected, nodeSelectedIndex;
@@ -235,6 +256,7 @@ canvas.addEventListener('mousemove', (event) => {
 
 document.addEventListener('mouseup', (event) => {
     mouseDown = false;
+    
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     if (isDraggingLine) {
         isDraggingLine = false;
@@ -252,6 +274,46 @@ document.addEventListener('mouseup', (event) => {
     const endX = event.clientX - canvas.getBoundingClientRect().left;
     const endY = event.clientY - canvas.getBoundingClientRect().top;
 
+    functionsToPlot = [];
+    
+    for (const nodeBlock of nodeBlocks) {
+        if (nodeBlock.type == "Input" | nodeBlock.type == "Variable") {
+            nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
+            console.log(nodeBlock.outputs[0].value);
+        }
+        if (nodeBlock.type == "Function") {
+            let functionPrediction;
+            console.log(nodeBlock.operationtype);
+            switch (nodeBlock.operationtype) {
+                case 'Add':
+                    functionPrediction = nodeBlock.inputs[0].value + " + " + nodeBlock.inputs[1].value;
+                    break;
+                case 'Subtract':
+                    functionPrediction = nodeBlock.inputs[0].value + " - " + nodeBlock.inputs[1].value;
+                    break;
+                case 'Multiply':
+                    functionPrediction = nodeBlock.inputs[0].value + " * " + nodeBlock.inputs[1].value;
+                    break;
+                case 'Divide':
+                    functionPrediction = nodeBlock.inputs[0].value + " / " + nodeBlock.inputs[1].value;
+                    break;
+                case 'Exponent':
+                    functionPrediction = nodeBlock.inputs[0].value + " ** " + nodeBlock.inputs[1].value;
+                    break;
+            }
+            
+            nodeBlock.operation = functionPrediction;
+            nodeBlock.outputs[0].value = nodeBlock.operation;
+            nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
+        }
+        if (nodeBlock.type == "Output") {
+            console.log("Blub: " + nodeBlock.inputs[0].value);
+            functionsToPlot.push(nodeBlock.inputs[0].value);
+        }
+    }
+
+    drawGridRenderer();
+
     // Determine selected node blocks within the box
     for (const nodeBlock of nodeBlocks) {
         const x = nodeBlock.x;
@@ -267,8 +329,6 @@ document.addEventListener('mouseup', (event) => {
             selectedBlocks.push(nodeBlock);
         }
     }
-
-    
 
     // const nodeOver = isInputNoduleOver(selectedNodeBlock, endX, endY);
     // console.log(nodeOver);

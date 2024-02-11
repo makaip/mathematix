@@ -16,10 +16,10 @@ function newFunction() {
         operation: null
     };
 
-    newNodeBlock.inputs.push(newNodule("input", "Addend", null, "borrower", null, newNodeBlock));
-    newNodeBlock.inputs.push(newNodule("input", "Addend", null, "borrower", null, newNodeBlock));
-    newNodeBlock.operation = newNodeBlock.inputs[0].value + newNodeBlock.inputs[1].value;
-    newNodeBlock.outputs.push(newNodule("output", "Sum", newNodeBlock.operation, "lender", null, newNodeBlock));
+    newNodeBlock.inputs.push(newNodule("input", "Input 1", null, "borrower", null, newNodeBlock));
+    newNodeBlock.inputs.push(newNodule("input", "Input 2", null, "borrower", null, newNodeBlock));
+    
+    newNodeBlock.outputs.push(newNodule("output", "Output", newNodeBlock.operation, "lender", null, newNodeBlock));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -46,7 +46,7 @@ function newInput() {
         operation: null
     };
 
-    newNodeBlock.outputs.push(newNodule("output", "Value", 5, "lender", null, newNodeBlock));
+    newNodeBlock.outputs.push(newNodule("output", "Value", "5", "lender", null, newNodeBlock));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);

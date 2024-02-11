@@ -15,7 +15,7 @@ const rcanvasHeight = rcanvas.height;
 let roffsetX = 0;
 let roffsetY = 0;
 
-const functionsToPlot = [];
+let functionsToPlot = [];
 
 // Set the rcanvas rendering mode to "crisp edges" to make it look sharper
 rctx.imageSmoothingEnabled = false;
@@ -28,10 +28,10 @@ function evaluateFunction(funcString, x) {
 // Push mathematical functions as strings to the functionsToPlot array
 //functionsToPlot.push("(x ** 3)");
 //functionsToPlot.push("Math.sin(x)");
-functionsToPlot.push("x - 1")
+//functionsToPlot.push("x - 1")
 //functionsToPlot.push("Math.sin(x)")
 //functionsToPlot.push("(x ** 4) - 2 * (x ** 2) - 5")
-functionsToPlot.push("x ** 2")
+//functionsToPlot.push("x ** 2")
 
 // Initial drawing of the grid
 drawGridRenderer();
