@@ -16,10 +16,10 @@ function newFunction() {
         operation: null
     };
 
-    newNodeBlock.inputs.push(newNodule("input", "Addend", null, "borrower", null));
-    newNodeBlock.inputs.push(newNodule("input", "Addend", null, "borrower", null));
+    newNodeBlock.inputs.push(newNodule("input", "Addend", null, "borrower", null, newNodeBlock));
+    newNodeBlock.inputs.push(newNodule("input", "Addend", null, "borrower", null, newNodeBlock));
     newNodeBlock.operation = newNodeBlock.inputs[0].value + newNodeBlock.inputs[1].value;
-    newNodeBlock.outputs.push(newNodule("output", "Sum", newNodeBlock.operation, "lender", null));
+    newNodeBlock.outputs.push(newNodule("output", "Sum", newNodeBlock.operation, "lender", null, newNodeBlock));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -46,7 +46,7 @@ function newInput() {
         operation: null
     };
 
-    newNodeBlock.outputs.push(newNodule("output", "Value", 5, "lender", null));
+    newNodeBlock.outputs.push(newNodule("output", "Value", 5, "lender", null, newNodeBlock));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -73,7 +73,7 @@ function newOutput() {
         operation: null
     };
 
-    newNodeBlock.inputs.push(newNodule("input", "Graph", null, "borrower", null));
+    newNodeBlock.inputs.push(newNodule("input", "Graph", null, "borrower", null, newNodeBlock));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -100,7 +100,7 @@ function newVaraible() {
         operation: null
     };
 
-    newNodeBlock.outputs.push(newNodule("output", "Value", "x", "lender", null));
+    newNodeBlock.outputs.push(newNodule("output", "Value", "x", "lender", null, newNodeBlock));
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -111,13 +111,14 @@ function newVaraible() {
     drawGrid();
 }
 
-function newNodule(type, name, value, relation, connection) {
+function newNodule(type, name, value, relation, connection, parent) {
     const newNodule = {
         type: type, //input, output
         name: name, //Value, Sum, Graph, etc.
         value: value, //[x, y, z, ... ] | [1, 2, 3, ... ] | null
         relation: relation, //borrower, lender
-        connection: connection //null
+        connection: connection, //null
+        parent: parent //null
     }
     return newNodule;
 }

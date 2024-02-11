@@ -27,9 +27,8 @@ let lineStartX, lineStartY, lineEndX, lineEndY;
 
 const menuItems = ['Function', 'Input', 'Output', 'Variable']; // Replace with your menu items
 const functionMenuItems = [
-    [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent"]],
-
-    [["Algebra"], ["Radical", "Logarithm", "Natural Logarithm", "Absolute Value", "Factorial"]], 
+    [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Radical"]],
+    [["Algebra"], [, "Logarithm", "Natural Logarithm", "Absolute Value", "Factorial"]], 
 
     //["Linear Algebra", ["Cross Product", "Magnitude", "Dot Product", "Matrix Multiply", "Matix Transpose", "Matrix Determinant"]], 
 
