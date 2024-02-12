@@ -125,6 +125,8 @@ canvas.addEventListener('mousedown', (event) => {
             // Hide the menu when starting a drag
         }
 
+        
+
         if (clickedNodeBlock) {
             
             //x + 15, y + 75, blockWidth - 30, blockHeight - 170
@@ -172,6 +174,13 @@ canvas.addEventListener('mousedown', (event) => {
             //console.log(clickedNodeBlock, lineStartX, lineStartY);
         }
         hideMenu();
+
+        if (clickedNodeBlock) {
+            document.getElementById("propertyType").innerHTML = clickedNodeBlock.type;
+            document.getElementById("propertyCategory").innerHTML = clickedNodeBlock.category;
+            document.getElementById("propertyInputs").innerHTML = clickedNodeBlock.inputs[0].value + ", " + clickedNodeBlock.inputs[1].value;
+            document.getElementById("propertyOutputs").innerHTML = clickedNodeBlock.outputs[0].value;
+        }
     }
     drawGrid();
 });
@@ -294,22 +303,22 @@ document.addEventListener('mouseup', (event) => {
             console.log(nodeBlock.operationtype);
             switch (nodeBlock.operationtype) {
                 case 'Add':
-                    functionPrediction = (nodeBlock.inputs[0].value + " + " + nodeBlock.inputs[1].value);
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " + " + nodeBlock.inputs[1].value + " )");
                     break;
                 case 'Subtract':
-                    functionPrediction = (nodeBlock.inputs[0].value + " - " + nodeBlock.inputs[1].value);
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " - " + nodeBlock.inputs[1].value + " )");
                     break;
                 case 'Multiply':
-                    functionPrediction = (nodeBlock.inputs[0].value + " * " + nodeBlock.inputs[1].value);
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " * " + nodeBlock.inputs[1].value + " )");
                     break;
                 case 'Divide':
-                    functionPrediction = (nodeBlock.inputs[0].value + " / " + nodeBlock.inputs[1].value);
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " / " + nodeBlock.inputs[1].value + " )");
                     break;
                 case 'Exponent':
-                    functionPrediction = (nodeBlock.inputs[0].value + " ** " + nodeBlock.inputs[1].value);
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " ** " + nodeBlock.inputs[1].value + " )");
                     break;
                 case 'Radical':
-                    functionPrediction = ( nodeBlock.inputs[0].value + " ** " + ( 1 / nodeBlock.inputs[1].value ));
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " ** " + ( 1 / nodeBlock.inputs[1].value ) + " )");
                     break;
 
                 case 'Logarithm':
@@ -335,13 +344,13 @@ document.addEventListener('mouseup', (event) => {
                     functionPrediction = ("Math.tan(" + nodeBlock.inputs[0].value + ")");
                     break;
                 case 'Cosecant':
-                    functionPrediction = ("1 / Math.sin(" + nodeBlock.inputs[0].value + ")");
+                    functionPrediction = ("( " + "1 / Math.sin(" + nodeBlock.inputs[0].value + ")" + " )");
                     break;
                 case 'Secant':
-                    functionPrediction = ("1 / Math.cos(" + nodeBlock.inputs[0].value + ")");
+                    functionPrediction = ("( " + "1 / Math.cos(" + nodeBlock.inputs[0].value + ")" + " )");
                     break;
                 case 'Cotangent':
-                    functionPrediction = ("1 / Math.tan(" + nodeBlock.inputs[0].value + ")");
+                    functionPrediction = ("( " + "1 / Math.tan(" + nodeBlock.inputs[0].value + ")" + " )");
                     break;
             }
             if (nodeBlock.outputs[0].connection !== null) {
@@ -417,6 +426,7 @@ window.addEventListener('keydown', (event) => {
         console.log("Deleted Block");
 
         //WHY THIS NO WORK AAAAAAA
+        /*
         for (length = 0; length < selectedNodeBlock.inputs.length; length++) {
             for (asdf = 0; asdf < selectedNodeBlock.inputs[length].connection.parent.inputs.length; asdf++) {
                 selectedNodeBlock.inputs[length].connection.parent.inputs[asdf].connection = null;
@@ -424,7 +434,7 @@ window.addEventListener('keydown', (event) => {
             console.log(selectedNodeBlock.inputs[length].connection.parent.inputs);
             selectedNodeBlock.inputs[length].connection = null;
         }
-        
+        */
         nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
         drawGrid();
     }

@@ -8,8 +8,9 @@ canvas.height = canvas.clientHeight;
 let gridSize = 20; // Initial size of each grid cell
 let zoomFactor = 1;
 let scale = 1;
-const canvasWidth = canvas.width;
-const canvasHeight = canvas.height;
+let canvasWidth = canvas.width;
+let canvasHeight = canvas.height;
+console.log(canvasWidth, canvasHeight);
 
 let offsetX = 0;
 let offsetY = 0;

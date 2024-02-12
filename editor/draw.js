@@ -1,3 +1,14 @@
+function resizeCanvas() {
+    canvas.style.width ='100%';
+    canvas.style.height='100%';
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    canvasWidth = canvas.width;
+    canvasHeight = canvas.height;
+    console.log(canvasWidth, canvasHeight);
+    drawGrid();
+}
+
 function drawRoundedRect(ctx, x, y, width, height, radius) {
     ctx.beginPath();
     ctx.moveTo(x + radius, y);

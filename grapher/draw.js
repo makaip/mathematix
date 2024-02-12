@@ -1,3 +1,12 @@
+function resizeCanvasRenderer() {
+    rcanvas.width = rcanvas.clientWidth;
+    rcanvas.height = rcanvas.clientHeight;
+    rcanvasWidth = rcanvas.width;
+    rcanvasHeight = rcanvas.height;
+    console.log(rcanvasWidth, rcanvasHeight);
+    drawGridRenderer();
+}
+
 // Function to draw the infinite grid and axes
 function drawGridRenderer() {
     rctx.clearRect(0, 0, rcanvasWidth, rcanvasHeight);

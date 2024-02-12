@@ -10,7 +10,7 @@
         <span style="display: inline; float: left;" class="material-symbols-outlined">
             calculate
         </span>
-        <p style="display: inline" >Mathematix / Untitled-1</p>
+        <h4 style="display: inline" >Mathematix / Untitled-1</h4>
     </div>
     <div class="editor-container">
         <div id="sidebarleft" class="sidebar left" style="width: 250px; padding-right: 10px;">
@@ -19,14 +19,20 @@
                 </span></button>
             <br>
             <br>
-            <h3>Properties</h3>
-            <h5>Function</h5>
+            <h2>Properties</h2>
+            <h3>Node Properties</h3>
+            <p style="font-size: 14px;">Node Type: <span class="code" id="propertyType">none</span></p>
+            <p style="font-size: 14px;">Node Category: <span class="code" id="propertyCategory">none</span></p>
+            <p style="font-size: 14px;">Node Inputs: <span class="code" id="propertyInputs">none</span></p>
+            <p style="font-size: 14px;">Node Outputs: <span class="code" id="propertyOutputs">none</span></p>
+            <br>
+            <h4>World Properties</h4>
             
         </div>
         <canvas id="gridCanvas" width="720" height="770" style="padding-right: 2px"></canvas>
         <canvas id="graphCanvas" width="720" height="770"></canvas>
 
-        <button id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;" hidden><span class="material-symbols-outlined" onclick="togglePanel()">
+        <button id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;" hidden><span class="material-symbols-outlined" onclick="togglePanel();">
             arrow_forward_ios
         </span></button>
 
