@@ -284,8 +284,10 @@ document.addEventListener('mouseup', (event) => {
     
     for (const nodeBlock of nodeBlocks) {
         if (nodeBlock.type == "Input" | nodeBlock.type == "Variable") {
-            nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
-            console.log(nodeBlock.outputs[0].value);
+            if (nodeBlock.outputs[0].connection !== null) {
+                nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
+                console.log(nodeBlock.outputs[0].value);
+            }
         }
         if (nodeBlock.type == "Function") {
             let functionPrediction;
@@ -341,13 +343,13 @@ document.addEventListener('mouseup', (event) => {
                 case 'Cotangent':
                     functionPrediction = ("1 / Math.tan(" + nodeBlock.inputs[0].value + ")");
                     break;
-                
-                
+            }
+            if (nodeBlock.outputs[0].connection !== null) {
+                nodeBlock.operation = functionPrediction;
+                nodeBlock.outputs[0].value = nodeBlock.operation;
+                nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
             }
             
-            nodeBlock.operation = functionPrediction;
-            nodeBlock.outputs[0].value = nodeBlock.operation;
-            nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
         }
         if (nodeBlock.type == "Output") {
             console.log("Blub: " + nodeBlock.inputs[0].value);
@@ -413,6 +415,16 @@ window.addEventListener('keydown', (event) => {
     }
     if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
         console.log("Deleted Block");
+
+        //WHY THIS NO WORK AAAAAAA
+        for (length = 0; length < selectedNodeBlock.inputs.length; length++) {
+            for (asdf = 0; asdf < selectedNodeBlock.inputs[length].connection.parent.inputs.length; asdf++) {
+                selectedNodeBlock.inputs[length].connection.parent.inputs[asdf].connection = null;
+            }
+            console.log(selectedNodeBlock.inputs[length].connection.parent.inputs);
+            selectedNodeBlock.inputs[length].connection = null;
+        }
+        
         nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
         drawGrid();
     }
