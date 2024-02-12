@@ -26,10 +26,11 @@ let nodeSelected, nodeOver = null;
 let isDraggingLine = false; // Flag to track if the user is dragging a line
 let lineStartX, lineStartY, lineEndX, lineEndY;
 
-const menuItems = ['Variable', 'Arithmetic', 'Trigonometry', 'Input', 'Output']; // Replace with your menu items
+const menuItems = ['Variable', 'Arithmetic', 'Trigonometry', 'Unary Operators', 'Input', 'Output']; // Replace with your menu items
 const functionMenuItems = [
-    [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Radical"]],
-    [["Algebra"], [, "Logarithm", "Natural Logarithm", "Absolute Value", "Factorial"]], 
+    [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Modulus", "Radical", "Logarithm"]],
+
+    [["Unary Operators"], ["Absolute Value", "Factorial", "Ceiling", "Floor"]], 
 
     //["Linear Algebra", ["Cross Product", "Magnitude", "Dot Product", "Matrix Multiply", "Matix Transpose", "Matrix Determinant"]], 
 
@@ -49,7 +50,7 @@ const functionMenuItems = [
 
     //["Distributions", ["Normal", "Students", "Poisson", "Binomial", "Uniform", "PDF", "CDF"]],
     
-    //["Number Theory", ["Least Common Multiple", "Greatest Common Denominator", "Modulus", "Ceiling", "Floor", "Round", "Sign", "nPr", "nCr"]]
+    //["Number Theory", ["Least Common Multiple", "Greatest Common Denominator", "Round", "Sign", "nPr", "nCr"]]
 ];
 
 const nodeBlocks = []; // Store information about node blocks

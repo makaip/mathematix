@@ -61,6 +61,36 @@ function newTrigFunction() {
     drawGrid();
 }
 
+function newUnaryFunction() {
+    console.log("Function menu item clicked");
+    const cursorX = endX; // Get the X coordinate of the cursor
+    const cursorY = endY; // Get the Y coordinate of the cursor
+
+    // Create a new node block with the cursor's position and type (you can define types as needed)
+    const newNodeBlock = {
+        x: cursorX - offsetX,
+        y: cursorY - offsetY,
+        type: 'Function', // Replace with the appropriate node type
+        category: 'Unary Operators',
+        inputs: [],
+        outputs: [],
+        operationtype: "Absolute Value",
+        operation: null
+    };
+
+    newNodeBlock.inputs.push(newNodule("input", "Input 1", null, "borrower", null, newNodeBlock));
+    
+    newNodeBlock.outputs.push(newNodule("output", "Output", newNodeBlock.operation, "lender", null, newNodeBlock));
+
+    // Add the new node block to the array
+    nodeBlocks.push(newNodeBlock);
+    console.log(newNodeBlock);
+
+    hideMenu();
+    // Redraw the grid to include the new node block
+    drawGrid();
+}
+
 function newInput() {
     // Code for the "Input" menu item
     console.log("Input menu item clicked");

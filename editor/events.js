@@ -125,8 +125,6 @@ canvas.addEventListener('mousedown', (event) => {
             // Hide the menu when starting a drag
         }
 
-        
-
         if (clickedNodeBlock) {
             
             //x + 15, y + 75, blockWidth - 30, blockHeight - 170
@@ -136,7 +134,15 @@ canvas.addEventListener('mousedown', (event) => {
                     startY >= clickedNodeBlock.y + 75 + offsetY &&
                     startY <= clickedNodeBlock.y + 200 - 100 + offsetY) {
                         if (clickedNodeBlock.category == "Arithmetic") {
-                            let operations = ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Radical", "RESET"];
+                            let operations = ["Add", "Subtract", "Multiply", "Divide", "Modulus", "Exponent", "Radical", "Logarithm", "RESET"];
+                            if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
+                                clickedNodeBlock.operationtype = operations[0]
+                            } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
+                                clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
+                            }
+                        }
+                        if (clickedNodeBlock.category == "Unary Operators") {
+                            let operations = ["Absolute Value", "Factorial", "Ceiling", "Floor", "RESET"];
                             if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
                                 clickedNodeBlock.operationtype = operations[0]
                             } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
@@ -314,24 +320,30 @@ document.addEventListener('mouseup', (event) => {
                 case 'Divide':
                     functionPrediction = ("( " + nodeBlock.inputs[0].value + " / " + nodeBlock.inputs[1].value + " )");
                     break;
+                case 'Modulus':
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " % " + nodeBlock.inputs[1].value + " )");
+                    break;
                 case 'Exponent':
                     functionPrediction = ("( " + nodeBlock.inputs[0].value + " ** " + nodeBlock.inputs[1].value + " )");
                     break;
                 case 'Radical':
                     functionPrediction = ("( " + nodeBlock.inputs[0].value + " ** " + ( 1 / nodeBlock.inputs[1].value ) + " )");
                     break;
-
                 case 'Logarithm':
                     functionPrediction = ("Math.log(" + nodeBlock.inputs[0].value + ")");
                     break;
-                case 'Natural Logarithm':
-                    functionPrediction = ("Math.log(" + nodeBlock.inputs[0].value + ")");
-                    break;
+                
                 case 'Absolute Value':
                     functionPrediction = ("Math.abs(" + nodeBlock.inputs[0].value + ")");
                     break;
                 case 'Factorial':
-                    functionPrediction = ("Math.factorial(" + nodeBlock.inputs[0].value + ")");
+                    functionPrediction = ("( " + nodeBlock.inputs[0].value + "! )");
+                    break;
+                case 'Floor':
+                    functionPrediction = ("Math.floor(" + nodeBlock.inputs[0].value + ")");
+                    break;
+                case 'Ceiling':
+                    functionPrediction = ("Math.ceil(" + nodeBlock.inputs[0].value + ")");
                     break;
                 
                 case 'Sine':
@@ -489,6 +501,9 @@ function handleMenuItemClick(itemText) {
                 break;
             case 'Trigonometry':
                 newTrigFunction();
+                break;
+            case 'Unary Operators':
+                newUnaryFunction();
                 break;
             default:
                 break;
