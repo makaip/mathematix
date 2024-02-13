@@ -55,8 +55,10 @@ const functionMenuItems = [
 
 const nodeBlocks = []; // Store information about node blocks
 let selectedNodeBlock = null; // Variable to keep track of the selected node block
+let previousSelectedNodeBlock; // Variable to keep track of the previously selected node block
 let isBoxSelecting = false; // Flag to track box selection
 let isDraggingNodeBlock = false; // Flag to track node block dragging
+let beginConnection = false;
 
 let resultOfOutputNoduleClicked = [];
 let resultOfMouseOverNodule = [];
