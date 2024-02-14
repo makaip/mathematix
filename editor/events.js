@@ -110,7 +110,6 @@ canvas.addEventListener('mousedown', (event) => {
                 startY >= y + offsetY &&
                 startY <= y + blockHeight + offsetY
             ) {
-                previousSelectedNodeBlock = clickedNodeBlock;
                 clickedNodeBlock = nodeBlock; // Store the clicked node block
             }
         }
@@ -124,22 +123,6 @@ canvas.addEventListener('mousedown', (event) => {
             endX = startX;
             endY = startY;
             // Hide the menu when starting a drag
-        }
-        
-        console.log("outside " + clickedNodeBlock.type);
-        console.log("outside " + previousSelectedNodeBlock.type);
-
-        if (clickedNodeBlock && event.shiftKey) {
-            console.log("inside " + clickedNodeBlock.type);
-            console.log("1");
-            if (beginConnection == true) {
-                console.log(previousSelectedNodeBlock[0].name + " to " + selectedNodeBlock[0].name);
-                previousSelectedNodeBlock[0].connection = selectedNodeBlock[0];
-                selectedNodeBlock[0].connection = previousSelectedNodeBlock[0];
-                beginConnection = false;
-                
-            }
-            beginConnection = true;
         }
 
         if (clickedNodeBlock) {
@@ -201,8 +184,8 @@ canvas.addEventListener('mousedown', (event) => {
         if (clickedNodeBlock) {
             document.getElementById("propertyType").innerHTML = clickedNodeBlock.type;
             document.getElementById("propertyCategory").innerHTML = clickedNodeBlock.category;
-            //document.getElementById("propertyInputs").innerHTML = clickedNodeBlock.inputs[0].value + ", " + clickedNodeBlock.inputs[1].value;
-            //document.getElementById("propertyOutputs").innerHTML = clickedNodeBlock.outputs[0].value;
+            document.getElementById("propertyInputs").innerHTML = clickedNodeBlock.inputs[0].value + ", " + clickedNodeBlock.inputs[1].value;
+            document.getElementById("propertyOutputs").innerHTML = clickedNodeBlock.outputs[0].value;
         }
     }
     drawGrid();
