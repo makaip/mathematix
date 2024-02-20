@@ -61,7 +61,6 @@ function newNode(type, category, operationtype, inputs, outputs) {
     nodeBlocks.push(newNodeBlock);
     console.log(newNodeBlock);
 
-    hideMenu();
     // Redraw the grid to include the new node block
     drawGrid();
 }
