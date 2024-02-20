@@ -1,26 +1,62 @@
 // actions.js
 
-function newFunction() {
-    console.log("Function menu item clicked");
+function newNodule(type, name, value, relation, connection, parent) {
+    return {
+        type: type,  // input, output
+        name: name,  // Value, Sum, Graph, etc.
+        value: value,  // [x, y, z, ... ] | [1, 2, 3, ... ] | null
+        relation: relation,  // borrower, lender
+        connection: connection,  // null
+        parent: parent  // null
+    };
+}
+
+
+/**
+ * Creates a new node to the given specification.
+ *
+ * @param type The type of node.
+ * @param category The category of node.
+ * @param operationtype The operation type of the node. (null if not applicable, e.g., a value node)
+ * @param inputs An array of objects. Each object has a title "name" and a value "value".
+ * @param outputs An array of objects. Each object has a title "name" and a value "value".
+ */
+function newNode(type, category, operationtype, inputs, outputs) {
     const cursorX = endX; // Get the X coordinate of the cursor
     const cursorY = endY; // Get the Y coordinate of the cursor
 
     // Create a new node block with the cursor's position and type (you can define types as needed)
-    const newNodeBlock = {
-        x: cursorX - offsetX,
-        y: cursorY - offsetY,
-        type: 'Function', // Replace with the appropriate node type
-        category: 'Arithmetic',
-        inputs: [],
-        outputs: [],
-        operationtype: "Add",
-        operation: null
-    };
+    let newNodeBlock;
 
-    newNodeBlock.inputs.push(newNodule("input", "Input 1", null, "borrower", null, newNodeBlock));
-    newNodeBlock.inputs.push(newNodule("input", "Input 2", null, "borrower", null, newNodeBlock));
-    
-    newNodeBlock.outputs.push(newNodule("output", "Output", newNodeBlock.operation, "lender", null, newNodeBlock));
+    if (operationtype !== null) {
+        newNodeBlock = {
+            x: cursorX - offsetX,
+            y: cursorY - offsetY,
+            type: type,
+            category: category,
+            inputs: [],
+            outputs: [],
+            operationtype: operationtype,
+            operation: null
+        }
+    } else {
+        newNodeBlock = {
+            x: cursorX - offsetX,
+            y: cursorY - offsetY,
+            type: type,
+            category: category,
+            inputs: [],
+            outputs: [],
+        };
+    }
+
+    inputs.forEach(input => {
+        newNodeBlock.inputs.push(newNodule("input", input.name, input.value, "borrower", null, newNodeBlock));
+    })
+
+    outputs.forEach(output => {
+        newNodeBlock.outputs.push(newNodule("output", output.name, output.value, "lender", null, newNodeBlock));
+    });
 
     // Add the new node block to the array
     nodeBlocks.push(newNodeBlock);
@@ -29,157 +65,52 @@ function newFunction() {
     hideMenu();
     // Redraw the grid to include the new node block
     drawGrid();
+}
+
+function newFunction() {
+    newNode(
+        "Function", "Arithmetic", "Add",
+        [{name: "Input 1", value: null}, {name: "Input 2", value: null}],
+        [{name: "Output", value: null}]
+    );
 }
 
 function newTrigFunction() {
-    console.log("Function menu item clicked");
-    const cursorX = endX; // Get the X coordinate of the cursor
-    const cursorY = endY; // Get the Y coordinate of the cursor
-
-    // Create a new node block with the cursor's position and type (you can define types as needed)
-    const newNodeBlock = {
-        x: cursorX - offsetX,
-        y: cursorY - offsetY,
-        type: 'Function', // Replace with the appropriate node type
-        category: 'Trigonometry',
-        inputs: [],
-        outputs: [],
-        operationtype: "Sine",
-        operation: null
-    };
-
-    newNodeBlock.inputs.push(newNodule("input", "Input 1", null, "borrower", null, newNodeBlock));
-    
-    newNodeBlock.outputs.push(newNodule("output", "Output", newNodeBlock.operation, "lender", null, newNodeBlock));
-
-    // Add the new node block to the array
-    nodeBlocks.push(newNodeBlock);
-    console.log(newNodeBlock);
-
-    hideMenu();
-    // Redraw the grid to include the new node block
-    drawGrid();
+    newNode(
+        "Function", "Trigonometry", "Sine",
+        [{name: "Input", value: null}],
+        [{name: "Output", value: null}]
+    );
 }
 
 function newUnaryFunction() {
-    console.log("Function menu item clicked");
-    const cursorX = endX; // Get the X coordinate of the cursor
-    const cursorY = endY; // Get the Y coordinate of the cursor
-
-    // Create a new node block with the cursor's position and type (you can define types as needed)
-    const newNodeBlock = {
-        x: cursorX - offsetX,
-        y: cursorY - offsetY,
-        type: 'Function', // Replace with the appropriate node type
-        category: 'Unary Operators',
-        inputs: [],
-        outputs: [],
-        operationtype: "Absolute Value",
-        operation: null
-    };
-
-    newNodeBlock.inputs.push(newNodule("input", "Input 1", null, "borrower", null, newNodeBlock));
-    
-    newNodeBlock.outputs.push(newNodule("output", "Output", newNodeBlock.operation, "lender", null, newNodeBlock));
-
-    // Add the new node block to the array
-    nodeBlocks.push(newNodeBlock);
-    console.log(newNodeBlock);
-
-    hideMenu();
-    // Redraw the grid to include the new node block
-    drawGrid();
+    newNode(
+        "Function", "Unary Operators", "Absolute Value",
+        [{name: "Input", value: null}],
+        [{name: "Output", value: null}]
+    );
 }
 
 function newInput() {
-    // Code for the "Input" menu item
-    console.log("Input menu item clicked");
-    const cursorX = endX; // Get the X coordinate of the cursor
-    const cursorY = endY; // Get the Y coordinate of the cursor
-
-    // Create a new node block with the cursor's position and type (you can define types as needed)
-    const newNodeBlock = {
-        x: cursorX - offsetX,
-        y: cursorY - offsetY,
-        type: 'Input', // Replace with the appropriate node type
-        category: 'Input',
-        inputs: [],
-        outputs: [],
-    };
-
-    newNodeBlock.outputs.push(newNodule("output", "Value", "5", "lender", null, newNodeBlock));
-
-    // Add the new node block to the array
-    nodeBlocks.push(newNodeBlock);
-    console.log(newNodeBlock);
-
-    hideMenu();
-    // Redraw the grid to include the new node block
-    drawGrid();
+    newNode(
+        "Input", "Input", null,
+        [],
+        [{name: "Value", value: 5}]
+    );
 }
 
 function newOutput() {
-    // Code for the "Output" menu item
-    console.log("Output menu item clicked");
-    const cursorX = endX; // Get the X coordinate of the cursor
-    const cursorY = endY; // Get the Y coordinate of the cursor
-
-    // Create a new node block with the cursor's position and type (you can define types as needed)
-    const newNodeBlock = {
-        x: cursorX - offsetX,
-        y: cursorY - offsetY,
-        type: 'Output', // Replace with the appropriate node type
-        category: 'Output',
-        inputs: [],
-        outputs: [],
-    };
-
-    newNodeBlock.inputs.push(newNodule("input", "Graph", null, "borrower", null, newNodeBlock));
-
-    // Add the new node block to the array
-    nodeBlocks.push(newNodeBlock);
-    console.log(newNodeBlock);
-
-    hideMenu();
-    // Redraw the grid to include the new node block
-    drawGrid();
+    newNode(
+        "Output", "Output", null,
+        [{name: "Graph", value: null}],
+        []
+    );
 }
 
-function newVaraible() {
-    // Code for the "Input" menu item
-    console.log("Variable menu item clicked");
-    const cursorX = endX; // Get the X coordinate of the cursor
-    const cursorY = endY; // Get the Y coordinate of the cursor
-
-    // Create a new node block with the cursor's position and type (you can define types as needed)
-    const newNodeBlock = {
-        x: cursorX - offsetX,
-        y: cursorY - offsetY,
-        type: 'Variable', // Replace with the appropriate node type
-        category: 'Variable',
-        inputs: [],
-        outputs: [],
-    };
-
-    newNodeBlock.outputs.push(newNodule("output", "Value", "x", "lender", null, newNodeBlock));
-
-    // Add the new node block to the array
-    nodeBlocks.push(newNodeBlock);
-    console.log(newNodeBlock);
-
-    hideMenu();
-    // Redraw the grid to include the new node block
-    drawGrid();
-}
-
-function newNodule(type, name, value, relation, connection, parent) {
-    const newNodule = {
-        type: type, //input, output
-        name: name, //Value, Sum, Graph, etc.
-        value: value, //[x, y, z, ... ] | [1, 2, 3, ... ] | null
-        relation: relation, //borrower, lender
-        connection: connection, //null
-        parent: parent //null
-    }
-    return newNodule;
+function newVariable() {
+    newNode(
+        "Variable", "Variable", null,
+        [],
+        [{name: "Value", value: "x"}]
+    );
 }

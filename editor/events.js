@@ -432,7 +432,7 @@ window.addEventListener('keydown', (event) => {
         newOutput();
     }
     if (event.key === "V") {
-        newVaraible();
+        newVariable();
     }
     if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
         console.log("Deleted Block");
@@ -494,7 +494,7 @@ function handleMenuItemClick(itemText) {
                 newOutput();
                 break;
             case 'Variable':
-                newVaraible();
+                newVariable();
                 break;
             case 'Arithmetic':
                 newFunction();
