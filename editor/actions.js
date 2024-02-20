@@ -1,8 +1,8 @@
 // actions.js
 
 class Nodule {
-    constructor(type, name, value, parent) {
-        this.type = type;
+    constructor(isInput, name, value, parent) {
+        this.isInput = isInput;
         this.name = name;
         this.value = value;
         this.connection = null;
@@ -10,8 +10,8 @@ class Nodule {
     }
 
     draw(ctx, x, y, index, blockWidth, blockHeight) {
-        let xOffset = this.type === "input" ? 1 : blockWidth - 1;
-        let yOffset = this.type === "output" ? -25 * index + blockHeight - 30 : 25 * index + 55;
+        let xOffset = this.isInput ? 1 : blockWidth - 1;
+        let yOffset = this.isInput ? -25 * index + blockHeight - 30 : 25 * index + 55;
 
         drawCircle(ctx, x + xOffset, y + yOffset, 6);
         ctx.fill();
@@ -59,11 +59,11 @@ function newNode(type, category, operationtype, inputs, outputs) {
     }
 
     inputs.forEach(input => {
-        newNodeBlock.inputs.push(new Nodule("input", input.name, input.value, newNodeBlock));
+        newNodeBlock.inputs.push(new Nodule(true, input.name, input.value, newNodeBlock));
     })
 
     outputs.forEach(output => {
-        newNodeBlock.outputs.push(new Nodule("output", output.name, output.value, newNodeBlock));
+        newNodeBlock.outputs.push(new Nodule(false, output.name, output.value, newNodeBlock));
     });
 
     // Add the new node block to the array
