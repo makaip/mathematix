@@ -1,13 +1,22 @@
 // actions.js
 
-function newNodule(type, name, value, connection, parent) {
-    return {
-        type: type,  // input, output
-        name: name,  // Value, Sum, Graph, etc.
-        value: value,  // [x, y, z, ... ] | [1, 2, 3, ... ] | null
-        connection: connection,  // null
-        parent: parent  // null
-    };
+class Nodule {
+    constructor(type, name, value, parent) {
+        this.type = type;
+        this.name = name;
+        this.value = value;
+        this.connection = null;
+        this.parent = parent;
+    }
+
+    draw(ctx, x, y, index, blockWidth, blockHeight) {
+        let xOffset = this.type === "input" ? 1 : blockWidth - 1;
+        let yOffset = this.type === "output" ? -25 * index + blockHeight - 30 : 25 * index + 55;
+
+        drawCircle(ctx, x + xOffset, y + yOffset, 6);
+        ctx.fill();
+        ctx.stroke();
+    }
 }
 
 
@@ -50,11 +59,11 @@ function newNode(type, category, operationtype, inputs, outputs) {
     }
 
     inputs.forEach(input => {
-        newNodeBlock.inputs.push(newNodule("input", input.name, input.value, null, newNodeBlock));
+        newNodeBlock.inputs.push(new Nodule("input", input.name, input.value, newNodeBlock));
     })
 
     outputs.forEach(output => {
-        newNodeBlock.outputs.push(newNodule("output", output.name, output.value, null, newNodeBlock));
+        newNodeBlock.outputs.push(new Nodule("output", output.name, output.value, newNodeBlock));
     });
 
     // Add the new node block to the array

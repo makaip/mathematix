@@ -127,15 +127,11 @@ function drawGrid() {
         ctx.fillStyle = '#9f9f9f';
 
         nodeBlock.inputs.forEach(function (item, index) {
-            drawCircle(ctx, x + 1, y + ( -25 * index ) + blockHeight - 30, 6);
-            ctx.fill();
-            ctx.stroke();
+            item.draw(ctx, x, y, index, blockWidth, blockHeight);
         });
         
         nodeBlock.outputs.forEach(function (item, index) {
-            drawCircle(ctx, x + 149, y + ( 25 * index ) + 55, 6);
-            ctx.fill();
-            ctx.stroke();
+            item.draw(ctx, x, y, index, blockWidth, blockHeight);
 
             ctx.fillStyle = 'white'; // Text color
             ctx.font = '14px Poppins';
