@@ -132,12 +132,6 @@ function drawGrid() {
         
         nodeBlock.outputs.forEach(function (item, index) {
             item.draw(ctx, x, y, index, blockWidth, blockHeight);
-
-            ctx.fillStyle = 'white'; // Text color
-            ctx.font = '14px Poppins';
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(item.name, x + 135, y + ( 25 * index ) + 55);
         });
 
         if (nodeBlock.type === "Input" | nodeBlock.type === "Variable") {

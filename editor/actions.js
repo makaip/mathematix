@@ -13,9 +13,20 @@ class Nodule {
         let xOffset = this.isInput ? 1 : blockWidth - 1;
         let yOffset = this.isInput ? -25 * index + blockHeight - 30 : 25 * index + 55;
 
+        // Draw the nodule
+        ctx.fillStyle = '#9f9f9f';
         drawCircle(ctx, x + xOffset, y + yOffset, 6);
         ctx.fill();
         ctx.stroke();
+
+        // Draw nodule label
+        xOffset += this.isInput ? 10 : -10;
+
+        ctx.fillStyle = "white"; // Text color
+        ctx.font = "14px Poppins";
+        ctx.textAlign = this.isInput ? "left" : "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText(this.name, x + xOffset, y + yOffset);
     }
 }
 
