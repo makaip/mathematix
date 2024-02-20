@@ -1,11 +1,10 @@
 // actions.js
 
-function newNodule(type, name, value, relation, connection, parent) {
+function newNodule(type, name, value, connection, parent) {
     return {
         type: type,  // input, output
         name: name,  // Value, Sum, Graph, etc.
         value: value,  // [x, y, z, ... ] | [1, 2, 3, ... ] | null
-        relation: relation,  // borrower, lender
         connection: connection,  // null
         parent: parent  // null
     };
@@ -51,11 +50,11 @@ function newNode(type, category, operationtype, inputs, outputs) {
     }
 
     inputs.forEach(input => {
-        newNodeBlock.inputs.push(newNodule("input", input.name, input.value, "borrower", null, newNodeBlock));
+        newNodeBlock.inputs.push(newNodule("input", input.name, input.value, null, newNodeBlock));
     })
 
     outputs.forEach(output => {
-        newNodeBlock.outputs.push(newNodule("output", output.name, output.value, "lender", null, newNodeBlock));
+        newNodeBlock.outputs.push(newNodule("output", output.name, output.value, null, newNodeBlock));
     });
 
     // Add the new node block to the array
