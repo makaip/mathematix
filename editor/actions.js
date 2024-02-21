@@ -31,6 +31,18 @@ class Nodule {
 }
 
 
+class Node {
+    constructor(type, category, operationtype, inputs, outputs) {
+        this.type = type;
+        this.category = category;
+        this.operationtype = operationtype;
+        this.inputs = inputs;
+        this.outputs = outputs;
+    }
+
+}
+
+
 /**
  * Creates a new node to the given specification.
  *
@@ -56,7 +68,6 @@ function newNode(type, category, operationtype, inputs, outputs) {
             inputs: [],
             outputs: [],
             operationtype: operationtype,
-            operation: null
         }
     } else {
         newNodeBlock = {
