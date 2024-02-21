@@ -32,114 +32,101 @@ class Nodule {
 
 
 class Node {
+    /**
+     * @param type The type of node.
+     * @param category The category of node.
+     * @param operationtype The operation type of the node. (null if not applicable, e.g., a value node)
+     * @param inputs An array of objects. Each object has a title "name" and a value "value".
+     * @param outputs An array of objects. Each object has a title "name" and a value "value".
+     */
     constructor(type, category, operationtype, inputs, outputs) {
+        this.x = endX - offsetX;
+        this.y = endY - offsetY;
+
         this.type = type;
         this.category = category;
+        this.inputs = [];
+        this.outputs = [];
         this.operationtype = operationtype;
-        this.inputs = inputs;
-        this.outputs = outputs;
+
+        inputs.forEach(input => {
+            this.inputs.push(new Nodule(true, input.name, input.value, this));
+        })
+
+        outputs.forEach(output => {
+            this.outputs.push(new Nodule(false, output.name, output.value, this));
+        });
     }
-
-}
-
-
-/**
- * Creates a new node to the given specification.
- *
- * @param type The type of node.
- * @param category The category of node.
- * @param operationtype The operation type of the node. (null if not applicable, e.g., a value node)
- * @param inputs An array of objects. Each object has a title "name" and a value "value".
- * @param outputs An array of objects. Each object has a title "name" and a value "value".
- */
-function newNode(type, category, operationtype, inputs, outputs) {
-    const cursorX = endX; // Get the X coordinate of the cursor
-    const cursorY = endY; // Get the Y coordinate of the cursor
-
-    // Create a new node block with the cursor's position and type (you can define types as needed)
-    let newNodeBlock;
-
-    if (operationtype !== null) {
-        newNodeBlock = {
-            x: cursorX - offsetX,
-            y: cursorY - offsetY,
-            type: type,
-            category: category,
-            inputs: [],
-            outputs: [],
-            operationtype: operationtype,
-        }
-    } else {
-        newNodeBlock = {
-            x: cursorX - offsetX,
-            y: cursorY - offsetY,
-            type: type,
-            category: category,
-            inputs: [],
-            outputs: [],
-        };
-    }
-
-    inputs.forEach(input => {
-        newNodeBlock.inputs.push(new Nodule(true, input.name, input.value, newNodeBlock));
-    })
-
-    outputs.forEach(output => {
-        newNodeBlock.outputs.push(new Nodule(false, output.name, output.value, newNodeBlock));
-    });
-
-    // Add the new node block to the array
-    nodeBlocks.push(newNodeBlock);
-    console.log(newNodeBlock);
-
-    // Redraw the grid to include the new node block
-    drawGrid();
 }
 
 function newFunction() {
-    newNode(
-        "Function", "Arithmetic", "Add",
-        [{name: "Input 1", value: null}, {name: "Input 2", value: null}],
-        [{name: "Output", value: null}]
+    nodeBlocks.push(
+        new Node(
+            "Function", "Arithmetic", "Add",
+            [{name: "Input 1", value: null}, {name: "Input 2", value: null}],
+            [{name: "Output", value: null}]
+        )
     );
+
+    drawGrid();
 }
 
 function newTrigFunction() {
-    newNode(
-        "Function", "Trigonometry", "Sine",
-        [{name: "Input", value: null}],
-        [{name: "Output", value: null}]
+    nodeBlocks.push(
+        new Node(
+            "Function", "Trigonometry", "Sine",
+            [{name: "Input", value: null}],
+            [{name: "Output", value: null}]
+        )
     );
+
+    drawGrid();
 }
 
 function newUnaryFunction() {
-    newNode(
-        "Function", "Unary Operators", "Absolute Value",
-        [{name: "Input", value: null}],
-        [{name: "Output", value: null}]
+    nodeBlocks.push(
+        new Node(
+            "Function", "Unary Operators", "Absolute Value",
+            [{name: "Input", value: null}],
+            [{name: "Output", value: null}]
+        )
     );
+
+    drawGrid();
 }
 
 function newInput() {
-    newNode(
-        "Input", "Input", null,
-        [],
-        [{name: "Value", value: 5}]
+    nodeBlocks.push(
+        new Node(
+            "Input", "Input", null,
+            [],
+            [{name: "Value", value: 5}]
+        )
     );
+
+    drawGrid();
 }
 
 function newOutput() {
-    newNode(
-        "Output", "Output", null,
-        [{name: "Graph", value: null}],
-        []
+    nodeBlocks.push(
+        new Node(
+            "Output", "Output", null,
+            [{name: "Graph", value: null}],
+            []
+        )
     );
+
+    drawGrid();
 }
 
 function newVariable() {
-    newNode(
-        "Variable", "Variable", null,
-        [],
-        [{name: "Value", value: "x"}]
+    nodeBlocks.push(
+        new Node(
+            "Variable", "Variable", null,
+            [],
+            [{name: "Value", value: "x"}]
+        )
     );
+
+    drawGrid();
 }
