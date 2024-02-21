@@ -64,8 +64,6 @@ class Node {
     draw(ctx) {
         const x = this.x + offsetX;
         const y = this.y + offsetY;
-        let blockWidth = 150;
-        let blockHeight = 200;
 
         // Draw a rounded rectangle representing the node block
         ctx.fillStyle = '#343434';
@@ -78,11 +76,11 @@ class Node {
             ctx.strokeStyle = '#141414';
         }
 
-        drawRoundedRect(ctx, x, y, blockWidth, blockHeight, 5);  // Adjust cornerRadius as needed
+        drawRoundedRect(ctx, x, y, this.width, this.height, 5);  // Adjust cornerRadius as needed
         ctx.fill();
         ctx.stroke();
 
-        drawTop(ctx, x, y, blockWidth, 30, 5);  // Adjust cornerRadius as needed
+        drawTop(ctx, x, y, this.width, 30, 5);  // Adjust cornerRadius as needed
         ctx.fillStyle = '#00C49A';
         ctx.fill();
 
@@ -96,19 +94,19 @@ class Node {
         ctx.strokeStyle = '#141414';
         ctx.fillStyle = '#9f9f9f';
 
-        this.inputs.forEach(function (item, index) {
-            item.draw(ctx, x, y, index, blockWidth, blockHeight);
+        this.inputs.forEach((item, index) => {
+            item.draw(ctx, x, y, index, this.width, this.height);
         });
 
-        this.outputs.forEach(function (item, index) {
-            item.draw(ctx, x, y, index, blockWidth, blockHeight);
+        this.outputs.forEach((item, index) => {
+            item.draw(ctx, x, y, index, this.width, this.height);
         });
 
         if (this.type === "Input" || this.type === "Variable") {
             ctx.lineWidth = 1;
             ctx.strokeStyle = '#3f3f3f';
             ctx.fillStyle = '#555555';
-            drawRoundedRect(ctx, x + 15, y + 155, blockWidth - 30, blockHeight - 170, 5);  // Adjust cornerRadius as needed
+            drawRoundedRect(ctx, x + 15, y + 155, this.width - 30, this.height - 170, 5);  // Adjust cornerRadius as needed
             ctx.fill();
             ctx.stroke();
 
@@ -123,7 +121,7 @@ class Node {
             ctx.lineWidth = 1;
             ctx.strokeStyle = '#3d3d3d';
             ctx.fillStyle = '#282828';
-            drawRoundedRect(ctx, x + 15, y + 75, blockWidth - 30, blockHeight - 170, 5);  // Adjust cornerRadius as needed
+            drawRoundedRect(ctx, x + 15, y + 75, this.width - 30, this.height - 170, 5);  // Adjust cornerRadius as needed
             ctx.fill();
             ctx.stroke();
 
