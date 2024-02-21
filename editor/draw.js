@@ -96,73 +96,7 @@ function drawGrid() {
     //NODEBLOCKS
 
     for (const nodeBlock of nodeBlocks) {
-        const x = nodeBlock.x + offsetX;
-        const y = nodeBlock.y + offsetY;
-        let blockWidth = 150; // Replace with the width of your node block
-        let blockHeight = 200; // Replace with the height of your node block
-        // Draw a rounded rectangle representing the node block
-        ctx.fillStyle = '#343434'; // Replace with the color you want for node blocks
-        if (nodeBlock === selectedNodeBlock) {
-            ctx.strokeStyle = '#00C49A'; // Outline color for selected node block
-            ctx.lineWidth = 2; // Outline width
-        } else {
-            ctx.strokeStyle = '#141414'; // No outline for unselected node blocks
-        }
-        drawRoundedRect(ctx, x, y, blockWidth, blockHeight, 5); // Adjust cornerRadius as needed
-        ctx.fill();
-        ctx.stroke();
-
-        drawTop(ctx, x, y, blockWidth, 30, 5); // Adjust cornerRadius as needed
-        ctx.fillStyle = '#00C49A';
-        ctx.fill();
-
-        ctx.fillStyle = 'white'; // Text color
-        ctx.font = '16px Poppins';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText(nodeBlock.category, x + 10, y + 25);
-
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#141414';
-        ctx.fillStyle = '#9f9f9f';
-
-        nodeBlock.inputs.forEach(function (item, index) {
-            item.draw(ctx, x, y, index, blockWidth, blockHeight);
-        });
-        
-        nodeBlock.outputs.forEach(function (item, index) {
-            item.draw(ctx, x, y, index, blockWidth, blockHeight);
-        });
-
-        if (nodeBlock.type === "Input" | nodeBlock.type === "Variable") {
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#3f3f3f';
-            ctx.fillStyle = '#555555';
-            drawRoundedRect(ctx, x + 15, y + 155, blockWidth - 30, blockHeight - 170, 5); // Adjust cornerRadius as needed
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.fillStyle = 'white'; // Text color
-            ctx.font = '14px Poppins';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(nodeBlock.outputs[0].value, x + 75, y + 170);
-        }
-
-        if (nodeBlock.type === "Function") {
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#3d3d3d';
-            ctx.fillStyle = '#282828';
-            drawRoundedRect(ctx, x + 15, y + 75, blockWidth - 30, blockHeight - 170, 5); // Adjust cornerRadius as needed
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.fillStyle = 'white'; // Text color
-            ctx.font = '14px Poppins';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(nodeBlock.operationtype, x + 27, y + 90);
-        }
+        nodeBlock.draw(ctx);
     }
 
     ///SELECTION

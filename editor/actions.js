@@ -40,6 +40,9 @@ class Node {
      * @param outputs An array of objects. Each object has a title "name" and a value "value".
      */
     constructor(type, category, operationtype, inputs, outputs) {
+        this.width = 150;
+        this.height = 200;
+
         this.x = endX - offsetX;
         this.y = endY - offsetY;
 
@@ -56,6 +59,80 @@ class Node {
         outputs.forEach(output => {
             this.outputs.push(new Nodule(false, output.name, output.value, this));
         });
+    }
+
+    draw(ctx) {
+        const x = this.x + offsetX;
+        const y = this.y + offsetY;
+        let blockWidth = 150;
+        let blockHeight = 200;
+
+        // Draw a rounded rectangle representing the node block
+        ctx.fillStyle = '#343434';
+        if (this === selectedNodeBlock) {
+            // The outline for the selected node block
+            ctx.strokeStyle = '#00C49A';
+            ctx.lineWidth = 2;
+        } else {
+            // The outline for the unselected node block
+            ctx.strokeStyle = '#141414';
+        }
+
+        drawRoundedRect(ctx, x, y, blockWidth, blockHeight, 5);  // Adjust cornerRadius as needed
+        ctx.fill();
+        ctx.stroke();
+
+        drawTop(ctx, x, y, blockWidth, 30, 5);  // Adjust cornerRadius as needed
+        ctx.fillStyle = '#00C49A';
+        ctx.fill();
+
+        ctx.fillStyle = 'white';  // Text color
+        ctx.font = '16px Poppins';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(this.category, x + 10, y + 25);
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#141414';
+        ctx.fillStyle = '#9f9f9f';
+
+        this.inputs.forEach(function (item, index) {
+            item.draw(ctx, x, y, index, blockWidth, blockHeight);
+        });
+
+        this.outputs.forEach(function (item, index) {
+            item.draw(ctx, x, y, index, blockWidth, blockHeight);
+        });
+
+        if (this.type === "Input" || this.type === "Variable") {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#3f3f3f';
+            ctx.fillStyle = '#555555';
+            drawRoundedRect(ctx, x + 15, y + 155, blockWidth - 30, blockHeight - 170, 5);  // Adjust cornerRadius as needed
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = 'white';  // Text color
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.outputs[0].value, x + 75, y + 170);
+        }
+
+        if (this.type === "Function") {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#3d3d3d';
+            ctx.fillStyle = '#282828';
+            drawRoundedRect(ctx, x + 15, y + 75, blockWidth - 30, blockHeight - 170, 5);  // Adjust cornerRadius as needed
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = 'white';  // Text color
+            ctx.font = '14px Poppins';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.operationtype, x + 27, y + 90);
+        }
     }
 }
 
