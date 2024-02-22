@@ -128,6 +128,8 @@ class Node {
         ctx.fill();
         ctx.stroke();
 
+        this.drawNodeHeader(ctx, x, y);
+
         // Draw the attachment points
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#141414';
