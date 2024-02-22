@@ -61,6 +61,38 @@ class Node {
         });
     }
 
+    /**
+     * Draws the node header.
+     *
+     * @param ctx The canvas context.
+     * @param x The x-coordinate of the node block.
+     * @param y The y-coordinate of the node block.
+     */
+    drawNodeHeader(ctx, x, y) {
+        // Draw the node header
+        drawTop(ctx, x, y, this.width, 30, 5);
+        ctx.fillStyle = '#00C49A';
+        ctx.fill();
+
+        // Draw the node header text
+        ctx.fillStyle = 'white';  // Text color
+        ctx.font = '16px Poppins';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(this.category, x + 10, y + 25);
+    }
+
+    /**
+     * Draws the box used to display the operation type of the node (e.g., sine, cosine).
+     *
+     * @param ctx The canvas context.
+     * @param x The x-coordinate of the node block.
+     * @param y The y-coordinate of the node block.
+     * @param rectYOffset The y-offset of the rectangle.
+     * @param textXOffset The x-offset of the text.
+     * @param textYOffset The y-offset of the text.
+     * @param textAlign The text alignment.
+     */
     drawBox(ctx, x, y, rectYOffset, textXOffset, textYOffset, textAlign) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#3d3d3d';
@@ -96,18 +128,6 @@ class Node {
         ctx.fill();
         ctx.stroke();
 
-        // Draw the node header
-        drawTop(ctx, x, y, this.width, 30, 5);
-        ctx.fillStyle = '#00C49A';
-        ctx.fill();
-
-        // Draw the node header text
-        ctx.fillStyle = 'white';  // Text color
-        ctx.font = '16px Poppins';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText(this.category, x + 10, y + 25);
-
         // Draw the attachment points
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#141414';
@@ -121,6 +141,7 @@ class Node {
             item.draw(ctx, x, y, index, this.width, this.height);
         });
 
+        // Draw the "box" used for input or function types
         if (this.type === "Input" || this.type === "Variable") {
             this.drawBox(ctx, x, y, 155, 75, 170, "center");
         }
