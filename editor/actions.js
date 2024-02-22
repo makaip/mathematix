@@ -61,6 +61,21 @@ class Node {
         });
     }
 
+    drawBox(ctx, x, y, rectYOffset, textXOffset, textYOffset, textAlign) {
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#3d3d3d';
+        ctx.fillStyle = '#282828';
+        drawRoundedRect(ctx, x + 15, y + rectYOffset, this.width - 30, this.height - 170, 5);  // Adjust cornerRadius as needed
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = 'white';  // Text color
+        ctx.font = '14px Poppins';
+        ctx.textAlign = textAlign;
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.operationtype, x + textXOffset, y + textYOffset);
+    }
+
     draw(ctx) {
         const x = this.x + offsetX;
         const y = this.y + offsetY;
@@ -76,20 +91,24 @@ class Node {
             ctx.strokeStyle = '#141414';
         }
 
-        drawRoundedRect(ctx, x, y, this.width, this.height, 5);  // Adjust cornerRadius as needed
+        // Draw the node "body"
+        drawRoundedRect(ctx, x, y, this.width, this.height, 5);
         ctx.fill();
         ctx.stroke();
 
-        drawTop(ctx, x, y, this.width, 30, 5);  // Adjust cornerRadius as needed
+        // Draw the node header
+        drawTop(ctx, x, y, this.width, 30, 5);
         ctx.fillStyle = '#00C49A';
         ctx.fill();
 
+        // Draw the node header text
         ctx.fillStyle = 'white';  // Text color
         ctx.font = '16px Poppins';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
         ctx.fillText(this.category, x + 10, y + 25);
 
+        // Draw the attachment points
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#141414';
         ctx.fillStyle = '#9f9f9f';
@@ -103,33 +122,11 @@ class Node {
         });
 
         if (this.type === "Input" || this.type === "Variable") {
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#3f3f3f';
-            ctx.fillStyle = '#555555';
-            drawRoundedRect(ctx, x + 15, y + 155, this.width - 30, this.height - 170, 5);  // Adjust cornerRadius as needed
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.fillStyle = 'white';  // Text color
-            ctx.font = '14px Poppins';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(this.outputs[0].value, x + 75, y + 170);
+            this.drawBox(ctx, x, y, 155, 75, 170, "center");
         }
 
         if (this.type === "Function") {
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#3d3d3d';
-            ctx.fillStyle = '#282828';
-            drawRoundedRect(ctx, x + 15, y + 75, this.width - 30, this.height - 170, 5);  // Adjust cornerRadius as needed
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.fillStyle = 'white';  // Text color
-            ctx.font = '14px Poppins';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(this.operationtype, x + 27, y + 90);
+            this.drawBox(ctx, x, y, 75, 27, 90, "left");
         }
     }
 }
