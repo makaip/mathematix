@@ -106,10 +106,14 @@ class Node {
         ctx.fillText(this.operationtype, x + textXOffset, y + textYOffset);
     }
 
-    draw(ctx) {
-        const x = this.x + offsetX;
-        const y = this.y + offsetY;
-
+    /**
+     * Draws "structure" the node block.
+     *
+     * @param ctx The canvas context.
+     * @param x The x-coordinate of the node block.
+     * @param y The y-coordinate of the node block.
+     */
+    drawNodeBase(ctx, x, y) {
         // Draw a rounded rectangle representing the node block
         ctx.fillStyle = '#343434';
         if (this === selectedNodeBlock) {
@@ -125,10 +129,16 @@ class Node {
         drawRoundedRect(ctx, x, y, this.width, this.height, 5);
         ctx.fill();
         ctx.stroke();
+    }
 
-        this.drawNodeHeader(ctx, x, y);
-
-        // Draw the attachment points
+    /**
+     * Draws the nodules (attachment points) of the node block.
+     *
+     * @param ctx The canvas context.
+     * @param x The x-coordinate of the node block.
+     * @param y The y-coordinate of the node block.
+     */
+    drawNodules(ctx, x, y) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#141414';
         ctx.fillStyle = '#9f9f9f';
@@ -140,6 +150,16 @@ class Node {
         this.outputs.forEach((item, index) => {
             item.draw(ctx, x, y, index, this.width, this.height);
         });
+    }
+
+    draw(ctx) {
+        const x = this.x + offsetX;
+        const y = this.y + offsetY;
+
+        this.drawNodeBase(ctx, x, y);
+        this.drawNodeHeader(ctx, x, y);
+
+        this.drawNodules(ctx, x, y);
 
         // Draw the "box" used for input or function types
         if (this.type === "Input" || this.type === "Variable") {
