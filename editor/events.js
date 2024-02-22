@@ -486,30 +486,18 @@ function handleMenuItemClick(itemText) {
         return;
     }
 
-    switch (itemText) {
-        case 'Function':
-            newFunction();
-            break;
-        case 'Input':
-            newInput();
-            break;
-        case 'Output':
-            newOutput();
-            break;
-        case 'Variable':
-            newVariable();
-            break;
-        case 'Arithmetic':
-            newFunction();
-            break;
-        case 'Trigonometry':
-            newTrigFunction();
-            break;
-        case 'Unary Operators':
-            newUnaryFunction();
-            break;
-        default:
-            break;
+    let functionsByTitle = {
+        "Function": newFunction,
+        "Input": newInput,
+        "Output": newOutput,
+        "Variable": newVariable,
+        "Arithmetic": newFunction,
+        "Trigonometry": newTrigFunction,
+        "Unary Operators": newUnaryFunction
+    }
+
+    if (functionsByTitle[itemText]) {
+        functionsByTitle[itemText]();
     }
 }
 
