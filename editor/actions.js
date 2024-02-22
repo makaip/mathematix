@@ -193,7 +193,7 @@ function newUnaryFunction() {
 function newInput() {
     nodeBlocks.push(
         new Node(
-            "Input", "Input", null,
+            "Input", "Input", "5",
             [],
             [{name: "Value", value: 5}]
         )
@@ -217,7 +217,7 @@ function newOutput() {
 function newVariable() {
     nodeBlocks.push(
         new Node(
-            "Variable", "Variable", null,
+            "Variable", "Variable", "x",
             [],
             [{name: "Value", value: "x"}]
         )
