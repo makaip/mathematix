@@ -482,32 +482,34 @@ function getMenuItemAtPosition(x, y) {
 }
 
 function handleMenuItemClick(itemText) {
-    if (isMenuVisible == true) {
-        switch (itemText) {
-            case 'Function':
-                newFunction();
-                break;
-            case 'Input':
-                newInput();
-                break;
-            case 'Output':
-                newOutput();
-                break;
-            case 'Variable':
-                newVariable();
-                break;
-            case 'Arithmetic':
-                newFunction();
-                break;
-            case 'Trigonometry':
-                newTrigFunction();
-                break;
-            case 'Unary Operators':
-                newUnaryFunction();
-                break;
-            default:
-                break;
-        }
+    if (isMenuVisible !== true) {
+        return;
+    }
+
+    switch (itemText) {
+        case 'Function':
+            newFunction();
+            break;
+        case 'Input':
+            newInput();
+            break;
+        case 'Output':
+            newOutput();
+            break;
+        case 'Variable':
+            newVariable();
+            break;
+        case 'Arithmetic':
+            newFunction();
+            break;
+        case 'Trigonometry':
+            newTrigFunction();
+            break;
+        case 'Unary Operators':
+            newUnaryFunction();
+            break;
+        default:
+            break;
     }
 }
 
