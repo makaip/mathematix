@@ -178,6 +178,10 @@ class Node {
     setValue() {
         throw new Error("This method must be overridden in a subclass");
     }
+
+    getFormula() {
+        throw new Error("This method must be overridden in a subclass");
+    }
 }
 
 class ValueNode extends Node {
@@ -191,6 +195,10 @@ class ValueNode extends Node {
             this.outputs[0].connection.value = this.outputs[0].value;
             console.log(this.outputs[0].value);
         }
+    }
+
+    getFormula() {
+        return this.value;
     }
 }
 
@@ -233,6 +241,34 @@ class FunctionNode extends Node {
             this.outputs[0].connection.value = this.outputs[0].value;
         }
     }
+
+    getFormula() {
+        let input1 = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getFormula();
+        let input2 = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getFormula();
+
+        let predictionMap = {
+            "Add": "( " + input1 + " + " + input2 + " )",
+            "Subtract": "( " + input1 + " - " + input2 + " )",
+            "Multiply": "( " + input1 + " * " + input2 + " )",
+            "Divide": "( " + input1 + " / " + input2 + " )",
+            "Modulus": "( " + input1 + " % " + input2 + " )",
+            "Exponent": "( " + input1 + " ** " + input2 + " )",
+            "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
+            "Logarithm": "Math.log(" + input1 + ")",
+            "Absolute Value": "Math.abs(" + input1 + ")",
+            "Factorial": "( " + input1 + "! )",
+            "Floor": "Math.floor(" + input1 + ")",
+            "Ceiling": "Math.ceil(" + input1 + ")",
+            "Sine": "Math.sin(" + input1 + ")",
+            "Cosine": "Math.cos(" + input1 + ")",
+            "Tangent": "Math.tan(" + input1 + ")",
+            "Cosecant": "( " + "1 / Math.sin(" + input1 + ")" + " )",
+            "Secant": "( " + "1 / Math.cos(" + input1 + ")" + " )",
+            "Cotangent": "( " + "1 / Math.tan(" + input1 + ")" + " )"
+        }
+
+        return predictionMap[this.operationtype];
+    }
 }
 
 
@@ -246,6 +282,10 @@ class OutputNode extends Node {
      */
     setValue() {
         functionsToPlot.push(this.inputs[0].value);
+    }
+
+    getFormula() {
+        return this.inputs[0].connection.parent.getFormula();
     }
 }
 

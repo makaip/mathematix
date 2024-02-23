@@ -298,7 +298,9 @@ document.addEventListener('mouseup', (event) => {
     functionsToPlot = [];
     
     for (const nodeBlock of nodeBlocks) {
-        nodeBlock.setValue();
+        if (nodeBlock instanceof OutputNode) {
+            functionsToPlot.push(nodeBlock.getFormula());
+        }
     }
 
     drawGridRenderer();
