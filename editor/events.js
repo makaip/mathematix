@@ -305,66 +305,32 @@ document.addEventListener('mouseup', (event) => {
             }
         }
         if (nodeBlock.type == "Function") {
-            let functionPrediction;
-            console.log(nodeBlock.operationtype);
-            switch (nodeBlock.operationtype) {
-                case 'Add':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " + " + nodeBlock.inputs[1].value + " )");
-                    break;
-                case 'Subtract':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " - " + nodeBlock.inputs[1].value + " )");
-                    break;
-                case 'Multiply':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " * " + nodeBlock.inputs[1].value + " )");
-                    break;
-                case 'Divide':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " / " + nodeBlock.inputs[1].value + " )");
-                    break;
-                case 'Modulus':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " % " + nodeBlock.inputs[1].value + " )");
-                    break;
-                case 'Exponent':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " ** " + nodeBlock.inputs[1].value + " )");
-                    break;
-                case 'Radical':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + " ** " + ( 1 / nodeBlock.inputs[1].value ) + " )");
-                    break;
-                case 'Logarithm':
-                    functionPrediction = ("Math.log(" + nodeBlock.inputs[0].value + ")");
-                    break;
-                
-                case 'Absolute Value':
-                    functionPrediction = ("Math.abs(" + nodeBlock.inputs[0].value + ")");
-                    break;
-                case 'Factorial':
-                    functionPrediction = ("( " + nodeBlock.inputs[0].value + "! )");
-                    break;
-                case 'Floor':
-                    functionPrediction = ("Math.floor(" + nodeBlock.inputs[0].value + ")");
-                    break;
-                case 'Ceiling':
-                    functionPrediction = ("Math.ceil(" + nodeBlock.inputs[0].value + ")");
-                    break;
-                
-                case 'Sine':
-                    functionPrediction = ("Math.sin(" + nodeBlock.inputs[0].value + ")");
-                    break;
-                case 'Cosine':
-                    functionPrediction = ("Math.cos(" + nodeBlock.inputs[0].value + ")");
-                    break;
-                case 'Tangent':
-                    functionPrediction = ("Math.tan(" + nodeBlock.inputs[0].value + ")");
-                    break;
-                case 'Cosecant':
-                    functionPrediction = ("( " + "1 / Math.sin(" + nodeBlock.inputs[0].value + ")" + " )");
-                    break;
-                case 'Secant':
-                    functionPrediction = ("( " + "1 / Math.cos(" + nodeBlock.inputs[0].value + ")" + " )");
-                    break;
-                case 'Cotangent':
-                    functionPrediction = ("( " + "1 / Math.tan(" + nodeBlock.inputs[0].value + ")" + " )");
-                    break;
+            let input1 = nodeBlock.inputs[0] !== undefined ? nodeBlock.inputs[0].value : undefined;
+            let input2 = nodeBlock.inputs[1] !== undefined ? nodeBlock.inputs[1].value : undefined;
+
+            let predictionMap = {
+                "Add": "( " + input1 + " + " + input2 + " )",
+                "Subtract": "( " + input1 + " - " + input2 + " )",
+                "Multiply": "( " + input1 + " * " + input2 + " )",
+                "Divide": "( " + input1 + " / " + input2 + " )",
+                "Modulus": "( " + input1 + " % " + input2 + " )",
+                "Exponent": "( " + input1 + " ** " + input2 + " )",
+                "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
+                "Logarithm": "Math.log(" + input1 + ")",
+                "Absolute Value": "Math.abs(" + input1 + ")",
+                "Factorial": "( " + input1 + "! )",
+                "Floor": "Math.floor(" + input1 + ")",
+                "Ceiling": "Math.ceil(" + input1 + ")",
+                "Sine": "Math.sin(" + input1 + ")",
+                "Cosine": "Math.cos(" + input1 + ")",
+                "Tangent": "Math.tan(" + input1 + ")",
+                "Cosecant": "( " + "1 / Math.sin(" + input1 + ")" + " )",
+                "Secant": "( " + "1 / Math.cos(" + input1 + ")" + " )",
+                "Cotangent": "( " + "1 / Math.tan(" + input1 + ")" + " )"
             }
+
+            let functionPrediction = predictionMap[nodeBlock.operationtype];
+
             if (nodeBlock.outputs[0].connection !== null) {
                 nodeBlock.operation = functionPrediction;
                 nodeBlock.outputs[0].value = nodeBlock.operation;
