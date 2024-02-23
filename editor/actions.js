@@ -172,13 +172,6 @@ class Node {
         }
     }
 
-    /**
-     * Sets this.value to the formula for this node.
-     */
-    setValue() {
-        throw new Error("This method must be overridden in a subclass");
-    }
-
     getFormula() {
         throw new Error("This method must be overridden in a subclass");
     }
@@ -190,13 +183,6 @@ class ValueNode extends Node {
         this.value = operationtype;
     }
 
-    setValue() {
-        if (this.outputs[0].connection !== null) {
-            this.outputs[0].connection.value = this.outputs[0].value;
-            console.log(this.outputs[0].value);
-        }
-    }
-
     getFormula() {
         return this.value;
     }
@@ -206,40 +192,6 @@ class ValueNode extends Node {
 class FunctionNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
         super(type, category, operationtype, inputs, outputs);
-    }
-
-    setValue() {
-        let input1 = this.inputs[0] !== undefined ? this.inputs[0].value : undefined;
-        let input2 = this.inputs[1] !== undefined ? this.inputs[1].value : undefined;
-
-        let predictionMap = {
-            "Add": "( " + input1 + " + " + input2 + " )",
-            "Subtract": "( " + input1 + " - " + input2 + " )",
-            "Multiply": "( " + input1 + " * " + input2 + " )",
-            "Divide": "( " + input1 + " / " + input2 + " )",
-            "Modulus": "( " + input1 + " % " + input2 + " )",
-            "Exponent": "( " + input1 + " ** " + input2 + " )",
-            "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
-            "Logarithm": "Math.log(" + input1 + ")",
-            "Absolute Value": "Math.abs(" + input1 + ")",
-            "Factorial": "( " + input1 + "! )",
-            "Floor": "Math.floor(" + input1 + ")",
-            "Ceiling": "Math.ceil(" + input1 + ")",
-            "Sine": "Math.sin(" + input1 + ")",
-            "Cosine": "Math.cos(" + input1 + ")",
-            "Tangent": "Math.tan(" + input1 + ")",
-            "Cosecant": "( " + "1 / Math.sin(" + input1 + ")" + " )",
-            "Secant": "( " + "1 / Math.cos(" + input1 + ")" + " )",
-            "Cotangent": "( " + "1 / Math.tan(" + input1 + ")" + " )"
-        }
-
-        let functionPrediction = predictionMap[this.operationtype];
-
-        if (this.outputs[0].connection !== null) {
-            this.operation = functionPrediction;
-            this.outputs[0].value = this.operation;
-            this.outputs[0].connection.value = this.outputs[0].value;
-        }
     }
 
     getFormula() {
@@ -275,13 +227,6 @@ class FunctionNode extends Node {
 class OutputNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
         super(type, category, operationtype, inputs, outputs);
-    }
-
-    /**
-     * Plots the function on the graph.
-     */
-    setValue() {
-        functionsToPlot.push(this.inputs[0].value);
     }
 
     getFormula() {
