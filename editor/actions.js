@@ -1,5 +1,3 @@
-
-
 class Nodule {
     constructor(isInput, name, value, parent) {
         this.isInput = isInput;
@@ -12,23 +10,20 @@ class Nodule {
         let xOffset = this.isInput ? 1 : blockWidth - 1;
         let yOffset = this.isInput ? -25 * index + blockHeight - 30 : 25 * index + 55;
 
-        // Draw the nodule
         ctx.fillStyle = '#9f9f9f';
         drawCircle(ctx, x + xOffset, y + yOffset, 6);
         ctx.fill();
         ctx.stroke();
 
-        // Draw nodule label
         xOffset += this.isInput ? 10 : -10;
 
-        ctx.fillStyle = "white"; // Text color
+        ctx.fillStyle = "white";
         ctx.font = "14px Poppins";
         ctx.textAlign = this.isInput ? "left" : "right";
         ctx.textBaseline = "middle";
         ctx.fillText(this.name, x + xOffset, y + yOffset);
     }
 }
-
 
 class Node {
     /**
@@ -180,7 +175,6 @@ class Node {
     }
 }
 
-
 class ValueNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
         super(type, category, operationtype, inputs, outputs);
@@ -191,7 +185,6 @@ class ValueNode extends Node {
         return this.value;
     }
 }
-
 
 class FunctionNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
@@ -227,7 +220,6 @@ class FunctionNode extends Node {
     }
 }
 
-
 class OutputNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
         super(type, category, operationtype, inputs, outputs);
@@ -242,7 +234,6 @@ class OutputNode extends Node {
     }
 }
 
-
 function newFunction() {
     nodeBlocks.push(
         new FunctionNode(
@@ -254,7 +245,6 @@ function newFunction() {
 
     drawGrid();
 }
-
 
 function newTrigFunction() {
     nodeBlocks.push(
@@ -268,7 +258,6 @@ function newTrigFunction() {
     drawGrid();
 }
 
-
 function newUnaryFunction() {
     nodeBlocks.push(
         new FunctionNode(
@@ -280,7 +269,6 @@ function newUnaryFunction() {
 
     drawGrid();
 }
-
 
 function newInput() {
     nodeBlocks.push(
@@ -294,7 +282,6 @@ function newInput() {
     drawGrid();
 }
 
-
 function newOutput() {
     nodeBlocks.push(
         new OutputNode(
@@ -306,7 +293,6 @@ function newOutput() {
 
     drawGrid();
 }
-
 
 function newVariable() {
     nodeBlocks.push(
