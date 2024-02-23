@@ -39,21 +39,16 @@ function drawCircle(ctx, x, y, radius) {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, 2 * Math.PI);
     ctx.closePath();
-    ctx.stroke(); // You can also use fill() if you want to fill the circle
+    ctx.stroke(); // use fill() if u want to fill the circle
 }
 
 function drawGrid() {
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, canvasWidth + 5, canvasHeight + 5);
-
-    // Set background color to dark gray
-    ctx.fillStyle = '#1d1d1d'; // Dark gray
+    ctx.fillStyle = '#1d1d1d';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.fillStyle = '#282828';
 
-    // Set dot color to #282828
-    ctx.fillStyle = '#282828'; // Darker gray
-
-    // Draw dots at grid intersections
     for (let y = offsetY % gridSize; y < canvasHeight; y += gridSize) {
         for (let x = offsetX % gridSize; x < canvasWidth; x += gridSize) {
             ctx.beginPath();
@@ -93,37 +88,29 @@ function drawGrid() {
         }
     }
 
-    //NODEBLOCKS
-
     for (const nodeBlock of nodeBlocks) {
         nodeBlock.draw(ctx);
     }
 
-    ///SELECTION
-
-    // Draw the selection box
     if (isDragging) {
-        ctx.strokeStyle = 'white'; // Box border color
+        ctx.strokeStyle = 'white';
         ctx.lineWidth = 2;
-
-        // Set the fill color with transparency (RGBA)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; // Very transparent white
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         ctx.beginPath();
         ctx.rect(startX, startY, endX - startX, endY - startY);
         ctx.fill();
         ctx.stroke();
     }
 
-    // Draw the menu with rounded corners
     if (isMenuVisible) {
-        ctx.fillStyle = '#181818'; // Menu background color
+        ctx.fillStyle = '#181818';
         const menuWidth = 150;
         const menuHeight = menuItems.length * 30 + 10;
-        const cornerRadius = 5; // Adjust as needed
+        const cornerRadius = 5;
         drawRoundedRect(ctx, menuX, menuY, menuWidth, menuHeight, cornerRadius);
         ctx.fill();
         
-        ctx.fillStyle = 'white'; // Text color
+        ctx.fillStyle = 'white';
         ctx.font = '16px Poppins';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
