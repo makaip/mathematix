@@ -1,4 +1,5 @@
-// actions.js
+
+
 class Nodule {
     constructor(isInput, name, value, parent) {
         this.isInput = isInput;
@@ -172,10 +173,14 @@ class Node {
         }
     }
 
+    /**
+     * @returns The formula of the node block, considering all sub-nodes.
+     */
     getFormula() {
         throw new Error("This method must be overridden in a subclass");
     }
 }
+
 
 class ValueNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
@@ -247,6 +252,7 @@ function newFunction() {
     drawGrid();
 }
 
+
 function newTrigFunction() {
     nodeBlocks.push(
         new FunctionNode(
@@ -258,6 +264,7 @@ function newTrigFunction() {
 
     drawGrid();
 }
+
 
 function newUnaryFunction() {
     nodeBlocks.push(
@@ -271,6 +278,7 @@ function newUnaryFunction() {
     drawGrid();
 }
 
+
 function newInput() {
     nodeBlocks.push(
         new ValueNode(
@@ -283,6 +291,7 @@ function newInput() {
     drawGrid();
 }
 
+
 function newOutput() {
     nodeBlocks.push(
         new OutputNode(
@@ -294,6 +303,7 @@ function newOutput() {
 
     drawGrid();
 }
+
 
 function newVariable() {
     nodeBlocks.push(
