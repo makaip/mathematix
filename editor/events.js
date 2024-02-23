@@ -298,50 +298,7 @@ document.addEventListener('mouseup', (event) => {
     functionsToPlot = [];
     
     for (const nodeBlock of nodeBlocks) {
-        if (nodeBlock.type == "Input" | nodeBlock.type == "Variable") {
-            if (nodeBlock.outputs[0].connection !== null) {
-                nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
-                console.log(nodeBlock.outputs[0].value);
-            }
-        }
-        if (nodeBlock.type == "Function") {
-            let input1 = nodeBlock.inputs[0] !== undefined ? nodeBlock.inputs[0].value : undefined;
-            let input2 = nodeBlock.inputs[1] !== undefined ? nodeBlock.inputs[1].value : undefined;
-
-            let predictionMap = {
-                "Add": "( " + input1 + " + " + input2 + " )",
-                "Subtract": "( " + input1 + " - " + input2 + " )",
-                "Multiply": "( " + input1 + " * " + input2 + " )",
-                "Divide": "( " + input1 + " / " + input2 + " )",
-                "Modulus": "( " + input1 + " % " + input2 + " )",
-                "Exponent": "( " + input1 + " ** " + input2 + " )",
-                "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
-                "Logarithm": "Math.log(" + input1 + ")",
-                "Absolute Value": "Math.abs(" + input1 + ")",
-                "Factorial": "( " + input1 + "! )",
-                "Floor": "Math.floor(" + input1 + ")",
-                "Ceiling": "Math.ceil(" + input1 + ")",
-                "Sine": "Math.sin(" + input1 + ")",
-                "Cosine": "Math.cos(" + input1 + ")",
-                "Tangent": "Math.tan(" + input1 + ")",
-                "Cosecant": "( " + "1 / Math.sin(" + input1 + ")" + " )",
-                "Secant": "( " + "1 / Math.cos(" + input1 + ")" + " )",
-                "Cotangent": "( " + "1 / Math.tan(" + input1 + ")" + " )"
-            }
-
-            let functionPrediction = predictionMap[nodeBlock.operationtype];
-
-            if (nodeBlock.outputs[0].connection !== null) {
-                nodeBlock.operation = functionPrediction;
-                nodeBlock.outputs[0].value = nodeBlock.operation;
-                nodeBlock.outputs[0].connection.value = nodeBlock.outputs[0].value;
-            }
-            
-        }
-        if (nodeBlock.type == "Output") {
-            console.log("Blub: " + nodeBlock.inputs[0].value);
-            functionsToPlot.push(nodeBlock.inputs[0].value);
-        }
+        nodeBlock.setValue();
     }
 
     drawGridRenderer();
