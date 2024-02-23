@@ -184,8 +184,7 @@ canvas.addEventListener('mousedown', (event) => {
         if (clickedNodeBlock) {
             document.getElementById("propertyType").innerHTML = clickedNodeBlock.type;
             document.getElementById("propertyCategory").innerHTML = clickedNodeBlock.category;
-            document.getElementById("propertyInputs").innerHTML = clickedNodeBlock.inputs[0].value + ", " + clickedNodeBlock.inputs[1].value;
-            document.getElementById("propertyOutputs").innerHTML = clickedNodeBlock.outputs[0].value;
+            document.getElementById("propertyFunction").innerHTML = clickedNodeBlock.getFormula();
         }
     }
     drawGrid();
