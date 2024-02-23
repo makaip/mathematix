@@ -5,13 +5,11 @@ const rctx = rcanvas.getContext('2d');
 // Set the rcanvas resolution to match its CSS size
 rcanvas.width = rcanvas.clientWidth;
 rcanvas.height = rcanvas.clientHeight;
-console.log(rcanvas.width, rcanvas.height);
 
 // Initial grid size and rcanvas dimensions
 let rgridSize = 20;
 let rcanvasWidth = rcanvas.width;
 let rcanvasHeight = rcanvas.height;
-console.log(rcanvasWidth, rcanvasHeight);
 
 // Offset values for panning
 let roffsetX = 0;
