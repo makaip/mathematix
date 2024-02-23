@@ -5,7 +5,7 @@ function resizeCanvas() {
     canvas.height = canvas.offsetHeight;
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
-    console.log(canvasWidth, canvasHeight);
+
     drawGrid();
 }
 

@@ -3,7 +3,6 @@ function resizeCanvasRenderer() {
     rcanvas.height = rcanvas.clientHeight;
     rcanvasWidth = rcanvas.width;
     rcanvasHeight = rcanvas.height;
-    console.log(rcanvasWidth, rcanvasHeight);
     drawGridRenderer();
 }
 

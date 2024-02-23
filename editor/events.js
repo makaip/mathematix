@@ -29,7 +29,6 @@ function isMouseOverNodule(nodeBlock, x, y) {
             const noduleX = nodeBlock.x + offsetX - 5; // X coordinate of the nodule
             const noduleY = nodeBlock.y + ( -25 * index ) + 200 - 35 + offsetY; // Y coordinate of the nodule
 
-            console.log(noduleX, noduleY);
             const noduleWidth = 10; // Adjust as needed
             const noduleHeight = 10; // Adjust as needed
             if (
@@ -179,7 +178,7 @@ canvas.addEventListener('mousedown', (event) => {
 
         if (typeof nodeSelected === "object" && nodeSelected !== undefined && nodeSelected !== null) {
             // Start drawing a line from the selected output nodule
-            console.log("Output Nodule Clicked " + nodeSelected.name);
+
             isDraggingLine = true;
             lineStartX = clickedNodeBlock.x + 149 + offsetX; // X coordinate of the output nodule
             lineStartY = clickedNodeBlock.y + offsetY + 55 + (25 * nodeSelectedIndex);
@@ -270,7 +269,6 @@ document.addEventListener('mouseup', (event) => {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     if (isDraggingLine) {
         isDraggingLine = false;
-        console.log(resultOfOutputNoduleClicked[0].name + " to " + resultOfMouseOverNodule[0].name);
         resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
         resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
         drawGrid();
@@ -345,8 +343,6 @@ window.addEventListener('keydown', (event) => {
         newVariable();
     }
     if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
-        console.log("Deleted Block");
-
         //WHY THIS NO WORK AAAAAAA
         /*
         for (length = 0; length < selectedNodeBlock.inputs.length; length++) {
