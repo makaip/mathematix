@@ -1,4 +1,6 @@
 function isOutputNoduleClicked(nodeBlock, x, y) {
+    // TODO: move to the Nodule class
+
     let noduleClicked = null;
     let noduleClickedIndex = null;
     
@@ -18,6 +20,7 @@ function isOutputNoduleClicked(nodeBlock, x, y) {
 }
 
 function isMouseOverNodule(nodeBlock, x, y) {
+    // TODO: move to a method in the Nodule class
     let noduleOver = null;
     let noduleOverIndex = null;
 
@@ -125,6 +128,7 @@ canvas.addEventListener('mousedown', (event) => {
             // Hide the menu when starting a drag
         }
 
+        // TODO: omg what the heck is this mess of code
         if (clickedNodeBlock) {
             
             //x + 15, y + 75, blockWidth - 30, blockHeight - 170
@@ -132,31 +136,32 @@ canvas.addEventListener('mousedown', (event) => {
                 if (startX >= clickedNodeBlock.x + 15 + offsetX &&
                     startX <= clickedNodeBlock.x + 150 - 15 + offsetX &&
                     startY >= clickedNodeBlock.y + 75 + offsetY &&
-                    startY <= clickedNodeBlock.y + 200 - 100 + offsetY) {
-                        if (clickedNodeBlock.category == "Arithmetic") {
-                            let operations = ["Add", "Subtract", "Multiply", "Divide", "Modulus", "Exponent", "Radical", "Logarithm", "RESET"];
-                            if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
-                                clickedNodeBlock.operationtype = operations[0]
-                            } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
-                                clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
-                            }
+                    startY <= clickedNodeBlock.y + 200 - 100 + offsetY)
+                {
+                    if (clickedNodeBlock.category == "Arithmetic") {
+                        let operations = ["Add", "Subtract", "Multiply", "Divide", "Modulus", "Exponent", "Radical", "Logarithm", "RESET"];
+                        if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
+                            clickedNodeBlock.operationtype = operations[0]
+                        } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
+                            clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
                         }
-                        if (clickedNodeBlock.category == "Unary Operators") {
-                            let operations = ["Absolute Value", "Factorial", "Ceiling", "Floor", "RESET"];
-                            if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
-                                clickedNodeBlock.operationtype = operations[0]
-                            } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
-                                clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
-                            }
+                    }
+                    if (clickedNodeBlock.category == "Unary Operators") {
+                        let operations = ["Absolute Value", "Factorial", "Ceiling", "Floor", "RESET"];
+                        if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
+                            clickedNodeBlock.operationtype = operations[0]
+                        } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
+                            clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
                         }
-                        if (clickedNodeBlock.category == "Trigonometry") {
-                            let operations = ["Sine", "Cosine", "Tangent", "Cosecant", "Secant", "Cotangent", "RESET"];
-                            if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
-                                clickedNodeBlock.operationtype = operations[0]
-                            } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
-                                clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
-                            }
+                    }
+                    if (clickedNodeBlock.category == "Trigonometry") {
+                        let operations = ["Sine", "Cosine", "Tangent", "Cosecant", "Secant", "Cotangent", "RESET"];
+                        if (operations[operations.indexOf(clickedNodeBlock.operationtype) + 1] == "RESET") {
+                            clickedNodeBlock.operationtype = operations[0]
+                        } else if (clickedNodeBlock.operationtype == operations[operations.indexOf(clickedNodeBlock.operationtype)]) {
+                            clickedNodeBlock.operationtype = operations[operations.indexOf(clickedNodeBlock.operationtype) + 1];
                         }
+                    }
                 }
             }
         }
@@ -165,6 +170,7 @@ canvas.addEventListener('mousedown', (event) => {
 
         let nodeSelected, nodeSelectedIndex;
 
+        // TODO: remove try/catch and actually fix the damn error
         try {
             nodeSelected = resultOfOutputNoduleClicked[0];
             nodeSelectedIndex = resultOfOutputNoduleClicked[1];
@@ -177,7 +183,6 @@ canvas.addEventListener('mousedown', (event) => {
             isDraggingLine = true;
             lineStartX = clickedNodeBlock.x + 149 + offsetX; // X coordinate of the output nodule
             lineStartY = clickedNodeBlock.y + offsetY + 55 + (25 * nodeSelectedIndex);
-            //console.log(clickedNodeBlock, lineStartX, lineStartY);
         }
         hideMenu();
 
@@ -190,11 +195,6 @@ canvas.addEventListener('mousedown', (event) => {
     drawGrid();
 });
 
-/*
-    endX = event.clientX - canvas.getBoundingClientRect().left;
-    endY = event.clientY - canvas.getBoundingClientRect().top;
-*/
-
 canvas.addEventListener('mousemove', (event) => {
     endX = event.clientX - canvas.getBoundingClientRect().left;
     endY = event.clientY - canvas.getBoundingClientRect().top;
@@ -204,39 +204,29 @@ canvas.addEventListener('mousemove', (event) => {
     let overNodeBlock = null;
     overNodeBlock = null;
     for (const nodeBlock of nodeBlocks) {
-        const x = nodeBlock.x;
-        const y = nodeBlock.y;
-        const blockWidth = 150; // Replace with the width of your node block
-        const blockHeight = 200; // Replace with the height of your node block
+        // TODO: move into the NodeBlock class
+
+        // AABB collision
         if (
-            cursorX >= x + offsetX - 5 &&
-            cursorX <= x + blockWidth + offsetX + 5 &&
-            cursorY >= y + offsetY &&
-            cursorY <= y + blockHeight + offsetY
+            cursorX >= nodeBlock.x + offsetX - 5 &&
+            cursorX <= nodeBlock.x + nodeBlock.width + offsetX + 5 &&
+            cursorY >= nodeBlock.y + offsetY &&
+            cursorY <= nodeBlock.y + nodeBlock.height + offsetY
         ) {
             overNodeBlock = nodeBlock; // Store the clicked node block
         }
     }
 
+    // TODO: put in its own method
+    // TODO: refactor huge if/else if blocks
     if (isDraggingLine) {
         lineEndX = endX;
         lineEndY = endY;
         
         if (overNodeBlock !== null) {
             resultOfMouseOverNodule = isMouseOverNodule(overNodeBlock, cursorX, cursorY);
-            let nodeOver, nodeOverIndex;
-            try {
-                nodeOver = resultOfMouseOverNodule[0];
-                nodeOverIndex = resultOfMouseOverNodule[1];
-            } catch {
-            }
-            console.log(nodeOver);
-            if (typeof nodeOver === "object" && nodeOver !== undefined && nodeOver !== null) {
-                //console.log("Output Nodule Over " + nodeOver.name);
-                //console.log(nodeOver, lineStartX, lineStartY);
-            }
-            
         }
+
         drawGrid();
     } else if (isDragging) {
         // Calculate the movement of the cursor
@@ -306,15 +296,11 @@ document.addEventListener('mouseup', (event) => {
 
     // Determine selected node blocks within the box
     for (const nodeBlock of nodeBlocks) {
-        const x = nodeBlock.x;
-        const y = nodeBlock.y;
-        const blockWidth = 100; // Replace with the width of your node block
-        const blockHeight = 50; // Replace with the height of your node block
         if (
-            boxSelectStartX <= x + blockWidth &&
-            endX >= x &&
-            boxSelectStartY <= y + blockHeight &&
-            endY >= y
+            boxSelectStartX <= nodeBlock.x + nodeBlock.width &&
+            endX >= nodeBlock.x &&
+            boxSelectStartY <= nodeBlock.y + nodeBlock.height &&
+            endY >= nodeBlock.y
         ) {
             selectedBlocks.push(nodeBlock);
         }
