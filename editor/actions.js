@@ -4,7 +4,6 @@ class Nodule {
     constructor(isInput, name, value, parent) {
         this.isInput = isInput;
         this.name = name;
-        this.value = value;
         this.connection = null;
         this.parent = parent;
     }
