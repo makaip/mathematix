@@ -234,6 +234,10 @@ class OutputNode extends Node {
     }
 
     getFormula() {
+        if (this.inputs[0].connection === null) {
+            return "";
+        }
+
         return this.inputs[0].connection.parent.getFormula();
     }
 }
