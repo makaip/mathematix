@@ -1,5 +1,7 @@
 # mathematix
 A nodeblock-based math webapp, designed to make the graphic calculator more accessible and easy to use!
+<br> <br>
+Have you ever found it difficult to use a graphing calculator because you couldn't remember mathematical formulas or their implementations? **Mathematix** removes the graphing knowledge barrier by simplifying formulas into a collection of *node blocks*, which can easily be connected to other blocks to create a visual math formula, all without requiring prior knowledge of how each functions works or is notated. See how you can simplify your math problems today by visiting [mathematix](https://makaip.github.io/mathematix/)!
 
 ## Usage
 
