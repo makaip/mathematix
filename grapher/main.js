@@ -21,7 +21,9 @@ let functionsToPlot = [];
 rctx.imageSmoothingEnabled = false;
 
 function evaluateFunction(funcString, x) {
-    return eval(funcString);
+    console.log(funcString);
+    return nerdamer(funcString.replace("x", x));
+    
 }
 
 // Push mathematical functions as strings to the functionsToPlot array
