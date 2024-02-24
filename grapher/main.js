@@ -20,7 +20,6 @@ let functionsToPlot = [];
 // Set the rcanvas rendering mode to "crisp edges" to make it look sharper
 rctx.imageSmoothingEnabled = false;
 
-
 function evaluateFunction(funcString, x) {
     return eval(funcString);
 }

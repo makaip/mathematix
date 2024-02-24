@@ -20,6 +20,9 @@ let isMenuVisible = false;
 let menuX = 0;
 let menuY = 0;
 
+const times = [];
+let fps;
+
 let nodeSelected, nodeOver = null;
 let isDraggingLine = false;
 let lineStartX, lineStartY, lineEndX, lineEndY;

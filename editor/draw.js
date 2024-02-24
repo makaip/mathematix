@@ -119,3 +119,24 @@ function drawGrid() {
         });
     }
 }
+
+function refreshLoop() {
+    window.requestAnimationFrame(() => {
+      now = performance.now();
+      while (times.length > 0 && times[0] <= now - 1000) {
+        times.shift();
+      }
+      times.push(now);
+      fps = times.length;
+      refreshLoop();
+      ctx.fillStyle = '#1d1d1d'; //1d1d1d
+      ctx.fillRect(10, 10, 67, 22);
+      ctx.fillStyle = 'white';
+      ctx.font = '16px Poppins';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('FPS: ' + fps, 15, 30);
+    });
+  }
+  
+  refreshLoop();
