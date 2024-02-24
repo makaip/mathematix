@@ -173,6 +173,13 @@ class Node {
     getFormula() {
         throw new Error("This method must be overridden in a subclass");
     }
+
+    /**
+     * @returns The asymptotes of the node block, considering all sub-nodes.
+     */
+    getAsymptotes(xMin, xMax) {
+        throw new Error("This method must be overridden in a subclass");
+    }
 }
 
 class ValueNode extends Node {
@@ -183,6 +190,10 @@ class ValueNode extends Node {
 
     getFormula() {
         return this.value;
+    }
+
+    getAsymptotes(xMin, xMax) {
+        return [];
     }
 }
 
@@ -218,6 +229,43 @@ class FunctionNode extends Node {
 
         return predictionMap[this.operationtype];
     }
+
+    getAsymptotes(xMin, xMax) {
+        let input1Formula = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getFormula();
+        let input2Formula = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getFormula();
+
+        let input1Asymptotes = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
+        let input2Asymptotes = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getAsymptotes(xMin, xMax);
+
+        let asymptotes = [];
+
+        if (input1Asymptotes !== undefined) {
+            asymptotes = asymptotes.concat(input1Asymptotes);
+        } if (input2Asymptotes !== undefined) {
+            asymptotes = asymptotes.concat(input2Asymptotes);
+        }
+
+        if (this.operationtype === "Divide" && input2Asymptotes !== undefined) {
+            asymptotes.push(-1 * eval(input2Formula.replace("x", "(" + 0 + ")")));
+        } else if (this.operationtype === "Radical" && input1Formula !== undefined) {
+            asymptotes.push(-1 * eval(input1Formula.replace("x", "(" + 0 + ")")));
+        } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
+            asymptotes.push(-1 * eval(input1Formula.replace("x", "(" + 0 + ")")));
+        } else if (this.operationtype === "Tangent" && input1Formula !== undefined) {
+            let period = Math.PI;
+
+            // find the first x that is an asymptote past xMin
+            // idk how it works just put it in desmos lmao
+            let x = Math.PI * (Math.floor((2 * xMin - Math.PI) / (2 * Math.PI)) + 1);
+
+            while (x < xMax) {
+                asymptotes.push(-1 * eval(input1Formula.replace("x", "(" + x + ")")) + Math.PI / 2);
+                x += period;
+            }
+        }
+
+        return asymptotes;
+    }
 }
 
 class OutputNode extends Node {
@@ -231,5 +279,9 @@ class OutputNode extends Node {
         }
 
         return this.inputs[0].connection.parent.getFormula();
+    }
+
+    getAsymptotes(xMin, xMax) {
+        return this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
     }
 }

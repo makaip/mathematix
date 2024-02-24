@@ -150,7 +150,10 @@ canvas.addEventListener('mouseup', (event) => {
     
     for (const nodeBlock of nodeBlocks) {
         if (nodeBlock instanceof OutputNode) {
-            functionsToPlot.push(nodeBlock.getFormula());
+            functionsToPlot.push({
+                    "function": nodeBlock.getFormula(),
+                    "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2)
+            });
         }
     }
 
