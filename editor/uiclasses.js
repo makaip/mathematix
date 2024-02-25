@@ -255,16 +255,12 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
             functionsToFindZerosOf.push(input1Formula);
         } else if (this.operationtype === "Tangent" && input1Formula !== undefined) {
-            // TODO: fix tangent asymptotes, do something with the input formula and nerdamer
-            let period = Math.PI;
+            let funcInverseSolutions = getFunctionInverse(input1Formula);
 
-            // find the first x that is an asymptote past xMin
-            // idk how it works just put it in desmos lmao
-            let x = Math.PI * (Math.floor((2 * xMin - Math.PI) / (2 * Math.PI)) + 1);
-
-            while (x < xMax) {
-                asymptotes.push(-1 * eval(input1Formula.replace("x", "(" + x + ")")) + Math.PI / 2);
-                x += period;
+            for (const solution of funcInverseSolutions) {
+                for (let i = -10; i < 10; i++) {
+                    asymptotes.push(Number(solution.sub("x", "pi / 2 + pi * " + i).evaluate()));
+                }
             }
         }
 
@@ -299,6 +295,19 @@ class OutputNode extends Node {
     getAsymptotes(xMin, xMax) {
         return this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
     }
+}
+
+
+function getFunctionInverse(funcStr) {
+    funcStr = "y = " + funcStr;
+
+    let func = nerdamer(funcStr);
+    func = func.sub("x", "t");  // temp variable
+    func = func.sub("y", "x");
+    func = func.sub("t", "y");
+    let solutions = func.solveFor("y");
+
+    return solutions;
 }
 
 
