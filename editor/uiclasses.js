@@ -259,6 +259,9 @@ class FunctionNode extends Node {
 
             for (const solution of funcInverseSolutions) {
                 for (let i = -10; i < 10; i++) {
+                    // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes
+                    // if we have the function cos(f(x)) = 0, we find x = f^-1(cos^-1(0) + pi * n), where n is the nth asymptote
+                    // so if we substitute x for cos^-1(0) + pi * n, we get the x-value of the nth asymptote
                     asymptotes.push(Number(solution.sub("x", "pi / 2 + pi * " + i).evaluate()));
                 }
             }
@@ -305,9 +308,7 @@ function getFunctionInverse(funcStr) {
     func = func.sub("x", "t");  // temp variable
     func = func.sub("y", "x");
     func = func.sub("t", "y");
-    let solutions = func.solveFor("y");
-
-    return solutions;
+    return func.solveFor("y");
 }
 
 
