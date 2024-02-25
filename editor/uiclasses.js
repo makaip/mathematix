@@ -200,6 +200,8 @@ class ValueNode extends Node {
 class FunctionNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
         super(type, category, operationtype, inputs, outputs);
+
+        console.log(getZeros("x^2 - 4"));
     }
 
     getFormula() {
@@ -214,17 +216,17 @@ class FunctionNode extends Node {
             "Modulus": "( " + input1 + " % " + input2 + " )",
             "Exponent": "( " + input1 + " ** " + input2 + " )",
             "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
-            "Logarithm": "Math.log(" + input1 + ")",
-            "Absolute Value": "Math.abs(" + input1 + ")",
+            "Logarithm": "log(" + input1 + ")",  // TODO: add base
+            "Absolute Value": "abs(" + input1 + ")",
             "Factorial": "( " + input1 + "! )",
-            "Floor": "Math.floor(" + input1 + ")",
-            "Ceiling": "Math.ceil(" + input1 + ")",
-            "Sine": "Math.sin(" + input1 + ")",
-            "Cosine": "Math.cos(" + input1 + ")",
-            "Tangent": "Math.tan(" + input1 + ")",
-            "Cosecant": "( " + "1 / Math.sin(" + input1 + ")" + " )",
-            "Secant": "( " + "1 / Math.cos(" + input1 + ")" + " )",
-            "Cotangent": "( " + "1 / Math.tan(" + input1 + ")" + " )"
+            "Floor": "floor(" + input1 + ")",
+            "Ceiling": "ceil(" + input1 + ")",
+            "Sine": "sin(" + input1 + ")",
+            "Cosine": "cos(" + input1 + ")",
+            "Tangent": "tan(" + input1 + ")",
+            "Cosecant": "(1 / sin(" + input1 + "))",
+            "Secant": "(1 / cos(" + input1 + "))",
+            "Cotangent": "(1 / tan(" + input1 + "))"
         }
 
         return predictionMap[this.operationtype];
@@ -245,13 +247,15 @@ class FunctionNode extends Node {
             asymptotes = asymptotes.concat(input2Asymptotes);
         }
 
-        if (this.operationtype === "Divide" && input2Asymptotes !== undefined) {
-            asymptotes.push(-1 * eval(input2Formula.replace("x", "(" + 0 + ")")));
+        let functionsToFindZerosOf = [];
+        if (this.operationtype === "Divide" && input2Formula !== undefined) {
+            functionsToFindZerosOf.push(input2Formula);
         } else if (this.operationtype === "Radical" && input1Formula !== undefined) {
-            asymptotes.push(-1 * eval(input1Formula.replace("x", "(" + 0 + ")")));
+            functionsToFindZerosOf.push(input1Formula);
         } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
-            asymptotes.push(-1 * eval(input1Formula.replace("x", "(" + 0 + ")")));
+            functionsToFindZerosOf.push(input1Formula);
         } else if (this.operationtype === "Tangent" && input1Formula !== undefined) {
+            // TODO: fix tangent asymptotes, do something with the input formula and nerdamer
             let period = Math.PI;
 
             // find the first x that is an asymptote past xMin
@@ -263,6 +267,17 @@ class FunctionNode extends Node {
                 x += period;
             }
         }
+
+        console.log(functionsToFindZerosOf);
+
+        let zeros = [];
+        for (const func of functionsToFindZerosOf) {
+            zeros = zeros.concat(getZeros(func));
+        }
+
+        console.log(zeros);
+
+        asymptotes = asymptotes.concat(zeros);
 
         return asymptotes;
     }
@@ -284,4 +299,17 @@ class OutputNode extends Node {
     getAsymptotes(xMin, xMax) {
         return this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
     }
+}
+
+
+function getZeros(funcStr) {
+    funcStr += " = 0";
+    let solutions = nerdamer.solve(funcStr, "x").evaluate();
+    let zeros = eval(solutions.text());  // TODO: eval is a lazy way to convert a string to a number or list of numbers
+
+    if (typeof zeros === "number") {
+        zeros = [zeros];
+    }
+
+    return zeros;
 }

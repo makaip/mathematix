@@ -70,7 +70,8 @@ function drawGridRenderer() {
                 }
             }
 
-            const realY = -evaluateFunction(func["function"], realX) * 40 + (rcanvasHeight / 2 - roffsetY);
+            const y = nerdamer(func["function"], {"x": realX}).evaluate();
+            const realY = -y * 40 + (rcanvasHeight / 2 - roffsetY);
 
             if (x === 0 || isAsymptote) {
                 rctx.moveTo(x, realY);
