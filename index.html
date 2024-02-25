@@ -2,18 +2,16 @@
 <html>
 <head>
     <title>Mathematix</title>
+    <link rel="icon" type="image/png" href="/assets/logos/10.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
     <div class="navbar">
-        <span style="display: inline; float: left;" class="material-symbols-outlined">
-            calculate
-        </span>
         <h4 style="display: inline" >Mathematix / Untitled-1</h4>
     </div>
     <div class="editor-container">
-        <div id="sidebarleft" class="sidebar left" style="width: 250px; padding-right: 10px;">
+        <div id="sidebarleft" class="sidebar left" style="width: 250px; padding-right: 10px;" hidden>
             <button class="icon-button" style="float: right; padding-left: 20px; margin: 0px;" onclick="togglePanel()"><span class="material-symbols-outlined">
                 arrow_back_ios
                 </span></button>
@@ -28,10 +26,10 @@
             <h4>World Properties</h4>
             
         </div>
-        <canvas id="gridCanvas" width="720" height="770" style="padding-right: 2px"></canvas>
-        <canvas id="graphCanvas" width="720" height="770"></canvas>
+        <canvas id="gridCanvas" width="825" height="770" style="padding-right: 2px"></canvas>
+        <canvas id="graphCanvas" width="825" height="770"></canvas>
 
-        <button id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;" hidden><span class="material-symbols-outlined" onclick="togglePanel();">
+        <button hidden id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;"><span class="material-symbols-outlined" onclick="togglePanel();" >
             arrow_forward_ios
         </span></button>
 
@@ -56,6 +54,8 @@
         -->
         <!-- <canvas id="gridCanvas" width="795" height="905" style="padding-right: 2px"></canvas> -->
     </div>
+
+    <script src="nerdamer/all.min.js"></script>
 
     <script src="script.js"></script>
 
