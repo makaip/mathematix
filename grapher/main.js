@@ -22,7 +22,7 @@ rctx.imageSmoothingEnabled = false;
 
 function evaluateFunction(funcString, x) {
     console.log(funcString);
-    return nerdamer(funcString.replace("x", x));
+    return eval(funcString.replace("x", x));
     
 }
 
