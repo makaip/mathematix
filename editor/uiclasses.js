@@ -257,12 +257,9 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Tangent" && input1Formula !== undefined) {
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
-
-
             for (const solution of funcInverseSolutions) {
-                // TODO: get the minimum and maximum x values of the graph
-                let start = getZeroAtX(-rgridSize / 2);
-                let end = getZeroAtX(rgridSize / 2) + 1;
+                let start = getZeroAtX(getRealX(0));
+                let end = getZeroAtX(getRealX(rcanvasWidth)) + 1;
 
                 for (let i = start; i < end; i++) {
                     // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes

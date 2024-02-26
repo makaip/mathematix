@@ -20,10 +20,14 @@ let functionsToPlot = [];
 // Set the rcanvas rendering mode to "crisp edges" to make it look sharper
 rctx.imageSmoothingEnabled = false;
 
+function getRealX(x) {
+    return (x - rcanvasWidth / 2 + roffsetX) * 0.025;
+}
+
 function evaluateFunction(funcString, x) {
     console.log(funcString);
     return nerdamer(funcString.replace("x", x));
-    
+
 }
 
 // Push mathematical functions as strings to the functionsToPlot array

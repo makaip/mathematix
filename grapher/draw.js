@@ -60,7 +60,7 @@ function drawGridRenderer() {
 
         // Plot the function points within the canvas bounds
         for (let x = 0; x < rcanvasWidth; x++) {
-            const realX = (x - rcanvasWidth / 2 + roffsetX) * 0.025;
+            const realX = getRealX(x);
 
             let isAsymptote = false;
             for (const asymptote of func["asymptotes"]) {
