@@ -254,18 +254,32 @@ class FunctionNode extends Node {
             functionsToFindZerosOf.push(input1Formula);
         } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
             functionsToFindZerosOf.push(input1Formula);
-        } else if (this.operationtype === "Tangent" && input1Formula !== undefined) {
+        } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
-                let start = getZeroAtX(getRealX(0));
-                let end = getZeroAtX(getRealX(rcanvasWidth)) + 1;
+                let start = nthCosineZero(getRealX(0));
+                let end = nthCosineZero(getRealX(rcanvasWidth)) + 1;
 
                 for (let i = start; i < end; i++) {
                     // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes
                     // if we have the function cos(f(x)) = 0, we find x = f^-1(cos^-1(0) + pi * n), where n is the nth asymptote
                     // so if we substitute x for cos^-1(0) + pi * n, we get the x-value of the nth asymptote
                     asymptotes.push(Number(solution.sub("x", "pi / 2 + pi * " + i).evaluate()));
+                }
+            }
+        } else if ((this.operationtype === "Cosecant" || this.operationtype === "Cotangent") && input1Formula !== undefined) {
+            let funcInverseSolutions = getFunctionInverse(input1Formula);
+
+            for (const solution of funcInverseSolutions) {
+                let start = nthSineZero(getRealX(0));
+                let end = nthSineZero(getRealX(rcanvasWidth)) + 1;
+
+                for (let i = start; i < end; i++) {
+                    // since csc(x) = 1 / sin(x), we find when sin(x) = 0 to find asymptotes
+                    // if we have the function sin(f(x)) = 0, we find x = f^-1(sin^-1(0) + pi * n), where n is the nth asymptote
+                    // so if we substitute x for sin^-1(0) + pi * n, we get the x-value of the nth asymptote
+                    asymptotes.push(Number(solution.sub("x", "pi * " + i).evaluate()));
                 }
             }
         }
@@ -304,12 +318,18 @@ class OutputNode extends Node {
 }
 
 
+function nthSineZero(func, x) {
+    // floor((f(x) - sin^-1(0)) / pi) = floor(f(x) / pi)
+    return Math.floor((Number(nerdamer(func).evaluate({"x": x})) / Math.PI));
+}
+
+
 /**
  * The floor of the nth zero at the value x for cosine. Used for finding the nth tangent asymptote at x = ?
  * @param func The inner function to find the zero of.
  * @param x The x-value to find the zero at.
  */
-function getZeroAtX(func, x) {
+function nthCosineZero(func, x) {
     // floor((f(x) - cos^-1(0)) / pi)
     return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - Math.acos(0)) / Math.PI));
 }
