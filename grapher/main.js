@@ -27,7 +27,6 @@ function getRealX(x) {
 function evaluateFunction(funcString, x) {
     console.log(funcString);
     return nerdamer(funcString.replace("x", x));
-
 }
 
 // Push mathematical functions as strings to the functionsToPlot array
