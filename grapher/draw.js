@@ -53,19 +53,32 @@ function drawGridRenderer() {
     rctx.strokeStyle = '#00C49A';
     rctx.lineWidth = 2.25;
 
-    for (const funcString of functionsToPlot) {
+    for (const func of functionsToPlot) {
         rctx.beginPath();
+
+        let lastRealX = -roffsetX / 2;
 
         // Plot the function points within the canvas bounds
         for (let x = 0; x < rcanvasWidth; x++) {
-            const realX = (x - rcanvasWidth / 2 + roffsetX) * 0.025;
-            const realY = -evaluateFunction(funcString, realX) * 40 + (rcanvasHeight / 2 - roffsetY);
+            const realX = getRealX(x);
 
-            if (x === 0) {
+            let isAsymptote = false;
+            for (const asymptote of func["asymptotes"]) {
+                if (lastRealX < asymptote && realX > asymptote) {
+                    isAsymptote = true;
+                }
+            }
+
+            const y = nerdamer(func["function"], {"x": realX}).evaluate();
+            const realY = -y * 40 + (rcanvasHeight / 2 - roffsetY);
+
+            if (x === 0 || isAsymptote) {
                 rctx.moveTo(x, realY);
             } else {
                 rctx.lineTo(x, realY);
             }
+
+            lastRealX = realX;
         }
 
         rctx.stroke();

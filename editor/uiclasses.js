@@ -173,6 +173,13 @@ class Node {
     getFormula() {
         throw new Error("This method must be overridden in a subclass");
     }
+
+    /**
+     * @returns The asymptotes of the node block, considering all sub-nodes.
+     */
+    getAsymptotes(xMin, xMax) {
+        throw new Error("This method must be overridden in a subclass");
+    }
 }
 
 class ValueNode extends Node {
@@ -184,11 +191,17 @@ class ValueNode extends Node {
     getFormula() {
         return this.value;
     }
+
+    getAsymptotes(xMin, xMax) {
+        return [];
+    }
 }
 
 class FunctionNode extends Node {
     constructor(type, category, operationtype, inputs, outputs) {
         super(type, category, operationtype, inputs, outputs);
+
+        console.log(getZeros("x^2 - 4"));
     }
 
     getFormula() {
@@ -203,20 +216,89 @@ class FunctionNode extends Node {
             "Modulus": "( " + input1 + " % " + input2 + " )",
             "Exponent": "( " + input1 + " ** " + input2 + " )",
             "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
-            "Logarithm": "Math.log(" + input1 + ")",
-            "Absolute Value": "Math.abs(" + input1 + ")",
+            "Logarithm": "log(" + input1 + ")",  // TODO: add base
+            "Absolute Value": "abs(" + input1 + ")",
             "Factorial": "( " + input1 + "! )",
-            "Floor": "Math.floor(" + input1 + ")",
-            "Ceiling": "Math.ceil(" + input1 + ")",
-            "Sine": "Math.sin(" + input1 + ")",
-            "Cosine": "Math.cos(" + input1 + ")",
-            "Tangent": "Math.tan(" + input1 + ")",
-            "Cosecant": "( " + "1 / Math.sin(" + input1 + ")" + " )",
-            "Secant": "( " + "1 / Math.cos(" + input1 + ")" + " )",
-            "Cotangent": "( " + "1 / Math.tan(" + input1 + ")" + " )"
+            "Floor": "floor(" + input1 + ")",
+            "Ceiling": "ceil(" + input1 + ")",
+            "Sine": "sin(" + input1 + ")",
+            "Cosine": "cos(" + input1 + ")",
+            "Tangent": "tan(" + input1 + ")",
+            "Cosecant": "(1 / sin(" + input1 + "))",
+            "Secant": "(1 / cos(" + input1 + "))",
+            "Cotangent": "(1 / tan(" + input1 + "))"
         }
 
         return predictionMap[this.operationtype];
+    }
+
+    getAsymptotes(xMin, xMax) {
+        let input1Formula = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getFormula();
+        let input2Formula = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getFormula();
+
+        let input1Asymptotes = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
+        let input2Asymptotes = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getAsymptotes(xMin, xMax);
+
+        let asymptotes = [];
+
+        if (input1Asymptotes !== undefined) {
+            asymptotes = asymptotes.concat(input1Asymptotes);
+        } if (input2Asymptotes !== undefined) {
+            asymptotes = asymptotes.concat(input2Asymptotes);
+        }
+
+        let functionsToFindZerosOf = [];
+        if (this.operationtype === "Divide" && input2Formula !== undefined) {
+            functionsToFindZerosOf.push(input2Formula);
+        } else if (this.operationtype === "Radical" && input1Formula !== undefined) {
+            functionsToFindZerosOf.push(input1Formula);
+        } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
+            functionsToFindZerosOf.push(input1Formula);
+        } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
+            let funcInverseSolutions = getFunctionInverse(input1Formula);
+
+            for (const solution of funcInverseSolutions) {
+                let start = nthCosineZero(getRealX(0));
+                let end = nthCosineZero(getRealX(rcanvasWidth)) + 1;
+
+                for (let i = start; i < end; i++) {
+                    // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes
+                    // if we have the function cos(f(x)) = 0, we find x = f^-1(cos^-1(0) + pi * n), where n is the nth asymptote
+                    // so if we substitute x for cos^-1(0) + pi * n, we get the x-value of the nth asymptote
+                    asymptotes.push(Number(solution.sub("x", "pi / 2 + pi * " + i).evaluate()));
+                }
+            }
+        } else if ((this.operationtype === "Cosecant" || this.operationtype === "Cotangent") && input1Formula !== undefined) {
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
+
+            let funcInverseSolutions = getFunctionInverse(input1Formula);
+
+            for (const solution of funcInverseSolutions) {
+                let start = nthSineZero(getRealX(0));
+                let end = nthSineZero(getRealX(rcanvasWidth)) + 1;
+
+                for (let i = start; i < end; i++) {
+                    // since csc(x) = 1 / sin(x), we find when sin(x) = 0 to find asymptotes
+                    // if we have the function sin(f(x)) = 0, we find x = f^-1(sin^-1(0) + pi * n), where n is the nth asymptote
+                    // so if we substitute x for sin^-1(0) + pi * n, we get the x-value of the nth asymptote
+                    asymptotes.push(Number(solution.sub("x", "pi * " + i).evaluate()));
+                }
+            }
+        }
+
+        console.log(functionsToFindZerosOf);
+
+        let zeros = [];
+        for (const func of functionsToFindZerosOf) {
+            zeros = zeros.concat(getZeros(func));
+        }
+
+        console.log(zeros);
+
+        asymptotes = asymptotes.concat(zeros);
+
+        return asymptotes;
     }
 }
 
@@ -232,4 +314,54 @@ class OutputNode extends Node {
 
         return this.inputs[0].connection.parent.getFormula();
     }
+
+    getAsymptotes(xMin, xMax) {
+        return this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
+    }
+}
+
+
+function nthSineZero(func, x) {
+    // floor((f(x) - sin^-1(0)) / pi) = floor(f(x) / pi)
+    return Math.floor((Number(nerdamer(func).evaluate({"x": x})) / Math.PI));
+}
+
+
+/**
+ * The floor of the nth zero at the value x for cosine. Used for finding the nth tangent asymptote at x = ?
+ * @param func The inner function to find the zero of.
+ * @param x The x-value to find the zero at.
+ */
+function nthCosineZero(func, x) {
+    // floor((f(x) - cos^-1(0)) / pi)
+    return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - Math.acos(0)) / Math.PI));
+}
+
+
+function getDerivative(funcStr) {
+    return nerdamer.diff(funcStr, "x");
+}
+
+
+function getFunctionInverse(funcStr) {
+    funcStr = "y = " + funcStr;
+
+    let func = nerdamer(funcStr);
+    func = func.sub("x", "t");  // temp variable
+    func = func.sub("y", "x");
+    func = func.sub("t", "y");
+    return func.solveFor("y");
+}
+
+
+function getZeros(funcStr) {
+    funcStr += " = 0";
+    let solutions = nerdamer.solve(funcStr, "x").evaluate();
+    let zeros = eval(solutions.text());  // TODO: eval is a lazy way to convert a string to a number or list of numbers
+
+    if (typeof zeros === "number") {
+        zeros = [zeros];
+    }
+
+    return zeros;
 }

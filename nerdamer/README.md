@@ -1,0 +1,2 @@
+# Info
+This is a copy/paste of the nerdamer source code, a dependency of mathematix. Since this project does not use node.js, it is necessary to have the files within this project. Some files may be removed if not needed. You can view the original project [here](https://github.com/jiggzson/nerdamer). 
