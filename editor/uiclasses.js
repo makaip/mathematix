@@ -257,8 +257,14 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Tangent" && input1Formula !== undefined) {
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
+
+
             for (const solution of funcInverseSolutions) {
-                for (let i = -10; i < 10; i++) {
+                // TODO: get the minimum and maximum x values of the graph
+                let start = getZeroAtX(-rgridSize / 2);
+                let end = getZeroAtX(rgridSize / 2) + 1;
+
+                for (let i = start; i < end; i++) {
                     // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes
                     // if we have the function cos(f(x)) = 0, we find x = f^-1(cos^-1(0) + pi * n), where n is the nth asymptote
                     // so if we substitute x for cos^-1(0) + pi * n, we get the x-value of the nth asymptote
@@ -298,6 +304,22 @@ class OutputNode extends Node {
     getAsymptotes(xMin, xMax) {
         return this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
     }
+}
+
+
+/**
+ * The floor of the nth zero at the value x for cosine. Used for finding the nth tangent asymptote at x = ?
+ * @param func The inner function to find the zero of.
+ * @param x The x-value to find the zero at.
+ */
+function getZeroAtX(func, x) {
+    // floor((f(x) - cos^-1(0)) / pi)
+    return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - Math.acos(0)) / Math.PI));
+}
+
+
+function getDerivative(funcStr) {
+    return nerdamer.diff(funcStr, "x");
 }
 
 
