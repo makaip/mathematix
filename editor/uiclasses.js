@@ -255,6 +255,7 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
             functionsToFindZerosOf.push(input1Formula);
         } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
@@ -269,6 +270,8 @@ class FunctionNode extends Node {
                 }
             }
         } else if ((this.operationtype === "Cosecant" || this.operationtype === "Cotangent") && input1Formula !== undefined) {
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
+
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
