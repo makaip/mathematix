@@ -255,12 +255,13 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
             functionsToFindZerosOf.push(input1Formula);
         } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
+            // TODO: refactor this code to not repeat as much
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
-                let start = nthCosineZero(getRealX(0));
-                let end = nthCosineZero(getRealX(rcanvasWidth)) + 1;
+                let start = nthCosineZero(input1Formula, getRealX(0));
+                let end = nthCosineZero(input1Formula, getRealX(rcanvasWidth)) + 1;
 
                 for (let i = start; i < end; i++) {
                     // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes
@@ -270,13 +271,13 @@ class FunctionNode extends Node {
                 }
             }
         } else if ((this.operationtype === "Cosecant" || this.operationtype === "Cotangent") && input1Formula !== undefined) {
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
 
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
-                let start = nthSineZero(getRealX(0));
-                let end = nthSineZero(getRealX(rcanvasWidth)) + 1;
+                let start = nthSineZero(input1Formula, getRealX(0));
+                let end = nthSineZero(input1Formula, getRealX(rcanvasWidth)) + 1;
 
                 for (let i = start; i < end; i++) {
                     // since csc(x) = 1 / sin(x), we find when sin(x) = 0 to find asymptotes
@@ -334,7 +335,7 @@ function nthSineZero(func, x) {
  */
 function nthCosineZero(func, x) {
     // floor((f(x) - cos^-1(0)) / pi)
-    return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - Math.acos(0)) / Math.PI));
+    return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - (Math.PI / 2)) / Math.PI));
 }
 
 
