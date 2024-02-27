@@ -255,7 +255,8 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
             functionsToFindZerosOf.push(input1Formula);
         } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
+            // TODO: refactor this code to not repeat as much
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
@@ -270,7 +271,7 @@ class FunctionNode extends Node {
                 }
             }
         } else if ((this.operationtype === "Cosecant" || this.operationtype === "Cotangent") && input1Formula !== undefined) {
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula != x
+            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
 
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
@@ -334,8 +335,7 @@ function nthSineZero(func, x) {
  */
 function nthCosineZero(func, x) {
     // floor((f(x) - cos^-1(0)) / pi)
-    console.log(func + " ----- " + Math.floor((Number(nerdamer(func).evaluate({"x": x}) - Math.acos(0)) / Math.PI)));
-    return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - Math.acos(0)) / Math.PI));
+    return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - (Math.PI / 2)) / Math.PI));
 }
 
 
