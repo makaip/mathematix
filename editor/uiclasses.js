@@ -252,7 +252,7 @@ class FunctionNode extends Node {
 
         return predictionMap[this.operationtype];
     }
-
+    
     getAsymptotes(xMin, xMax) {
         let input1Formula = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getFormula();
         let input2Formula = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getFormula();
