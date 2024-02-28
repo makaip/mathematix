@@ -174,6 +174,26 @@ class Node {
         throw new Error("This method must be overridden in a subclass");
     }
 
+    getEvalFormula() {
+        let replaceMap = {
+            "log": "Math.log",
+            "abs": "Math.abs",
+            "floor": "Math.floor",
+            "ceil": "Math.ceil",
+            "sin": "Math.sin",
+            "cos": "Math.cos",
+            "tan": "Math.tan"
+        }
+
+        let formula = this.getFormula();
+
+        for (const key in replaceMap) {
+            formula = formula.replaceAll(key, replaceMap[key]);
+        }
+
+        return formula;
+    }
+
     /**
      * @returns The asymptotes of the node block, considering all sub-nodes.
      */
@@ -215,10 +235,10 @@ class FunctionNode extends Node {
             "Divide": "( " + input1 + " / " + input2 + " )",
             "Modulus": "( " + input1 + " % " + input2 + " )",
             "Exponent": "( " + input1 + " ** " + input2 + " )",
-            "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
+            "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",  // WARNING: if an invalid input is given, the program will hang
             "Logarithm": "log(" + input1 + ")",  // TODO: add base
             "Absolute Value": "abs(" + input1 + ")",
-            "Factorial": "( " + input1 + "! )",
+            "Factorial": input1,  // TODO: implement factorial
             "Floor": "floor(" + input1 + ")",
             "Ceiling": "ceil(" + input1 + ")",
             "Sine": "sin(" + input1 + ")",
