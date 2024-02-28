@@ -174,6 +174,26 @@ class Node {
         throw new Error("This method must be overridden in a subclass");
     }
 
+    getEvalFormula() {
+        let replaceMap = {
+            "log": "Math.log",
+            "abs": "Math.abs",
+            "floor": "Math.floor",
+            "ceil": "Math.ceil",
+            "sin": "Math.sin",
+            "cos": "Math.cos",
+            "tan": "Math.tan"
+        }
+
+        let formula = this.getFormula();
+
+        for (const key in replaceMap) {
+            formula = formula.replaceAll(key, replaceMap[key]);
+        }
+
+        return formula;
+    }
+
     /**
      * @returns The asymptotes of the node block, considering all sub-nodes.
      */
@@ -215,10 +235,10 @@ class FunctionNode extends Node {
             "Divide": "( " + input1 + " / " + input2 + " )",
             "Modulus": "( " + input1 + " % " + input2 + " )",
             "Exponent": "( " + input1 + " ** " + input2 + " )",
-            "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",
+            "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",  // WARNING: if an invalid input is given, the program will hang
             "Logarithm": "log(" + input1 + ")",  // TODO: add base
             "Absolute Value": "abs(" + input1 + ")",
-            "Factorial": "( " + input1 + "! )",
+            "Factorial": input1,  // TODO: implement factorial
             "Floor": "floor(" + input1 + ")",
             "Ceiling": "ceil(" + input1 + ")",
             "Sine": "sin(" + input1 + ")",
@@ -250,10 +270,6 @@ class FunctionNode extends Node {
         let functionsToFindZerosOf = [];
         if (this.operationtype === "Divide" && input2Formula !== undefined) {
             functionsToFindZerosOf.push(input2Formula);
-        } else if (this.operationtype === "Radical" && input1Formula !== undefined) {
-            functionsToFindZerosOf.push(input1Formula);
-        } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
-            functionsToFindZerosOf.push(input1Formula);
         } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
             // TODO: refactor this code to not repeat as much
             // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
@@ -288,18 +304,21 @@ class FunctionNode extends Node {
             }
         }
 
-        console.log(functionsToFindZerosOf);
-
         let zeros = [];
         for (const func of functionsToFindZerosOf) {
-            zeros = zeros.concat(getZeros(func));
+            try {
+                zeros = zeros.concat(getZeros(func));
+            } catch (e) {
+                if (e.name === "ParseError") {
+                    // do nothing, continue to the next function
+                    // this is likely caused because we set 5 = 0 or something
+                } else {
+                    throw e;
+                }
+            }
         }
 
-        console.log(zeros);
-
-        asymptotes = asymptotes.concat(zeros);
-
-        return asymptotes;
+        return asymptotes.concat(zeros);
     }
 }
 

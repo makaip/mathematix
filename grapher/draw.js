@@ -56,7 +56,7 @@ function drawGridRenderer() {
     for (const func of functionsToPlot) {
         rctx.beginPath();
 
-        let lastRealX = -roffsetX / 2;
+        let lastRealX = getRealX(0);
 
         // Plot the function points within the canvas bounds
         for (let x = 0; x < rcanvasWidth; x++) {
@@ -64,12 +64,12 @@ function drawGridRenderer() {
 
             let isAsymptote = false;
             for (const asymptote of func["asymptotes"]) {
-                if (lastRealX < asymptote && realX > asymptote) {
+                if (lastRealX === asymptote || realX === asymptote || (lastRealX < asymptote && realX > asymptote)) {
                     isAsymptote = true;
                 }
             }
 
-            const y = nerdamer(func["function"], {"x": realX}).evaluate();
+            const y = eval(func["function"].replaceAll("x", "(" + realX + ")"));
             const realY = -y * 40 + (rcanvasHeight / 2 - roffsetY);
 
             if (x === 0 || isAsymptote) {
