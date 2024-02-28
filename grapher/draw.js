@@ -56,7 +56,7 @@ function drawGridRenderer() {
     for (const func of functionsToPlot) {
         rctx.beginPath();
 
-        let lastRealX = -roffsetX / 2;
+        let lastRealX = getRealX(0);
 
         // Plot the function points within the canvas bounds
         for (let x = 0; x < rcanvasWidth; x++) {
@@ -64,7 +64,9 @@ function drawGridRenderer() {
 
             let isAsymptote = false;
             for (const asymptote of func["asymptotes"]) {
-                if (lastRealX < asymptote && realX > asymptote) {
+                console.log(realX + " " + lastRealX + " " + asymptote);
+
+                if (lastRealX === asymptote || realX === asymptote || (lastRealX < asymptote && realX > asymptote)) {
                     isAsymptote = true;
                 }
             }
