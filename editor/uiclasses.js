@@ -249,8 +249,6 @@ class FunctionNode extends Node {
 
         let functionsToFindZerosOf = [];
         if (this.operationtype === "Divide" && input2Formula !== undefined) {
-            console.log("divide yipeee");
-
             functionsToFindZerosOf.push(input2Formula);
         } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
             // TODO: refactor this code to not repeat as much
@@ -286,8 +284,6 @@ class FunctionNode extends Node {
             }
         }
 
-        console.log(functionsToFindZerosOf);
-
         let zeros = [];
         for (const func of functionsToFindZerosOf) {
             try {
@@ -302,11 +298,7 @@ class FunctionNode extends Node {
             }
         }
 
-        console.log(zeros);
-
-        asymptotes = asymptotes.concat(zeros);
-
-        return asymptotes;
+        return asymptotes.concat(zeros);
     }
 }
 
