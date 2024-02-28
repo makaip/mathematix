@@ -249,11 +249,9 @@ class FunctionNode extends Node {
 
         let functionsToFindZerosOf = [];
         if (this.operationtype === "Divide" && input2Formula !== undefined) {
+            console.log("divide yipeee");
+
             functionsToFindZerosOf.push(input2Formula);
-        } else if (this.operationtype === "Radical" && input1Formula !== undefined) {
-            functionsToFindZerosOf.push(input1Formula);
-        } else if (this.operationtype === "Logarithm" && input1Formula !== undefined) {
-            functionsToFindZerosOf.push(input1Formula);
         } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
             // TODO: refactor this code to not repeat as much
             // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
@@ -292,7 +290,16 @@ class FunctionNode extends Node {
 
         let zeros = [];
         for (const func of functionsToFindZerosOf) {
-            zeros = zeros.concat(getZeros(func));
+            try {
+                zeros = zeros.concat(getZeros(func));
+            } catch (e) {
+                if (e.name === "ParseError") {
+                    // do nothing, continue to the next function
+                    // this is likely caused because we set 5 = 0 or something
+                } else {
+                    throw e;
+                }
+            }
         }
 
         console.log(zeros);
