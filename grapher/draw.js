@@ -64,8 +64,6 @@ function drawGridRenderer() {
 
             let isAsymptote = false;
             for (const asymptote of func["asymptotes"]) {
-                console.log(realX + " " + lastRealX + " " + asymptote);
-
                 if (lastRealX === asymptote || realX === asymptote || (lastRealX < asymptote && realX > asymptote)) {
                     isAsymptote = true;
                 }
