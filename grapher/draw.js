@@ -69,7 +69,7 @@ function drawGridRenderer() {
                 }
             }
 
-            const y = eval(func["function"].replaceAll("x", realX));
+            const y = eval(func["function"].replaceAll("x", "(" + realX + ")"));
             const realY = -y * 40 + (rcanvasHeight / 2 - roffsetY);
 
             if (x === 0 || isAsymptote) {
