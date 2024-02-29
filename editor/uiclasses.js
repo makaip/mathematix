@@ -239,7 +239,7 @@ class FunctionNode extends Node {
             "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",  // WARNING: if an invalid input is given, the program will hang
             "Logarithm": "log(" + input1 + ") / log(" + input2 + ")",
             "Absolute Value": "abs(" + input1 + ")",
-            "Factorial": "let total = 1; for (i = " + input1 + "; i > 0; i--) {total = total * i}",  // TODO: implement factorial
+            "Factorial": input1,  // TODO: implement factorial
             "Floor": "floor(" + input1 + ")",
             "Ceiling": "ceil(" + input1 + ")",
             "Sine": "sin(" + input1 + ")",
