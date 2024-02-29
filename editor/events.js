@@ -318,7 +318,8 @@ function handleNodeTypeChange(nodeBlockToChange) {
                 }
             }
             if (nodeBlockToChange.category == "Unary Operators") {
-                let operations = ["Absolute Value", "Factorial", "Ceiling", "Floor", "RESET"];
+                let operations = ["Absolute Value", "Ceiling", "Floor", "RESET"];
+                //let operations = ["Absolute Value", "Factorial", "Ceiling", "Floor", "RESET"]; (copy of above line with factorial)
                 if (operations[operations.indexOf(nodeBlockToChange.operationtype) + 1] == "RESET") {
                     nodeBlockToChange.operationtype = operations[0]
                 } else if (nodeBlockToChange.operationtype == operations[operations.indexOf(nodeBlockToChange.operationtype)]) {
