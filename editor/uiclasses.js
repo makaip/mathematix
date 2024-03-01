@@ -268,7 +268,7 @@ class FunctionNode extends Node {
         }
 
         let functionsToFindZerosOf = [];
-        if (this.operationtype === "Divide" && input2Formula !== undefined) {
+        if ((this.operationtype === "Divide" || this.operationtype === "Logarithm") && input2Formula !== undefined ) {
             functionsToFindZerosOf.push(input2Formula);
         } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
             // TODO: refactor this code to not repeat as much
