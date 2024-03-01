@@ -133,8 +133,12 @@ canvas.addEventListener('mouseup', (event) => {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     if (isDraggingLine) {
         isDraggingLine = false;
-        resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
-        resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
+
+        if (resultOfOutputNoduleClicked[0].connection !== null && resultOfMouseOverNodule[0].connection !== null) {
+            resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
+            resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
+        }
+
         drawGrid();
     }
 
