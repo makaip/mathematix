@@ -134,7 +134,7 @@ canvas.addEventListener('mouseup', (event) => {
     if (isDraggingLine) {
         isDraggingLine = false;
 
-        if (resultOfOutputNoduleClicked[0].connection !== null && resultOfMouseOverNodule[0].connection !== null) {
+        if (resultOfOutputNoduleClicked[0] !== null && resultOfMouseOverNodule[0] !== null) {
             resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
             resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
         }
