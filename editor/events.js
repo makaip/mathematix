@@ -201,6 +201,11 @@ window.addEventListener('keydown', (event) => {
     }
     if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
         for (const nodule of selectedNodeBlock.inputs.concat(selectedNodeBlock.outputs)) {
+            // add this condition to prevent null pointer exceptions
+            if (nodule.connection === null) {
+                continue;
+            }
+
             // this is some black magic trickery, but it makes sense if you synapse really hard
             nodule.connection.connection = null;
             nodule.connection = null;
