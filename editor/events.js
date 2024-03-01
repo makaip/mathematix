@@ -143,29 +143,33 @@ canvas.addEventListener('mouseup', (event) => {
         drawGrid();
     }
 
-    const endX = event.clientX - canvas.getBoundingClientRect().left;
-    const endY = event.clientY - canvas.getBoundingClientRect().top;
-
     functionsToPlot = [];
     
     for (const nodeBlock of nodeBlocks) {
         if (nodeBlock instanceof OutputNode) {
             functionsToPlot.push({
                     "function": nodeBlock.getEvalFormula(),
-                    "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2)
+                    "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+                    "color": "#00C49A"
             });
         }
     }
 
+    // Draw the function of the selected node block
+    if (selectedNodeBlock !== null) {
+        functionsToPlot.push({
+            "function": selectedNodeBlock.getEvalFormula(),
+            "asymptotes": selectedNodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+            "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
+        })
+    }
+
     drawGridRenderer();
 
-    // const nodeOver = isInputNoduleOver(selectedNodeBlock, endX, endY);
-    // console.log(nodeOver);
-
-    //selectedNodeBlock = null;
     if (selectedBlocks.length > 0) {
         selectedNodeBlock = selectedBlocks;
     }
+
     drawGrid();
 });
 
