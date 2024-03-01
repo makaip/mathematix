@@ -195,7 +195,7 @@ window.addEventListener('keydown', (event) => {
     if (event.key === "V") {
         newVariable();
     }
-    if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
+    if (event.key === "x" || event.key === "d" || event.key === "Backspace" || event.key === "Delete") {
         //WHY THIS NO WORK AAAAAAA
         /*
         for (length = 0; length < selectedNodeBlock.inputs.length; length++) {
