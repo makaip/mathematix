@@ -196,16 +196,12 @@ window.addEventListener('keydown', (event) => {
         newVariable();
     }
     if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
-        //WHY THIS NO WORK AAAAAAA
-        /*
-        for (length = 0; length < selectedNodeBlock.inputs.length; length++) {
-            for (asdf = 0; asdf < selectedNodeBlock.inputs[length].connection.parent.inputs.length; asdf++) {
-                selectedNodeBlock.inputs[length].connection.parent.inputs[asdf].connection = null;
-            }
-            console.log(selectedNodeBlock.inputs[length].connection.parent.inputs);
-            selectedNodeBlock.inputs[length].connection = null;
+        for (const nodule of selectedNodeBlock.inputs.concat(selectedNodeBlock.outputs)) {
+            // this is some black magic trickery, but it makes sense if you synapse really hard
+            nodule.connection.connection = null;
+            nodule.connection = null;
         }
-        */
+
         nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
         drawGrid();
     }
