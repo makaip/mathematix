@@ -1,27 +1,47 @@
 class Nodule {
-    constructor(isInput, name, value, parent) {
+    HITBOX_RADIUS = 10;
+
+    constructor(isInput, name, value, parent, index) {
         this.isInput = isInput;
         this.name = name;
         this.connection = null;
         this.parent = parent;
+        this.index = index;
+
+        // defines x and y
+        this.refreshPos();
     }
 
-    draw(ctx, x, y, index, blockWidth, blockHeight) {
-        let xOffset = this.isInput ? 1 : blockWidth - 1;
-        let yOffset = this.isInput ? -25 * index + blockHeight - 30 : 25 * index + 55;
+    /**
+     * Refreshes the position based on the parent NodeBlock.
+     */
+    refreshPos() {
+        let xOffset = this.isInput ? 1 : this.parent.width - 1;
+        let yOffset = this.isInput ? -25 * this.index + this.parent.height - 30 : 25 * this.index + 55;
+
+        this.x = this.parent.x + xOffset;
+        this.y = this.parent.y + yOffset;
+    }
+
+    draw(ctx) {
+        this.refreshPos();
 
         ctx.fillStyle = '#9f9f9f';
-        drawCircle(ctx, x + xOffset, y + yOffset, 6);
+        drawCircle(ctx, this.x, this.y, 6);
         ctx.fill();
         ctx.stroke();
-
-        xOffset += this.isInput ? 10 : -10;
 
         ctx.fillStyle = "white";
         ctx.font = "14px Poppins";
         ctx.textAlign = this.isInput ? "left" : "right";
         ctx.textBaseline = "middle";
-        ctx.fillText(this.name, x + xOffset, y + yOffset);
+
+        let textOffset = this.isInput ? 10 : -10;
+        ctx.fillText(this.name, this.x + textOffset, this.y);
+    }
+
+    collidesWith(x, y) {
+        return (this.x - x) ** 2 + (this.y - y) ** 2 < this.HITBOX_RADIUS ** 2;
     }
 }
 
@@ -44,12 +64,12 @@ class Node {
         this.outputs = [];
         this.operationtype = operationtype;
 
-        inputs.forEach(input => {
-            this.inputs.push(new Nodule(true, input.name, input.value, this));
+        inputs.forEach((input, index) => {
+            this.inputs.push(new Nodule(true, input.name, input.value, this, index));
         })
 
-        outputs.forEach(output => {
-            this.outputs.push(new Nodule(false, output.name, output.value, this));
+        outputs.forEach((output, index) => {
+            this.outputs.push(new Nodule(false, output.name, output.value, this, index));
         });
     }
 
@@ -184,6 +204,8 @@ class Node {
         }
 
         let formula = this.getFormula();
+        console.log(formula);
+        console.log(typeof formula);
 
         for (const key in replaceMap) {
             formula = formula.replaceAll(key, replaceMap[key]);
@@ -230,8 +252,8 @@ class Node {
 }
 
 class ValueNode extends Node {
-    constructor(type, category, operationtype, inputs, outputs) {
-        super(type, category, operationtype, inputs, outputs);
+    constructor(category, operationtype, inputs, outputs) {
+        super(category, operationtype, inputs, outputs);
         this.value = operationtype;
     }
 
@@ -245,8 +267,8 @@ class ValueNode extends Node {
 }
 
 class FunctionNode extends Node {
-    constructor(type, category, operationtype, inputs, outputs) {
-        super(type, category, operationtype, inputs, outputs);
+    constructor(category, operationtype, inputs, outputs) {
+        super(category, operationtype, inputs, outputs);
 
         console.log(getZeros("x^2 - 4"));
     }
@@ -354,8 +376,8 @@ class FunctionNode extends Node {
 }
 
 class OutputNode extends Node {
-    constructor(type, category, operationtype, inputs, outputs) {
-        super(type, category, operationtype, inputs, outputs);
+    constructor(category, operationtype, inputs, outputs) {
+        super(category, operationtype, inputs, outputs);
     }
 
     getFormula() {

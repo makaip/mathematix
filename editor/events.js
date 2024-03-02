@@ -24,28 +24,25 @@ canvas.addEventListener("mousedown", (event) => {
             endY = startY;
         }
 
-        // TODO: omg what the heck is this mess of code
         if (clickedNodeBlock instanceof FunctionNode) {
             clickedNodeBlock.cycleNodeType();
         }
 
         resultOfOutputNoduleClicked = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
 
-        let nodeSelected, nodeSelectedIndex;
+        if (resultOfOutputNoduleClicked) {
+            let nodeSelected = resultOfOutputNoduleClicked[0];
 
-        // TODO: remove try/catch and actually fix the *farting* error
-        try {
-            nodeSelected = resultOfOutputNoduleClicked[0];
-            nodeSelectedIndex = resultOfOutputNoduleClicked[1];
-        } catch {}
-
-        if (typeof nodeSelected === "object" && nodeSelected !== undefined && nodeSelected !== null) {
-            isDraggingLine = true;
-            lineStartX = clickedNodeBlock.x + 149 + offsetX;
-            lineStartY = clickedNodeBlock.y + offsetY + 55 + (25 * nodeSelectedIndex);
+            if (typeof nodeSelected === "object" && nodeSelected !== undefined && nodeSelected !== null) {
+                isDraggingLine = true;
+                lineStartX = nodeSelected.x;
+                lineStartY = nodeSelected.y;
+            }
         }
+
         hideMenu();
     }
+
     drawGrid();
 });
 
