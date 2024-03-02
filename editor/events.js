@@ -133,8 +133,12 @@ canvas.addEventListener('mouseup', (event) => {
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     if (isDraggingLine) {
         isDraggingLine = false;
-        resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
-        resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
+
+        if (resultOfOutputNoduleClicked[0] !== null && resultOfMouseOverNodule[0] !== null) {
+            resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
+            resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
+        }
+
         drawGrid();
     }
 
@@ -199,17 +203,19 @@ window.addEventListener('keydown', (event) => {
     if (event.key === "V") {
         newVariable();
     }
+
     if (event.key === "x" || event.key === "d" || event.key === "Backspace" || event.key === "Delete") {
-        //WHY THIS NO WORK AAAAAAA
-        /*
-        for (length = 0; length < selectedNodeBlock.inputs.length; length++) {
-            for (asdf = 0; asdf < selectedNodeBlock.inputs[length].connection.parent.inputs.length; asdf++) {
-                selectedNodeBlock.inputs[length].connection.parent.inputs[asdf].connection = null;
+        for (const nodule of selectedNodeBlock.inputs.concat(selectedNodeBlock.outputs)) {
+            // add this condition to prevent null pointer exceptions
+            if (nodule.connection === null) {
+                continue;
             }
-            console.log(selectedNodeBlock.inputs[length].connection.parent.inputs);
-            selectedNodeBlock.inputs[length].connection = null;
+            
+            // this is some black magic trickery, but it makes sense if you synapse really hard
+            nodule.connection.connection = null;
+            nodule.connection = null;
         }
-        */
+
         nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
         drawGrid();
     }
