@@ -1,4 +1,4 @@
-canvas.addEventListener('mousedown', (event) => {
+canvas.addEventListener("mousedown", (event) => {
     mouseDown = true;
 
     if (event.button === 0) {
@@ -55,7 +55,7 @@ canvas.addEventListener('mousedown', (event) => {
     drawGrid();
 });
 
-canvas.addEventListener('mousemove', (event) => {
+canvas.addEventListener("mousemove", (event) => {
     endX = event.clientX - canvas.getBoundingClientRect().left;
     endY = event.clientY - canvas.getBoundingClientRect().top; // mysterious code breaks when touched; not sure why its not defined in main.js
     const cursorX = event.clientX - canvas.getBoundingClientRect().left;
@@ -124,7 +124,7 @@ canvas.addEventListener('mousemove', (event) => {
     }
 });
 
-canvas.addEventListener('mouseup', (event) => {
+canvas.addEventListener("mouseup", (event) => {
     mouseDown = false;
     
     document.getElementsByTagName("body")[0].style.cursor = "auto";
@@ -174,15 +174,15 @@ canvas.addEventListener('mouseup', (event) => {
     drawGrid();
 });
 
-canvas.addEventListener('mouseout', (event) => {
+canvas.addEventListener("mouseout", (event) => {
     if (isDragging) {
         isDragging = false;
         drawGrid();
     }
 });
 
-window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
+window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
         hideMenu();
     }
     if (event.key === "A") {
@@ -218,12 +218,12 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
-canvas.addEventListener('contextmenu', (event) => {
+canvas.addEventListener("contextmenu", (event) => {
     event.preventDefault(); // Prevent the default context menu
     showMenu(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top);
 });
 
-canvas.addEventListener('wheel', (event) => {
+canvas.addEventListener("wheel", (event) => {
     // DO NOT DELETE THIS - IF YOU DELETE THIS YOU WILL GET DELETED
     // const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1; // Zoom in or out based on scroll direction
     // gridSize *= zoomFactor;
