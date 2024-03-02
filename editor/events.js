@@ -31,7 +31,7 @@ canvas.addEventListener("mousedown", (event) => {
         resultOfOutputNoduleClicked = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
 
         if (resultOfOutputNoduleClicked) {
-            let nodeSelected = resultOfOutputNoduleClicked[0];
+            let nodeSelected = resultOfOutputNoduleClicked;
 
             if (typeof nodeSelected === "object" && nodeSelected !== undefined && nodeSelected !== null) {
                 isDraggingLine = true;
@@ -122,9 +122,9 @@ canvas.addEventListener("mouseup", (event) => {
     if (isDraggingLine) {
         isDraggingLine = false;
 
-        if (resultOfOutputNoduleClicked[0] !== null && resultOfMouseOverNodule[0] !== null) {
-            resultOfOutputNoduleClicked[0].connection = resultOfMouseOverNodule[0];
-            resultOfMouseOverNodule[0].connection = resultOfOutputNoduleClicked[0];
+        if (resultOfOutputNoduleClicked !== null && resultOfMouseOverNodule !== null) {
+            resultOfOutputNoduleClicked.connection = resultOfMouseOverNodule;
+            resultOfMouseOverNodule.connection = resultOfOutputNoduleClicked;
         }
 
         drawGrid();
@@ -267,7 +267,7 @@ function isOutputNoduleClicked(nodeBlock, x, y) {
                     break;
                 }
         }
-        return [noduleClicked, noduleClickedIndex];
+        return noduleClicked;
     }
 }
 
@@ -294,7 +294,7 @@ function isMouseOverNodule(nodeBlock, x, y) {
                 break;
             }
         }
-        return [noduleOver, noduleOverIndex];
+        return noduleOver;
     }
 }
 

@@ -33,8 +33,8 @@ const menuItems = ['Variable', 'Arithmetic', 'Trigonometry', 'Unary Operators', 
 const nodeBlocks = []; 
 let selectedNodeBlock = null;
 
-let resultOfOutputNoduleClicked = [];  // Array to store the result of where the user is dragging from
-let resultOfMouseOverNodule = [];  // Array to store the result of where the user is dragging to (what nodule the user is hovering over)
+let resultOfOutputNoduleClicked = null;  // Array to store the result of where the user is dragging from
+let resultOfMouseOverNodule = null;  // Array to store the result of where the user is dragging to (what nodule the user is hovering over)
 
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
