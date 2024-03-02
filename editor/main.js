@@ -16,7 +16,7 @@ let offsetY = 0;
 let isDragging = false;
 let startX, startY, endX, endY;
 // Node: StartX/Y are defined ON MOUSE DOWN, endX/Y are defined ON MOUSE MOVE
-// used to compute change of canvas offset + alot of other stuff
+// used to compute change of canvas offset + a lot of other stuff
 
 let isMenuVisible = false;
 let menuX = 0; // position of menu
