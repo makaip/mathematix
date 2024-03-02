@@ -64,12 +64,7 @@ canvas.addEventListener("mousemove", (event) => {
     let overNodeBlock = null;
     for (const nodeBlock of nodeBlocks) {
         // TODO: move into the NodeBlock class
-
-        // AABB collision (what is aabb)
-        if (
-            boundsDetection(nodeBlock, cursorX, cursorY, -5, nodeBlock.width + 5, 0, nodeBlock.height)
-            // 
-        ) {
+        if (boundsDetection(nodeBlock, cursorX, cursorY, -5, nodeBlock.width + 5, 0, nodeBlock.height)) {
             overNodeBlock = nodeBlock; // Store the clicked node block
         }
     }

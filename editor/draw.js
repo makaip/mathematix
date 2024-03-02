@@ -69,22 +69,16 @@ function drawGrid() {
 
     for (const nodeBlock of nodeBlocks) {
         for (const output of nodeBlock.outputs) {
-            if (output.connection !== null) {
-                let index = null;
-                // Iterate through the object keys
-                for (const key in output.connection.parent.inputs) {
-                    if (output.connection.parent.inputs[key] === output.connection) {
-                        index = key;
-                        break;
-                    }
-                }
-                ctx.strokeStyle = 'white';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(output.parent.x + 150 + offsetX, output.parent.y + 55 + offsetY);
-                ctx.lineTo(output.connection.parent.x + offsetX, output.connection.parent.y + ( -25 * index ) + 200 - 30 + offsetY);
-                ctx.stroke();
+            if (output.connection === null) {
+                continue;
             }
+
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(output.x, output.y);
+            ctx.lineTo(output.connection.x, output.connection.y);
+            ctx.stroke();
         }
     }
 
