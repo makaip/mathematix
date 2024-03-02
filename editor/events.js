@@ -252,50 +252,24 @@ function getMenuItemAtPosition(x, y) {
 function isOutputNoduleClicked(nodeBlock, x, y) {
     // TODO: move to the Nodule class
 
-    let noduleClicked = null;
-    let noduleClickedIndex = null;
-    if (nodeBlock !== null && x !== null && y !== null) {
-        for (let index = 0; index < nodeBlock.outputs.length; index++) {
-            if (boundsDetection(nodeBlock, startX, startY, 145, 155, (25 * index) + 50, (25 * index) + 65)) {
-                    try {
-                        noduleClicked = nodeBlock.outputs[index];
-                        noduleClickedIndex = index;
-                    } catch {
-                        console.log("The following error was written and defined by Github Copilot. I have no idea what is happening. I simply typed 'bruh' and copilot did the rest: ")
-                        console.log("Bruh moment in the try/catch block in events.js line 168. This is a temporary fix. Please fix this. Thank you. - The Management Team of the Math Function Grapher Project. (TM) (C) 2021. All rights reserved. All trademarks are property of their respective owners.");
-                    }
-                    break;
-                }
+    for (const nodule of nodeBlock.outputs) {
+        if (nodule.collidesWith(x, y)) {
+            return nodule;
         }
-        return noduleClicked;
     }
+
+    return null;
 }
 
 function isMouseOverNodule(nodeBlock, x, y) {
     // TODO: move to a method in the Nodule class
-    let noduleOver = null;
-    let noduleOverIndex = null;
-
-    if (nodeBlock !== null && x !== null && y !== null) {
-        for (let index = 0; index < nodeBlock.inputs.length; index++) {
-            const noduleX = nodeBlock.x + offsetX - 5;
-            const noduleY = nodeBlock.y + ( -25 * index ) + 200 - 35 + offsetY;
-
-            const noduleWidth = 10;
-            const noduleHeight = 10;
-            if (
-                x >= noduleX &&
-                x <= noduleX + noduleWidth &&
-                y >= noduleY &&
-                y <= noduleY + noduleHeight
-            ) {
-                noduleOver = nodeBlock.inputs[index];
-                noduleOverIndex = index;
-                break;
-            }
+    for (const nodule of nodeBlock.inputs) {
+        if (nodule.collidesWith(x, y)) {
+            return nodule;
         }
-        return noduleOver;
     }
+
+    return null;
 }
 
 function showMenu(x, y) {
