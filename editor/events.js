@@ -28,15 +28,17 @@ canvas.addEventListener("mousedown", (event) => {
             clickedNodeBlock.cycleNodeType();
         }
 
-        resultOfOutputNoduleClicked = selectedNodeBlock.outputNoduleAt(startX, startY);
+        if (selectedNodeBlock !== null) {
+            resultOfOutputNoduleClicked = selectedNodeBlock.outputNoduleAt(startX, startY);
 
-        if (resultOfOutputNoduleClicked) {
-            let nodeSelected = resultOfOutputNoduleClicked;
+            if (resultOfOutputNoduleClicked) {
+                let nodeSelected = resultOfOutputNoduleClicked;
 
-            if (typeof nodeSelected === "object" && nodeSelected !== undefined && nodeSelected !== null) {
-                isDraggingLine = true;
-                lineStartX = nodeSelected.x;
-                lineStartY = nodeSelected.y;
+                if (typeof nodeSelected === "object" && nodeSelected !== undefined && nodeSelected !== null) {
+                    isDraggingLine = true;
+                    lineStartX = nodeSelected.x;
+                    lineStartY = nodeSelected.y;
+                }
             }
         }
 
