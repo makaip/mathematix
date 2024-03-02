@@ -64,11 +64,11 @@ class Node {
         this.outputs = [];
         this.operationtype = operationtype;
 
-        inputs.forEach((input, index) => {
+        inputs.toReversed().forEach((input, index) => {
             this.inputs.push(new Nodule(true, input.name, input.value, this, index));
         })
 
-        outputs.forEach((output, index) => {
+        outputs.toReversed().forEach((output, index) => {
             this.outputs.push(new Nodule(false, output.name, output.value, this, index));
         });
     }
