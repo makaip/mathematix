@@ -174,23 +174,17 @@ canvas.addEventListener("mouseout", (event) => {
 });
 
 window.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-        hideMenu();
+    let keyMap = {
+        "Escape": hideMenu,
+        "A": () => showMenu(endX, endY),
+        "F": newFunction,
+        "R": newInput,
+        "C": newOutput,
+        "V": newVariable,
     }
-    if (event.key === "A") {
-        showMenu(endX, endY);
-    }
-    if (event.key === "F") {
-        newFunction();
-    }
-    if (event.key === "R") {
-        newInput();
-    }
-    if (event.key === "C") {
-        newOutput();
-    }
-    if (event.key === "V") {
-        newVariable();
+
+    if (keyMap[event.key]) {
+        keyMap[event.key]();
     }
 
     if (event.key === "x" || event.key === "d" || event.key === "Backspace" || event.key === "Delete") {
