@@ -204,8 +204,6 @@ class Node {
         }
 
         let formula = this.getFormula();
-        console.log(formula);
-        console.log(typeof formula);
 
         for (const key in replaceMap) {
             formula = formula.replaceAll(key, replaceMap[key]);
