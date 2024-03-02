@@ -267,6 +267,16 @@ class Node {
 
         return null;
     }
+
+    /**
+     * @param x The x coordinate to check collision for
+     * @param y The y coordinate to check collision for
+     * @returns {boolean} Whether the given x and y coordinates collide with the node block
+     */
+    collidesWithBlock(x, y) {
+        return x >= this.x + offsetX && x <= this.x + this.width + offsetX
+            && y >= this.y + offsetY && y <= this.y + this.height + offsetY;
+    }
 }
 
 class ValueNode extends Node {

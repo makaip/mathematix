@@ -9,7 +9,7 @@ canvas.addEventListener("mousedown", (event) => {
         let clickedNodeBlock = null;
         selectedNodeBlock = null;
         for (const nodeBlock of nodeBlocks) {
-            if (boundsDetection(nodeBlock, startX, startY, 0, nodeBlock.width + 5, 0, nodeBlock.height)) {
+            if (nodeBlock.collidesWithBlock(startX, startY)) {
                 clickedNodeBlock = nodeBlock;
             }
         }
@@ -63,8 +63,7 @@ canvas.addEventListener("mousemove", (event) => {
 
     let overNodeBlock = null;
     for (const nodeBlock of nodeBlocks) {
-        // TODO: move into the NodeBlock class
-        if (boundsDetection(nodeBlock, cursorX, cursorY, -5, nodeBlock.width + 5, 0, nodeBlock.height)) {
+        if (nodeBlock.collidesWithBlock(cursorX, cursorY)) {
             overNodeBlock = nodeBlock; // Store the clicked node block
         }
     }
@@ -268,8 +267,4 @@ function handleMenuItemClick(itemText) {
     if (functionsByTitle[itemText]) {
         functionsByTitle[itemText]();
     }
-}
-
-function boundsDetection(nodeBlock, xComp, yComp, gtx, ltx, gty, lty) {
-    return xComp >= nodeBlock.x + offsetX + gtx && xComp <= nodeBlock.x + offsetX + ltx && yComp >= nodeBlock.y + offsetY + gty && yComp <= nodeBlock.y + offsetY + lty;
 }
