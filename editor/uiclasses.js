@@ -200,6 +200,35 @@ class Node {
     getAsymptotes(xMin, xMax) {
         throw new Error("This method must be overridden in a subclass");
     }
+
+    cycleNodeType() {
+        //x + 15, y + 75, blockWidth - 30, blockHeight - 170
+        // Exit if the mouse is not within the bounds of the box
+        if (startX < this.x + 15 + offsetX ||
+            startX > this.x + 150 - 15 + offsetX ||
+            startY < this.y + 75 + offsetY ||
+            startY > this.y + 200 - 100 + offsetY)
+        {
+            return;
+        }
+
+        let operationsByCategory = {
+            "Arithmetic": ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Modulus", "Radical", "Logarithm"],
+            "Unary Operators": ["Absolute Value", "Ceiling", "Floor"],
+            "Trigonometry": ["Sine", "Cosine", "Tangent", "Cosecant", "Secant", "Cotangent"]
+        }
+
+        let operations = operationsByCategory[this.category];
+        let operationTypeIndex = operations.indexOf(this.operationtype);
+        let newOperationIndex = operationTypeIndex + 1;
+
+        // "Roll over" the operations array
+        if (newOperationIndex === operations.length - 1) {
+            newOperationIndex = 0;
+        }
+
+        this.operationtype = operations[newOperationIndex];
+    }
 }
 
 class ValueNode extends Node {

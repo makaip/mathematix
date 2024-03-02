@@ -1,4 +1,6 @@
 canvas.addEventListener('mousedown', (event) => {
+    mouseDown = true;
+
     if (event.button === 0) {
         startX = event.clientX - canvas.getBoundingClientRect().left; // idk what's going on around here, but I hope it works
         startY = event.clientY - canvas.getBoundingClientRect().top;
@@ -23,8 +25,8 @@ canvas.addEventListener('mousedown', (event) => {
         }
 
         // TODO: omg what the heck is this mess of code
-        if (clickedNodeBlock) {
-            handleNodeTypeChange(clickedNodeBlock);
+        if (clickedNodeBlock instanceof FunctionNode) {
+            clickedNodeBlock.cycleNodeType();
         }
 
         resultOfOutputNoduleClicked = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
@@ -103,7 +105,7 @@ canvas.addEventListener('mousemove', (event) => {
         }
 
         drawGrid();
-    } else if (selectedNodeBlock && !isDragging && mouseDown === 1 && !event.shiftKey) {
+    } else if (selectedNodeBlock && !isDragging && mouseDown === true && !event.shiftKey) {
         const deltaX = cursorX - startX;
         const deltaY = cursorY - startY;
 
@@ -302,34 +304,6 @@ function isMouseOverNodule(nodeBlock, x, y) {
             }
         }
         return [noduleOver, noduleOverIndex];
-    }
-}
-
-function handleNodeTypeChange(nodeBlockToChange) {
-    //x + 15, y + 75, blockWidth - 30, blockHeight - 170
-    if (nodeBlockToChange.type === "Function") {
-        if (startX >= nodeBlockToChange.x + 15 + offsetX &&
-            startX <= nodeBlockToChange.x + 150 - 15 + offsetX &&
-            startY >= nodeBlockToChange.y + 75 + offsetY &&
-            startY <= nodeBlockToChange.y + 200 - 100 + offsetY)
-        {
-            let operationsByCategory = {
-                "Arithmetic": ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Modulus", "Radical", "Logarithm"],
-                "Unary Operators": ["Absolute Value", "Ceiling", "Floor"],
-                "Trigonometry": ["Sine", "Cosine", "Tangent", "Cosecant", "Secant", "Cotangent"]
-            }
-
-            let operations = operationsByCategory[nodeBlockToChange.category];
-            let operationTypeIndex = operations.indexOf(nodeBlockToChange.operationtype);
-            let newOperationIndex = operationTypeIndex + 1;
-
-            // "Roll over" the operations array
-            if (newOperationIndex === operations.length - 1) {
-                newOperationIndex = 0;
-            }
-
-            nodeBlockToChange.operationtype = operations[newOperationIndex];
-        }
     }
 }
 
