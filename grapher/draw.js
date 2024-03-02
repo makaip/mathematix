@@ -50,10 +50,10 @@ function drawGridRenderer() {
     rctx.lineTo(rcanvasWidth / 2 - roffsetX, rcanvasHeight);
     rctx.stroke();
 
-    rctx.strokeStyle = '#00C49A';
     rctx.lineWidth = 2.25;
 
     for (const func of functionsToPlot) {
+        rctx.strokeStyle = func["color"] || "#00C49A";
         rctx.beginPath();
 
         let lastRealX = getRealX(0);

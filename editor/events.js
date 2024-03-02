@@ -1,7 +1,7 @@
 canvas.addEventListener('mousedown', (event) => {
     if (event.button == 0) {
         mouseDown = true;
-        startX = event.clientX - canvas.getBoundingClientRect().left;
+        startX = event.clientX - canvas.getBoundingClientRect().left; //idk whats goin on around here but i hope it works
         startY = event.clientY - canvas.getBoundingClientRect().top;
         handleMenuItemClick(getMenuItemAtPosition(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top));
 
@@ -60,7 +60,7 @@ canvas.addEventListener('mousedown', (event) => {
 
 canvas.addEventListener('mousemove', (event) => {
     endX = event.clientX - canvas.getBoundingClientRect().left;
-    endY = event.clientY - canvas.getBoundingClientRect().top;
+    endY = event.clientY - canvas.getBoundingClientRect().top; // mysterious code breaks when touched; not sure why its not defined in main.js
     const cursorX = event.clientX - canvas.getBoundingClientRect().left;
     const cursorY = event.clientY - canvas.getBoundingClientRect().top;
 
@@ -76,7 +76,7 @@ canvas.addEventListener('mousemove', (event) => {
     for (const nodeBlock of nodeBlocks) {
         // TODO: move into the NodeBlock class
 
-        // AABB collision
+        // AABB collision (what is aabb)
         if (
             boundsDetection(nodeBlock, cursorX, cursorY, -5, nodeBlock.width + 5, 0, nodeBlock.height)
             // 
@@ -147,29 +147,33 @@ canvas.addEventListener('mouseup', (event) => {
         drawGrid();
     }
 
-    const endX = event.clientX - canvas.getBoundingClientRect().left;
-    const endY = event.clientY - canvas.getBoundingClientRect().top;
-
     functionsToPlot = [];
     
     for (const nodeBlock of nodeBlocks) {
         if (nodeBlock instanceof OutputNode) {
             functionsToPlot.push({
                     "function": nodeBlock.getEvalFormula(),
-                    "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2)
+                    "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+                    "color": "#00C49A"
             });
         }
     }
 
+    // Draw the function of the selected node block
+    if (selectedNodeBlock !== null) {
+        functionsToPlot.push({
+            "function": selectedNodeBlock.getEvalFormula(),
+            "asymptotes": selectedNodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+            "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
+        })
+    }
+
     drawGridRenderer();
 
-    // const nodeOver = isInputNoduleOver(selectedNodeBlock, endX, endY);
-    // console.log(nodeOver);
-
-    //selectedNodeBlock = null;
     if (selectedBlocks.length > 0) {
         selectedNodeBlock = selectedBlocks;
     }
+
     drawGrid();
 });
 
@@ -199,13 +203,14 @@ window.addEventListener('keydown', (event) => {
     if (event.key === "V") {
         newVariable();
     }
-    if (event.key === "x" | event.key === "d" | event.key === "Backspace") {
+
+    if (event.key === "x" || event.key === "d" || event.key === "Backspace" || event.key === "Delete") {
         for (const nodule of selectedNodeBlock.inputs.concat(selectedNodeBlock.outputs)) {
             // add this condition to prevent null pointer exceptions
             if (nodule.connection === null) {
                 continue;
             }
-
+            
             // this is some black magic trickery, but it makes sense if you synapse really hard
             nodule.connection.connection = null;
             nodule.connection = null;
@@ -269,7 +274,7 @@ function isOutputNoduleClicked(nodeBlock, x, y) {
                         noduleClicked = nodeBlock.outputs[index];
                         noduleClickedIndex = index;
                     } catch {
-                        console.log("The following error was written and defined by Github Copilot. I have no idea what is happening.")
+                        console.log("The following error was written and defined by Github Copilot. I have no idea what is happening. I simply typed 'bruh' and copilot did the rest: ")
                         console.log("Bruh moment in the try/catch block in events.js line 168. This is a temporary fix. Please fix this. Thank you. - The Management Team of the Math Function Grapher Project. (TM) (C) 2021. All rights reserved. All trademarks are property of their respective owners.");
                     }
                     break;
@@ -323,7 +328,8 @@ function handleNodeTypeChange(nodeBlockToChange) {
                 }
             }
             if (nodeBlockToChange.category == "Unary Operators") {
-                let operations = ["Absolute Value", "Factorial", "Ceiling", "Floor", "RESET"];
+                let operations = ["Absolute Value", "Ceiling", "Floor", "RESET"];
+                //let operations = ["Absolute Value", "Factorial", "Ceiling", "Floor", "RESET"]; (copy of above line with factorial)
                 if (operations[operations.indexOf(nodeBlockToChange.operationtype) + 1] == "RESET") {
                     nodeBlockToChange.operationtype = operations[0]
                 } else if (nodeBlockToChange.operationtype == operations[operations.indexOf(nodeBlockToChange.operationtype)]) {

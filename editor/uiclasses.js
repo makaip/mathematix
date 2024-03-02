@@ -225,6 +225,7 @@ class FunctionNode extends Node {
     }
 
     getFormula() {
+        // Both inputs are numerical values?
         let input1 = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getFormula();
         let input2 = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getFormula();
 
@@ -236,9 +237,9 @@ class FunctionNode extends Node {
             "Modulus": "( " + input1 + " % " + input2 + " )",
             "Exponent": "( " + input1 + " ** " + input2 + " )",
             "Radical": "( " + input1 + " ** " + ( 1 / input2 ) + " )",  // WARNING: if an invalid input is given, the program will hang
-            "Logarithm": "log(" + input1 + ")",  // TODO: add base
+            "Logarithm": "log(" + input1 + ") / log(" + input2 + ")",
             "Absolute Value": "abs(" + input1 + ")",
-            "Factorial": input1,  // TODO: implement factorial
+            // "Factorial": input1,  // TODO: implement factorial
             "Floor": "floor(" + input1 + ")",
             "Ceiling": "ceil(" + input1 + ")",
             "Sine": "sin(" + input1 + ")",
@@ -251,7 +252,7 @@ class FunctionNode extends Node {
 
         return predictionMap[this.operationtype];
     }
-
+    
     getAsymptotes(xMin, xMax) {
         let input1Formula = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getFormula();
         let input2Formula = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getFormula();
@@ -268,9 +269,12 @@ class FunctionNode extends Node {
         }
 
         let functionsToFindZerosOf = [];
-        if (this.operationtype === "Divide" && input2Formula !== undefined) {
+        if (this.operationtype === "Divide" && input2Formula !== undefined ) {
             functionsToFindZerosOf.push(input2Formula);
-        } else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
+        } else if (this.operationtype === "Logarithm" && input2Formula !== undefined) {
+            // since this is the denominator in the change of base formula
+            functionsToFindZerosOf.push("log(" + input2Formula + ")");
+        }  else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
             // TODO: refactor this code to not repeat as much
             // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
             let funcInverseSolutions = getFunctionInverse(input1Formula);
