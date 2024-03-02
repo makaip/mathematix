@@ -389,6 +389,10 @@ class OutputNode extends Node {
     }
 
     getAsymptotes(xMin, xMax) {
+        if (this.inputs[0].connection === null) {
+            return [];
+        }
+
         return this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
     }
 }
