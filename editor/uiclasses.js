@@ -27,20 +27,18 @@ class Nodule {
 
 class Node {
     /**
-     * @param type The type of node.
      * @param category The category of node.
      * @param operationtype The operation type of the node. (null if not applicable, e.g., a value node)
      * @param inputs An array of objects. Each object has a title "name" and a value "value".
      * @param outputs An array of objects. Each object has a title "name" and a value "value".
      */
-    constructor(type, category, operationtype, inputs, outputs) {
+    constructor(category, operationtype, inputs, outputs) {
         this.width = 150;
         this.height = 200;
 
         this.x = endX - offsetX;
         this.y = endY - offsetY;
 
-        this.type = type;
         this.category = category;
         this.inputs = [];
         this.outputs = [];
@@ -158,11 +156,11 @@ class Node {
         this.drawNodules(ctx, x, y);
 
         // Draw the "box" used for input or function types
-        if (this.type === "Input" || this.type === "Variable") {
+        if (this instanceof ValueNode) {
             this.drawBox(ctx, x, y, 155, 75, 170, "center");
         }
 
-        if (this.type === "Function") {
+        if (this instanceof FunctionNode) {
             this.drawBox(ctx, x, y, 75, 27, 90, "left");
         }
     }

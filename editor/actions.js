@@ -2,7 +2,7 @@
 function newFunction() {
     nodeBlocks.push(
         new FunctionNode(
-            "Function", "Arithmetic", "Add",
+            "Arithmetic", "Add",
             [{name: "Input 1", value: null}, {name: "Input 2", value: null}],
             [{name: "Output", value: null}]
         )
@@ -14,7 +14,7 @@ function newFunction() {
 function newTrigFunction() {
     nodeBlocks.push(
         new FunctionNode(
-            "Function", "Trigonometry", "Sine",
+            "Trigonometry", "Sine",
             [{name: "Input", value: null}],
             [{name: "Output", value: null}]
         )
@@ -26,7 +26,7 @@ function newTrigFunction() {
 function newUnaryFunction() {
     nodeBlocks.push(
         new FunctionNode(
-            "Function", "Unary Operators", "Absolute Value",
+            "Unary Operators", "Absolute Value",
             [{name: "Input", value: null}],
             [{name: "Output", value: null}]
         )
@@ -38,7 +38,7 @@ function newUnaryFunction() {
 function newInput() {
     nodeBlocks.push(
         new ValueNode(
-            "Input", "Input", "5",
+            "Input", "5",
             [],
             [{name: "Value", value: 5}]
         )
@@ -50,7 +50,7 @@ function newInput() {
 function newOutput() {
     nodeBlocks.push(
         new OutputNode(
-            "Output", "Output", null,
+            "Output", null,
             [{name: "Graph", value: null}],
             []
         )
@@ -62,7 +62,7 @@ function newOutput() {
 function newVariable() {
     nodeBlocks.push(
         new ValueNode(
-            "Variable", "Variable", "x",
+            "Variable", "x",
             [],
             [{name: "Value", value: "x"}]
         )

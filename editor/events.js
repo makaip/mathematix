@@ -45,12 +45,6 @@ canvas.addEventListener("mousedown", (event) => {
             lineStartY = clickedNodeBlock.y + offsetY + 55 + (25 * nodeSelectedIndex);
         }
         hideMenu();
-
-        if (clickedNodeBlock) {
-            document.getElementById("propertyType").innerHTML = clickedNodeBlock.type;
-            document.getElementById("propertyCategory").innerHTML = clickedNodeBlock.category;
-            document.getElementById("propertyFunction").innerHTML = clickedNodeBlock.getFormula();
-        }
     }
     drawGrid();
 });
