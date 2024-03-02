@@ -433,11 +433,6 @@ function nthCosineZero(func, x) {
 }
 
 
-function getDerivative(funcStr) {
-    return nerdamer.diff(funcStr, "x");
-}
-
-
 function getFunctionInverse(funcStr) {
     funcStr = "y = " + funcStr;
 
