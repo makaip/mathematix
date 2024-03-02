@@ -39,7 +39,6 @@ function newInput() {
     nodeBlocks.push(
         new ValueNode(
             "Input", "5",
-            [],
             [{name: "Value", value: 5}]
         )
     );

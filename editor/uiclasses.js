@@ -271,7 +271,7 @@ class Node {
 
 class ValueNode extends Node {
     constructor(category, operationtype, outputs) {
-        super(category, operationtype, outputs);
+        super(category, operationtype, [], outputs);
         this.value = operationtype;
     }
 
@@ -341,36 +341,25 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Logarithm" && input2Formula !== undefined) {
             // since this is the denominator in the change of base formula
             functionsToFindZerosOf.push("log(" + input2Formula + ")");
-        }  else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
-            // TODO: refactor this code to not repeat as much
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
+        } else if ((["Tangent", "Secant", "Cosecant", "Cotangent"].includes(this.operationtype)) && input1Formula !== undefined) {
+
+            let isDenominatorSine = ["Cosecant", "Cotangent"].includes(this.operationtype);
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
-                let start = nthCosineZero(input1Formula, getRealX(0));
-                let end = nthCosineZero(input1Formula, getRealX(rcanvasWidth)) + 1;
+                let graphStart = getRealX(0);
+                let graphEnd = getRealX(rcanvasWidth);
+
+                let start = isDenominatorSine ? nthSineZero(input1Formula, graphStart) : nthCosineZero(input1Formula, graphStart);
+                let end = isDenominatorSine ? nthSineZero(input1Formula, graphEnd) + 1: nthCosineZero(input1Formula, graphEnd) + 1;
 
                 for (let i = start; i < end; i++) {
                     // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes
                     // if we have the function cos(f(x)) = 0, we find x = f^-1(cos^-1(0) + pi * n), where n is the nth asymptote
                     // so if we substitute x for cos^-1(0) + pi * n, we get the x-value of the nth asymptote
-                    asymptotes.push(Number(solution.sub("x", "pi / 2 + pi * " + i).evaluate()));
-                }
-            }
-        } else if ((this.operationtype === "Cosecant" || this.operationtype === "Cotangent") && input1Formula !== undefined) {
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
 
-            let funcInverseSolutions = getFunctionInverse(input1Formula);
-
-            for (const solution of funcInverseSolutions) {
-                let start = nthSineZero(input1Formula, getRealX(0));
-                let end = nthSineZero(input1Formula, getRealX(rcanvasWidth)) + 1;
-
-                for (let i = start; i < end; i++) {
-                    // since csc(x) = 1 / sin(x), we find when sin(x) = 0 to find asymptotes
-                    // if we have the function sin(f(x)) = 0, we find x = f^-1(sin^-1(0) + pi * n), where n is the nth asymptote
-                    // so if we substitute x for sin^-1(0) + pi * n, we get the x-value of the nth asymptote
-                    asymptotes.push(Number(solution.sub("x", "pi * " + i).evaluate()));
+                    let replaceValue = isDenominatorSine ? "pi *" : "pi / 2 + pi *"
+                    asymptotes.push(Number(solution.sub("x", replaceValue + i).evaluate()));
                 }
             }
         }
@@ -380,10 +369,8 @@ class FunctionNode extends Node {
             try {
                 zeros = zeros.concat(getZeros(func));
             } catch (e) {
-                if (e.name === "ParseError") {
-                    // do nothing, continue to the next function
-                    // this is likely caused because we set 5 = 0 or something
-                } else {
+                // do nothing if a ParseError occurs, likely caused by setting 5 = 0 or something
+                if (e.name !== "ParseError") {
                     throw e;
                 }
             }
