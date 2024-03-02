@@ -1,42 +1,60 @@
 # mathematix
 A nodeblock-based math webapp, designed to make the graphic calculator more accessible and easy to use!
 
+![image](https://github.com/makaip/mathematix/assets/98898166/3f581f15-5e96-402a-bdbc-c68c58e43e32)
+
+## Website
+
+You can view the website running the code at [makaip.github.io/mathematix]()
+
 ## Usage
 
-Users can right-click to open the context menu, where they can select from a variety of nodes to add to the canvas. Users can also press `Shift` + `A` to open the menu. Node blocks can also be added via a variety of hotkeys. For example:
+Users can right-click to open the context menu, where they can select from a variety of nodes to add to the canvas.
 
- - **Input Nodes** can be added with `Shift` + `R`. 
- - **Function Nodes** can be added with `Shift` + `F`.
- - **Output Nodes** can be added with `Shift` + `C`.
- - **Variable Nodes** can be added with `Shift` + `V`.
+### Example Graph `y = sin(x) - 5`
 
- When connecting nodes together, a variable node and output node are nessecary. To cycle between different operations in the function node blocks, simply click the operation name. To delete a node block, you can simply select the desired node block to delete and use any of the following hotkeys:
+Let's create a simple graph, `y = sin(x) - 5`.
 
-  - **Regular Delete** can be done with `Backspace`
-  - **Blender Delete** can be done with `x`
-  - **(Neo)Vi(m) Delete** can be done with `d`
+The first for any graph is to create an `output` node, which will display the contents of the graph. To do this, right click to open the context menu. Then click on `Output` to add an output node to the canvas.
 
-To pan around the editor or grapher, simply hold shift and drag. Dragging with the middle mouse wheel can also be used to pan. 
+![image](https://github.com/makaip/mathematix/assets/98898166/d2d80d0f-d21a-40c4-ad91-8265ef1d6237)
 
-## [The Editor](https://github.com/makaip/mathematix/tree/main/editor)
-This project consists of a number of different functions that serve to render all of the elements of the canvas, which draws the objects that are seen. A few of them are listed below.
+Now, we need to make our graph. Mathematix includes 17 mathematical functions, as well as the variable `x` and numerical constants (e.g., 1, 2, 3, etc.), which allow for a diverse range of graphs to be created. 
 
-### Editor Rendering
-All the different rendering functions are contained within the `draw.js` file, which is responsible for rendering everything in the editor.
+This graph need one arithmetic node for subtraction, one trigonometry node for sine, one variable node for `x`, and one input node for the number `5`. After using the context menu to create these nodes, it should look like the following:
 
- - `drawRoundedRect(ctx, x, y, width, height, radius)` draws rounded rectangles for nodes, menus, and other items.
+![image](https://github.com/makaip/mathematix/assets/98898166/55968581-4722-4222-9079-7ea2ec05adf2)
 
- - `drawTop(ctx, x, y, width, height, radius)` draws the tops of the nodes.
+The final step is to connect the nodes together. To do this, drag the nodules from the right side of each node to the left side of the next node. The final graph should look like the following:
 
- - `drawCircle(ctx, x, y, radius)` draws all the different nodules for connections to be made
+![image](https://github.com/makaip/mathematix/assets/98898166/05c55784-1577-4826-a577-e68e6901fcfe)
 
- - `drawGrid()` is called on any modification event (movement of canvas, mousedown, onclick, etc.) and is responsible for drawing backgrounds, node connections, box selection, and nodeblocks. 
+Finally, we need to click the box showing `Add` in the arithmetic node to switch it to subtraction. 
 
-### Events and Actions
-All the different events and actions are handled in [`actions.js`](https://github.com/makaip/mathematix/blob/main/editor/actions.js), which is responsible for the creation and destruction of nodeblocks, and [`events.js`](https://github.com/makaip/mathematix/blob/main/editor/events.js), which is responsible for handling user input, such as clicking and dragging.
+![image](https://github.com/makaip/mathematix/assets/98898166/5f5ac6da-0c98-4810-9e73-1f6490027df7)
 
-Events.js also handles mathematical operation selection (for example, generating new variables or trigonometric functions), based on the nodes that the user selects, and then works in conjunction with actions.js to develop the new nodes.
+If you want to continue experimenting with the graph, try changing the operation types (by clicking "Sine" or "Subtract") or adding more nodes. Thank you for following!
 
-## Graph Rendering
+## Hotkeys & More Actions
 
-sdghfksjdhfg will finish later or smthign idk
+To pan around the editor or graph, simply `Middle Click` or use `Shift` + `Left Click` and drag.
+
+| Action            | Hotkey        |
+|-------------------|---------------|
+| Open Context Menu | `Shift` + `A` |
+|                   |               |
+| Add Input Node    | `Shift` + `R` |
+| Add Function Node | `Shift` + `F` |
+| Add Output Node   | `Shift` + `C` |
+| Add Variable Node | `Shift` + `V` |
+
+
+ To delete a node block, you can simply select the desired node block (it should have a green outline) then use any of the following hotkeys:
+
+| Deletion Action         | Key                         |
+|-------------------------|-----------------------------|
+| Regular Delete          | `Delete` key or `Backspace` |
+| Blender-Style Delete    | `x`                         |
+| (Neo)Vi(m)-Style Delete | `d`                         |
+
+
