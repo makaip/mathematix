@@ -29,21 +29,6 @@ let isDraggingLine = false;
 let lineStartX, lineStartY, lineEndX, lineEndY; // Line dragging
 
 const menuItems = ['Variable', 'Arithmetic', 'Trigonometry', 'Unary Operators', 'Input', 'Output'];
-const functionMenuItems = [
-    [["Arithmetic"], ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Modulus", "Radical", "Logarithm"]],
-    [["Unary Operators"], ["Absolute Value", "Ceiling", "Floor"]], 
-    // [["Unary Operators"], ["Absolute Value", "Factorial", "Ceiling", "Floor"]], (Copy of above line with factorial)
-    // ["Linear Algebra", ["Cross Product", "Magnitude", "Dot Product", "Matrix Multiply", "Matix Transpose", "Matrix Determinant"]],
-    // ["Calculus", ["Limit", "Integral", "Derivative", "Gradient", "Summation", "Product"]],
-    // [["Boolean Logic"], ["And", "Or", "Exclusive Or", "Logical Implies", "Negotiation", "Less Than", "Greater Than", "Equal"]],
-    // ["Set", ["Union", "Intersection", "Set Difference", "Subset", "Superset", "Proper Superset", "Element Of"]],
-    [["Trigonometry"], ["Sine", "Cosine", "Tangent", "Cosecant", "Secant", "Cotangent", "Inverse Sine", "Inverse Cosine", "Inverse Tangent", "Inverse Cosecant", "Inverse Secant", "Inverse Cotangent"]]
-    // ["Statistics", ["Mean", "Median", "Minimum", "Maximum", "Quartile", "Quantile", "Standard Deviation", "Variance", "Mean Absolute Deviation", "Correlation", "Spearman", "Count", "Total"]],
-    // ["List Operations", ["Join", "Sort", "Shuffle", "Unique", "For"]],
-    // ["Visualizations", ["Histogram", "Dotplot", "Boxplot"]],
-    // ["Distributions", ["Normal", "Students", "Poisson", "Binomial", "Uniform", "PDF", "CDF"]],
-    // ["Number Theory", ["Least Common Multiple", "Greatest Common Denominator", "Round", "Sign", "nPr", "nCr"]]
-];
 
 const nodeBlocks = []; 
 let selectedNodeBlock = null;
