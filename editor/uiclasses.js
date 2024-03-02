@@ -247,6 +247,26 @@ class Node {
 
         this.operationtype = operations[newOperationIndex];
     }
+
+    inputNoduleAt(x, y) {
+        for (const nodule of this.inputs) {
+            if (nodule.collidesWith(x, y)) {
+                return nodule;
+            }
+        }
+
+        return null;
+    }
+
+    outputNoduleAt(x, y) {
+        for (const nodule of this.outputs) {
+            if (nodule.collidesWith(x, y)) {
+                return nodule;
+            }
+        }
+
+        return null;
+    }
 }
 
 class ValueNode extends Node {

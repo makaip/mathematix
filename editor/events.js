@@ -28,7 +28,7 @@ canvas.addEventListener("mousedown", (event) => {
             clickedNodeBlock.cycleNodeType();
         }
 
-        resultOfOutputNoduleClicked = isOutputNoduleClicked(selectedNodeBlock, startX, startY);
+        resultOfOutputNoduleClicked = selectedNodeBlock.outputNoduleAt(startX, startY);
 
         if (resultOfOutputNoduleClicked) {
             let nodeSelected = resultOfOutputNoduleClicked;
@@ -48,7 +48,7 @@ canvas.addEventListener("mousedown", (event) => {
 
 canvas.addEventListener("mousemove", (event) => {
     endX = event.clientX - canvas.getBoundingClientRect().left;
-    endY = event.clientY - canvas.getBoundingClientRect().top; // mysterious code breaks when touched; not sure why its not defined in main.js
+    endY = event.clientY - canvas.getBoundingClientRect().top; // mysterious code breaks when touched; not sure why it's not defined in main.js
     const cursorX = event.clientX - canvas.getBoundingClientRect().left;
     const cursorY = event.clientY - canvas.getBoundingClientRect().top;
 
@@ -60,7 +60,6 @@ canvas.addEventListener("mousemove", (event) => {
     }
 
     let overNodeBlock = null;
-    overNodeBlock = null;
     for (const nodeBlock of nodeBlocks) {
         // TODO: move into the NodeBlock class
 
@@ -80,7 +79,7 @@ canvas.addEventListener("mousemove", (event) => {
         lineEndY = endY;
         
         if (overNodeBlock !== null) {
-            resultOfMouseOverNodule = isMouseOverNodule(overNodeBlock, cursorX, cursorY);
+            resultOfMouseOverNodule = overNodeBlock.inputNoduleAt(cursorX, cursorY);
         }
 
         drawGrid();
@@ -246,30 +245,6 @@ function getMenuItemAtPosition(x, y) {
     } else {
         return null;
     }
-    
-}
-
-function isOutputNoduleClicked(nodeBlock, x, y) {
-    // TODO: move to the Nodule class
-
-    for (const nodule of nodeBlock.outputs) {
-        if (nodule.collidesWith(x, y)) {
-            return nodule;
-        }
-    }
-
-    return null;
-}
-
-function isMouseOverNodule(nodeBlock, x, y) {
-    // TODO: move to a method in the Nodule class
-    for (const nodule of nodeBlock.inputs) {
-        if (nodule.collidesWith(x, y)) {
-            return nodule;
-        }
-    }
-
-    return null;
 }
 
 function showMenu(x, y) {
