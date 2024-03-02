@@ -1,7 +1,7 @@
 canvas.addEventListener("mousedown", (event) => {
-    mouseDown = true;
-
     if (event.button === 0) {
+        mouseDown = true;
+
         startX = event.clientX - canvas.getBoundingClientRect().left; // idk what's going on around here, but I hope it works
         startY = event.clientY - canvas.getBoundingClientRect().top;
         handleMenuItemClick(getMenuItemAtPosition(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top));
