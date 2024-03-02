@@ -270,8 +270,8 @@ class Node {
 }
 
 class ValueNode extends Node {
-    constructor(category, operationtype, inputs, outputs) {
-        super(category, operationtype, inputs, outputs);
+    constructor(category, operationtype, outputs) {
+        super(category, operationtype, outputs);
         this.value = operationtype;
     }
 
@@ -394,8 +394,8 @@ class FunctionNode extends Node {
 }
 
 class OutputNode extends Node {
-    constructor(category, operationtype, inputs, outputs) {
-        super(category, operationtype, inputs, outputs);
+    constructor() {
+        super("Output", null, [{name: "Graph", value: null}], []);
     }
 
     getFormula() {

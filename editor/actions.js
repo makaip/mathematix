@@ -26,7 +26,7 @@ function newTrigFunction() {
 function newUnaryFunction() {
     nodeBlocks.push(
         new FunctionNode(
-            "Unary Operators", "Absolute Value",
+            "Unary Operator", "Absolute Value",
             [{name: "Input", value: null}],
             [{name: "Output", value: null}]
         )
@@ -48,13 +48,7 @@ function newInput() {
 }
 
 function newOutput() {
-    nodeBlocks.push(
-        new OutputNode(
-            "Output", null,
-            [{name: "Graph", value: null}],
-            []
-        )
-    );
+    nodeBlocks.push(new OutputNode());
 
     drawGrid();
 }
@@ -63,7 +57,6 @@ function newVariable() {
     nodeBlocks.push(
         new ValueNode(
             "Variable", "x",
-            [],
             [{name: "Value", value: "x"}]
         )
     );
