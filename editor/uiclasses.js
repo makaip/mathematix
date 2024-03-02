@@ -1,57 +1,75 @@
 class Nodule {
-    constructor(isInput, name, value, parent) {
+    HITBOX_RADIUS = 10;
+
+    constructor(isInput, name, value, parent, index) {
         this.isInput = isInput;
         this.name = name;
         this.connection = null;
         this.parent = parent;
+        this.index = index;
+
+        // defines x and y
+        this.refreshPos();
     }
 
-    draw(ctx, x, y, index, blockWidth, blockHeight) {
-        let xOffset = this.isInput ? 1 : blockWidth - 1;
-        let yOffset = this.isInput ? -25 * index + blockHeight - 30 : 25 * index + 55;
+    /**
+     * Refreshes the position based on the parent NodeBlock.
+     */
+    refreshPos() {
+        let xOffset = this.isInput ? 1 : this.parent.width - 1;
+        let yOffset = this.isInput ? -25 * this.index + this.parent.height - 30 : 25 * this.index + 55;
+
+        this.x = this.parent.x + xOffset;
+        this.y = this.parent.y + yOffset;
+    }
+
+    draw(ctx) {
+        this.refreshPos();
 
         ctx.fillStyle = '#9f9f9f';
-        drawCircle(ctx, x + xOffset, y + yOffset, 6);
+        drawCircle(ctx, this.x, this.y, 6);
         ctx.fill();
         ctx.stroke();
-
-        xOffset += this.isInput ? 10 : -10;
 
         ctx.fillStyle = "white";
         ctx.font = "14px Poppins";
         ctx.textAlign = this.isInput ? "left" : "right";
         ctx.textBaseline = "middle";
-        ctx.fillText(this.name, x + xOffset, y + yOffset);
+
+        let textOffset = this.isInput ? 10 : -10;
+        ctx.fillText(this.name, this.x + textOffset, this.y);
+    }
+
+    collidesWith(x, y) {
+        return (this.x - x) ** 2 + (this.y - y) ** 2 < this.HITBOX_RADIUS ** 2;
     }
 }
 
 class Node {
     /**
-     * @param type The type of node.
      * @param category The category of node.
      * @param operationtype The operation type of the node. (null if not applicable, e.g., a value node)
      * @param inputs An array of objects. Each object has a title "name" and a value "value".
      * @param outputs An array of objects. Each object has a title "name" and a value "value".
      */
-    constructor(type, category, operationtype, inputs, outputs) {
+    constructor(category, operationtype, inputs, outputs) {
         this.width = 150;
         this.height = 200;
 
         this.x = endX - offsetX;
         this.y = endY - offsetY;
 
-        this.type = type;
         this.category = category;
         this.inputs = [];
         this.outputs = [];
         this.operationtype = operationtype;
 
-        inputs.forEach(input => {
-            this.inputs.push(new Nodule(true, input.name, input.value, this));
+        inputs.forEach((input, index) => {
+            this.inputs.push(new Nodule(true, input.name, input.value, this, index));
         })
 
-        outputs.forEach(output => {
-            this.outputs.push(new Nodule(false, output.name, output.value, this));
+        outputs.forEach((output, index) => {
+            this.outputs.push(new Nodule(false, output.name, output.value, this, index));
         });
     }
 
@@ -158,11 +176,11 @@ class Node {
         this.drawNodules(ctx, x, y);
 
         // Draw the "box" used for input or function types
-        if (this.type === "Input" || this.type === "Variable") {
+        if (this instanceof ValueNode) {
             this.drawBox(ctx, x, y, 155, 75, 170, "center");
         }
 
-        if (this.type === "Function") {
+        if (this instanceof FunctionNode) {
             this.drawBox(ctx, x, y, 75, 27, 90, "left");
         }
     }
@@ -200,11 +218,70 @@ class Node {
     getAsymptotes(xMin, xMax) {
         throw new Error("This method must be overridden in a subclass");
     }
+
+    cycleNodeType() {
+        //x + 15, y + 75, blockWidth - 30, blockHeight - 170
+        // Exit if the mouse is not within the bounds of the box
+        if (startX < this.x + 15 + offsetX ||
+            startX > this.x + 150 - 15 + offsetX ||
+            startY < this.y + 75 + offsetY ||
+            startY > this.y + 200 - 100 + offsetY)
+        {
+            return;
+        }
+
+        let operationsByCategory = {
+            "Arithmetic": ["Add", "Subtract", "Multiply", "Divide", "Exponent", "Modulus", "Radical", "Logarithm"],
+            "Unary Operators": ["Absolute Value", "Ceiling", "Floor"],
+            "Trigonometry": ["Sine", "Cosine", "Tangent", "Cosecant", "Secant", "Cotangent"]
+        }
+
+        let operations = operationsByCategory[this.category];
+        let operationTypeIndex = operations.indexOf(this.operationtype);
+        let newOperationIndex = operationTypeIndex + 1;
+
+        // "Roll over" the operations array
+        if (newOperationIndex === operations.length - 1) {
+            newOperationIndex = 0;
+        }
+
+        this.operationtype = operations[newOperationIndex];
+    }
+
+    inputNoduleAt(x, y) {
+        for (const nodule of this.inputs) {
+            if (nodule.collidesWith(x, y)) {
+                return nodule;
+            }
+        }
+
+        return null;
+    }
+
+    outputNoduleAt(x, y) {
+        for (const nodule of this.outputs) {
+            if (nodule.collidesWith(x, y)) {
+                return nodule;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param x The x coordinate to check collision for
+     * @param y The y coordinate to check collision for
+     * @returns {boolean} Whether the given x and y coordinates collide with the node block
+     */
+    collidesWithBlock(x, y) {
+        return x >= this.x + offsetX && x <= this.x + this.width + offsetX
+            && y >= this.y + offsetY && y <= this.y + this.height + offsetY;
+    }
 }
 
 class ValueNode extends Node {
-    constructor(type, category, operationtype, inputs, outputs) {
-        super(type, category, operationtype, inputs, outputs);
+    constructor(category, operationtype, outputs) {
+        super(category, operationtype, [], outputs);
         this.value = operationtype;
     }
 
@@ -218,8 +295,8 @@ class ValueNode extends Node {
 }
 
 class FunctionNode extends Node {
-    constructor(type, category, operationtype, inputs, outputs) {
-        super(type, category, operationtype, inputs, outputs);
+    constructor(category, operationtype, inputs, outputs) {
+        super(category, operationtype, inputs, outputs);
 
         console.log(getZeros("x^2 - 4"));
     }
@@ -274,36 +351,25 @@ class FunctionNode extends Node {
         } else if (this.operationtype === "Logarithm" && input2Formula !== undefined) {
             // since this is the denominator in the change of base formula
             functionsToFindZerosOf.push("log(" + input2Formula + ")");
-        }  else if ((this.operationtype === "Tangent" || this.operationtype === "Secant") && input1Formula !== undefined) {
-            // TODO: refactor this code to not repeat as much
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
+        } else if ((["Tangent", "Secant", "Cosecant", "Cotangent"].includes(this.operationtype)) && input1Formula !== undefined) {
+
+            let isDenominatorSine = ["Cosecant", "Cotangent"].includes(this.operationtype);
             let funcInverseSolutions = getFunctionInverse(input1Formula);
 
             for (const solution of funcInverseSolutions) {
-                let start = nthCosineZero(input1Formula, getRealX(0));
-                let end = nthCosineZero(input1Formula, getRealX(rcanvasWidth)) + 1;
+                let graphStart = getRealX(0);
+                let graphEnd = getRealX(rcanvasWidth);
+
+                let start = isDenominatorSine ? nthSineZero(input1Formula, graphStart) : nthCosineZero(input1Formula, graphStart);
+                let end = isDenominatorSine ? nthSineZero(input1Formula, graphEnd) + 1: nthCosineZero(input1Formula, graphEnd) + 1;
 
                 for (let i = start; i < end; i++) {
                     // since tan(x) = sin(x) / cos(x), we find when cos(x) = 0 to find asymptotes
                     // if we have the function cos(f(x)) = 0, we find x = f^-1(cos^-1(0) + pi * n), where n is the nth asymptote
                     // so if we substitute x for cos^-1(0) + pi * n, we get the x-value of the nth asymptote
-                    asymptotes.push(Number(solution.sub("x", "pi / 2 + pi * " + i).evaluate()));
-                }
-            }
-        } else if ((this.operationtype === "Cosecant" || this.operationtype === "Cotangent") && input1Formula !== undefined) {
-            // TODO: bug: it does not exclude all the asymptotes that are displayed when input1Formula = x^2
 
-            let funcInverseSolutions = getFunctionInverse(input1Formula);
-
-            for (const solution of funcInverseSolutions) {
-                let start = nthSineZero(input1Formula, getRealX(0));
-                let end = nthSineZero(input1Formula, getRealX(rcanvasWidth)) + 1;
-
-                for (let i = start; i < end; i++) {
-                    // since csc(x) = 1 / sin(x), we find when sin(x) = 0 to find asymptotes
-                    // if we have the function sin(f(x)) = 0, we find x = f^-1(sin^-1(0) + pi * n), where n is the nth asymptote
-                    // so if we substitute x for sin^-1(0) + pi * n, we get the x-value of the nth asymptote
-                    asymptotes.push(Number(solution.sub("x", "pi * " + i).evaluate()));
+                    let replaceValue = isDenominatorSine ? "pi *" : "pi / 2 + pi *"
+                    asymptotes.push(Number(solution.sub("x", replaceValue + i).evaluate()));
                 }
             }
         }
@@ -313,10 +379,8 @@ class FunctionNode extends Node {
             try {
                 zeros = zeros.concat(getZeros(func));
             } catch (e) {
-                if (e.name === "ParseError") {
-                    // do nothing, continue to the next function
-                    // this is likely caused because we set 5 = 0 or something
-                } else {
+                // do nothing if a ParseError occurs, likely caused by setting 5 = 0 or something
+                if (e.name !== "ParseError") {
                     throw e;
                 }
             }
@@ -327,8 +391,8 @@ class FunctionNode extends Node {
 }
 
 class OutputNode extends Node {
-    constructor(type, category, operationtype, inputs, outputs) {
-        super(type, category, operationtype, inputs, outputs);
+    constructor() {
+        super("Output", null, [{name: "Graph", value: null}], []);
     }
 
     getFormula() {
@@ -340,6 +404,10 @@ class OutputNode extends Node {
     }
 
     getAsymptotes(xMin, xMax) {
+        if (this.inputs[0].connection === null) {
+            return [];
+        }
+
         return this.inputs[0].connection.parent.getAsymptotes(xMin, xMax);
     }
 }
@@ -359,11 +427,6 @@ function nthSineZero(func, x) {
 function nthCosineZero(func, x) {
     // floor((f(x) - cos^-1(0)) / pi)
     return Math.floor((Number(nerdamer(func).evaluate({"x": x}) - (Math.PI / 2)) / Math.PI));
-}
-
-
-function getDerivative(funcStr) {
-    return nerdamer.diff(funcStr, "x");
 }
 
 
