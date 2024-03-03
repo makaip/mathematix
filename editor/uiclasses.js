@@ -19,8 +19,8 @@ class Nodule {
         let xOffset = this.isInput ? 1 : this.parent.width - 1;
         let yOffset = this.isInput ? -25 * this.index + this.parent.height - 30 : 25 * this.index + 55;
 
-        this.x = this.parent.x + xOffset;
-        this.y = this.parent.y + yOffset;
+        this.x = this.parent.x + xOffset + offsetX;
+        this.y = this.parent.y + yOffset + offsetY;
     }
 
     draw(ctx) {
@@ -357,7 +357,7 @@ class FunctionNode extends Node {
 
         return predictionMap[this.operationtype];
     }
-    
+
     handleKeyEvent(event) {
         this.inputBox.handleKeyEvent(event);
     }
@@ -482,7 +482,7 @@ class InputBox {
 
         drawRoundedRect(
             ctx,
-            this.x - this.width / 2 + xOffset, this.y - this.height / 2 + yOffset,
+            this.x - this.width / 2 + xOffset + offsetX, this.y - this.height / 2 + yOffset + offsetY,
             this.width, this.height,
             5
         );
@@ -494,7 +494,7 @@ class InputBox {
         ctx.font = "16px Poppins";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(this.text, this.x + xOffset, this.y + yOffset);
+        ctx.fillText(this.text, this.x + xOffset + offsetX, this.y + yOffset + offsetY);
     }
 
     handleKeyEvent(event) {
@@ -517,8 +517,8 @@ class InputBox {
         let xOffset = this.parent.x - this.originalParentX;
         let yOffset = this.parent.y - this.originalParentY;
 
-        let xOffsetted = this.x - this.width / 2 + xOffset;
-        let yOffsetted = this.y - this.height / 2 + yOffset;
+        let xOffsetted = this.x - this.width / 2 + xOffset + offsetX;
+        let yOffsetted = this.y - this.height / 2 + yOffset + offsetY;
 
         this.selected = (
             x >= xOffsetted && x <= xOffsetted + this.width &&
