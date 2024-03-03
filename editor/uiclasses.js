@@ -485,8 +485,6 @@ class InputBox {
         } else if (event.key.length === 1) {
             this.text += event.key;
         }
-
-        this.draw(ctx);
     }
 
     getIntValue() {

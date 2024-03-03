@@ -198,6 +198,7 @@ window.addEventListener("keydown", (event) => {
     }
 
     selectedNodeBlock.handleKeyEvent(event);
+    drawGrid();
 });
 
 canvas.addEventListener("contextmenu", (event) => {
