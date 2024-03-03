@@ -273,6 +273,16 @@ class Node {
         return x >= this.x + offsetX && x <= this.x + this.width + offsetX
             && y >= this.y + offsetY && y <= this.y + this.height + offsetY;
     }
+
+    handleKeyEvent(event) {
+        // to be overridden in subclasses
+    }
+
+    handleMouseClick(x, y) {
+        // to be overridden in subclasses
+
+        // TODO: refactor this - make it select this node block also
+    }
 }
 
 class ValueNode extends Node {
@@ -304,6 +314,10 @@ class ValueNode extends Node {
 
     handleKeyEvent(event) {
         this.inputBox.handleKeyEvent(event);
+    }
+
+    handleMouseClick(x, y) {
+        this.inputBox.handleMouseClick(x, y);
     }
 }
 
@@ -444,6 +458,7 @@ class InputBox {
         this.width = width;
         this.height = height;
         this.text = text;
+        this.selected = false;
     }
 
     draw(ctx) {
@@ -451,7 +466,7 @@ class InputBox {
         let yOffset = this.parent.y - this.originalParentY;
 
         ctx.strokeStyle = "#3d3d3d";
-        if (this.parent === selectedNodeBlock) {
+        if (this.selected) {
             ctx.strokeStyle = "#00C49A";
         }
 
@@ -476,7 +491,7 @@ class InputBox {
     }
 
     handleKeyEvent(event) {
-        if (this.parent !== selectedNodeBlock) {
+        if (!this.selected) {
             return;
         }
 
@@ -485,6 +500,19 @@ class InputBox {
         } else if (event.key.length === 1) {
             this.text += event.key;
         }
+    }
+
+    handleMouseClick(x, y) {
+        let xOffset = this.parent.x - this.originalParentX;
+        let yOffset = this.parent.y - this.originalParentY;
+
+        let xOffsetted = this.x - this.width / 2 + xOffset;
+        let yOffsetted = this.y - this.height / 2 + yOffset;
+
+        this.selected = (
+            x >= xOffsetted && x <= xOffsetted + this.width &&
+            y >= yOffsetted && y <= yOffsetted + this.height
+        );
     }
 
     getIntValue() {

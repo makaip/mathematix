@@ -43,6 +43,10 @@ canvas.addEventListener("mousedown", (event) => {
         }
 
         hideMenu();
+
+        for (const nodeBlock of nodeBlocks) {
+            nodeBlock.handleMouseClick(startX, startY);
+        }
     }
 
     drawGrid();
