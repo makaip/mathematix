@@ -19,7 +19,7 @@ function drawGridRenderer() {
     rctx.lineWidth = 1;
 
     // Draw vertical grid lines
-    for (let x = -rgridSize + 1; x < rcanvasWidth; x += rgridSize) {
+    for (let x = -rgridSize - 1; x < rcanvasWidth; x += rgridSize) {
         rctx.beginPath();
         rctx.moveTo(x - roffsetX % rgridSize, 0);
         rctx.lineTo(x - roffsetX % rgridSize, rcanvasHeight);
@@ -27,7 +27,7 @@ function drawGridRenderer() {
     }
 
     // Draw horizontal grid lines
-    for (let y = -rgridSize - 2; y < rcanvasHeight; y += rgridSize) {
+    for (let y = -rgridSize - 5; y < rcanvasHeight; y += rgridSize) {
         rctx.beginPath();
         rctx.moveTo(0, y - roffsetY % rgridSize);
         rctx.lineTo(rcanvasWidth, y - roffsetY % rgridSize);
