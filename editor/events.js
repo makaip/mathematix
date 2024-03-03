@@ -187,7 +187,11 @@ window.addEventListener("keydown", (event) => {
         drawGrid();
     }
 
-    selectedNodeBlock.handleKeyEvent(event);
+
+    if (selectedNodeBlock !== null) {
+        selectedNodeBlock.handleKeyEvent(event);
+    }
+
     drawGrid();
     resetFunctionsToPlot();
     drawGridRenderer();
