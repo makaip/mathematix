@@ -358,8 +358,7 @@ class FunctionNode extends Node {
     }
     
     handleKeyEvent(event) {
-        //this.inputBox.handleKeyEvent(event);
-        // I have no clue what this does its just gonna get rid of an error
+        this.inputBox.handleKeyEvent(event);
     }
 
     getAsymptotes(xMin, xMax) {
@@ -521,8 +520,12 @@ class InputBox {
     }
 
     getIntValue() {
+        if (this.text === "x") {
+            return "x";
+        }
+
         let parsed = parseFloat(this.text);
-        return isNaN(parsed) ? this.text : parsed;
+        return isNaN(parsed) ? 0 : parsed;
     }
 }
 
