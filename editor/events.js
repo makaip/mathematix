@@ -157,6 +157,8 @@ window.addEventListener("keydown", (event) => {
         "A": () => showMenu(endX, endY),
         "F": newFunction,
         "R": newInput,
+        "T":newTrigFunction,
+        "U":newUnaryFunction,
         "C": newOutput,
         "V": newVariable,
     }
