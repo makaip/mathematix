@@ -134,27 +134,7 @@ canvas.addEventListener("mouseup", (event) => {
         drawGrid();
     }
 
-    functionsToPlot = [];
-    
-    for (const nodeBlock of nodeBlocks) {
-        if (nodeBlock instanceof OutputNode) {
-            functionsToPlot.push({
-                    "function": nodeBlock.getEvalFormula(),
-                    "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
-                    "color": "#00C49A"
-            });
-        }
-    }
-
-    // Draw the function of the selected node block
-    if (selectedNodeBlock !== null) {
-        functionsToPlot.push({
-            "function": selectedNodeBlock.getEvalFormula(),
-            "asymptotes": selectedNodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
-            "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
-        })
-    }
-
+    resetFunctionsToPlot();
     drawGridRenderer();
 
     if (selectedBlocks.length > 0) {
@@ -207,6 +187,8 @@ window.addEventListener("keydown", (event) => {
 
     selectedNodeBlock.handleKeyEvent(event);
     drawGrid();
+    resetFunctionsToPlot();
+    drawGridRenderer();
 });
 
 canvas.addEventListener("contextmenu", (event) => {
@@ -277,5 +259,29 @@ function handleMenuItemClick(itemText) {
 
     if (functionsByTitle[itemText]) {
         functionsByTitle[itemText]();
+    }
+}
+
+
+function resetFunctionsToPlot() {
+    functionsToPlot = [];
+
+    for (const nodeBlock of nodeBlocks) {
+        if (nodeBlock instanceof OutputNode) {
+            functionsToPlot.push({
+                "function": nodeBlock.getEvalFormula(),
+                "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+                "color": "#00C49A"
+            });
+        }
+    }
+
+    // Draw the function of the selected node block
+    if (selectedNodeBlock !== null) {
+        functionsToPlot.push({
+            "function": selectedNodeBlock.getEvalFormula(),
+            "asymptotes": selectedNodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+            "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
+        })
     }
 }
