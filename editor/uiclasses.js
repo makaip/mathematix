@@ -516,7 +516,7 @@ class InputBox {
     }
 
     getIntValue() {
-        let parsed = parseInt(this.text);
+        let parsed = parseFloat(this.text);
 
         return isNaN(parsed) ? 0 : parsed;
     }
