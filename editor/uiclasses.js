@@ -281,8 +281,8 @@ class ValueNode extends Node {
 
         this.inputBox = new InputBox(
             this,
-            this.x + this.width / 2, this.y + this.y / 2,
-            this.width * 2/3, this.height / 5,
+            this.x + this.width / 2, this.y + this.height * 2 / 3,
+            this.width * 4/5, this.height / 6,
             this.value
         );
 
