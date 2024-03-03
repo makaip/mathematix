@@ -196,6 +196,8 @@ window.addEventListener("keydown", (event) => {
         nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
         drawGrid();
     }
+
+    selectedNodeBlock.handleKeyEvent(event);
 });
 
 canvas.addEventListener("contextmenu", (event) => {
