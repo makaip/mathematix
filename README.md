@@ -47,6 +47,8 @@ To pan around the editor or graph, simply `Middle Click` or use `Shift` + `Left 
 | Add Function Node | `Shift` + `F` |
 | Add Output Node   | `Shift` + `C` |
 | Add Variable Node | `Shift` + `V` |
+| Add Trig Node     | `Shift` + `T` |
+| Add Unary Node    | `Shift` + `U` |
 
 
  To delete a node block, you can simply select the desired node block (it should have a green outline) then use any of the following hotkeys:
