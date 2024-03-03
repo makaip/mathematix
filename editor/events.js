@@ -43,6 +43,10 @@ canvas.addEventListener("mousedown", (event) => {
         }
 
         hideMenu();
+
+        for (const nodeBlock of nodeBlocks) {
+            nodeBlock.handleMouseClick(startX, startY);
+        }
     }
 
     drawGrid();
@@ -130,27 +134,7 @@ canvas.addEventListener("mouseup", (event) => {
         drawGrid();
     }
 
-    functionsToPlot = [];
-    
-    for (const nodeBlock of nodeBlocks) {
-        if (nodeBlock instanceof OutputNode) {
-            functionsToPlot.push({
-                    "function": nodeBlock.getEvalFormula(),
-                    "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
-                    "color": "#00C49A"
-            });
-        }
-    }
-
-    // Draw the function of the selected node block
-    if (selectedNodeBlock !== null) {
-        functionsToPlot.push({
-            "function": selectedNodeBlock.getEvalFormula(),
-            "asymptotes": selectedNodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
-            "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
-        })
-    }
-
+    resetFunctionsToPlot();
     drawGridRenderer();
 
     if (selectedBlocks.length > 0) {
@@ -181,7 +165,11 @@ window.addEventListener("keydown", (event) => {
         keyMap[event.key]();
     }
 
-    if (event.key === "x" || event.key === "d" || event.key === "Backspace" || event.key === "Delete") {
+    // do not delete the node block if the input box is selected
+    // this allows the user to input any values to the input box without deleting the node block
+    let allowDeletion = selectedNodeBlock === null || selectedNodeBlock.inputBox === undefined || selectedNodeBlock.inputBox.selected !== true;
+
+    if (allowDeletion && ["Backspace", "x", "d", "Delete"].includes(event.key)) {
         for (const nodule of selectedNodeBlock.inputs.concat(selectedNodeBlock.outputs)) {
             // add this condition to prevent null pointer exceptions
             if (nodule.connection === null) {
@@ -196,6 +184,11 @@ window.addEventListener("keydown", (event) => {
         nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
         drawGrid();
     }
+
+    selectedNodeBlock.handleKeyEvent(event);
+    drawGrid();
+    resetFunctionsToPlot();
+    drawGridRenderer();
 });
 
 canvas.addEventListener("contextmenu", (event) => {
@@ -266,5 +259,29 @@ function handleMenuItemClick(itemText) {
 
     if (functionsByTitle[itemText]) {
         functionsByTitle[itemText]();
+    }
+}
+
+
+function resetFunctionsToPlot() {
+    functionsToPlot = [];
+
+    for (const nodeBlock of nodeBlocks) {
+        if (nodeBlock instanceof OutputNode) {
+            functionsToPlot.push({
+                "function": nodeBlock.getEvalFormula(),
+                "asymptotes": nodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+                "color": "#00C49A"
+            });
+        }
+    }
+
+    // Draw the function of the selected node block
+    if (selectedNodeBlock !== null) {
+        functionsToPlot.push({
+            "function": selectedNodeBlock.getEvalFormula(),
+            "asymptotes": selectedNodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+            "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
+        })
     }
 }

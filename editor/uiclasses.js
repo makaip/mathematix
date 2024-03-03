@@ -175,11 +175,7 @@ class Node {
 
         this.drawNodules(ctx, x, y);
 
-        // Draw the "box" used for input or function types
-        if (this instanceof ValueNode) {
-            this.drawBox(ctx, x, y, 155, 75, 170, "center");
-        }
-
+        // Draw the "box" used for function types
         if (this instanceof FunctionNode) {
             this.drawBox(ctx, x, y, 75, 27, 90, "left");
         }
@@ -277,20 +273,51 @@ class Node {
         return x >= this.x + offsetX && x <= this.x + this.width + offsetX
             && y >= this.y + offsetY && y <= this.y + this.height + offsetY;
     }
+
+    handleKeyEvent(event) {
+        // to be overridden in subclasses
+    }
+
+    handleMouseClick(x, y) {
+        // to be overridden in subclasses
+
+        // TODO: refactor this - make it select this node block also
+    }
 }
 
 class ValueNode extends Node {
     constructor(category, operationtype, outputs) {
         super(category, operationtype, [], outputs);
-        this.value = operationtype;
+
+        this.inputBox = new InputBox(
+            this,
+            this.x + this.width / 2, this.y + this.height * 2 / 3,
+            this.width * 4/5, this.height / 6,
+            this.value
+        );
+
+        this.inputBox.text = operationtype;
+    }
+
+    draw(ctx) {
+        super.draw(ctx);
+        this.inputBox.draw(ctx);
     }
 
     getFormula() {
-        return this.value;
+        return this.inputBox.getIntValue().toString();
     }
 
     getAsymptotes(xMin, xMax) {
         return [];
+    }
+
+    handleKeyEvent(event) {
+        this.inputBox.handleKeyEvent(event);
+    }
+
+    handleMouseClick(x, y) {
+        this.inputBox.handleMouseClick(x, y);
     }
 }
 
@@ -412,6 +439,88 @@ class OutputNode extends Node {
     }
 }
 
+class InputBox {
+    /**
+     * @param parent The parent node block. Used to stay with it when it moves.
+     * @param x The x-coordinate of the box.
+     * @param y The y-coordinate of the box.
+     * @param width The width of the box.
+     * @param height The height of the box.
+     * @param text The text to display in the box.
+     */
+    constructor(parent, x, y, width, height, text) {
+        this.parent = parent;
+        this.originalParentX = parent.x;
+        this.originalParentY = parent.y;
+
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.text = text;
+        this.selected = false;
+    }
+
+    draw(ctx) {
+        let xOffset = this.parent.x - this.originalParentX;
+        let yOffset = this.parent.y - this.originalParentY;
+
+        ctx.strokeStyle = "#3d3d3d";
+        if (this.selected) {
+            ctx.strokeStyle = "#00C49A";
+        }
+
+        ctx.fillStyle = "#282828";
+        ctx.lineWidth = 2;
+
+        drawRoundedRect(
+            ctx,
+            this.x - this.width / 2 + xOffset, this.y - this.height / 2 + yOffset,
+            this.width, this.height,
+            5
+        );
+
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "white";
+        ctx.font = "16px Poppins";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(this.text, this.x + xOffset, this.y + yOffset);
+    }
+
+    handleKeyEvent(event) {
+        if (!this.selected) {
+            return;
+        }
+
+        if (event.key === "Backspace") {
+            this.text = this.text.slice(0, -1);
+        } else if (event.key.length === 1) {
+            this.text += event.key;
+        }
+    }
+
+    handleMouseClick(x, y) {
+        let xOffset = this.parent.x - this.originalParentX;
+        let yOffset = this.parent.y - this.originalParentY;
+
+        let xOffsetted = this.x - this.width / 2 + xOffset;
+        let yOffsetted = this.y - this.height / 2 + yOffset;
+
+        this.selected = (
+            x >= xOffsetted && x <= xOffsetted + this.width &&
+            y >= yOffsetted && y <= yOffsetted + this.height
+        );
+    }
+
+    getIntValue() {
+        let parsed = parseFloat(this.text);
+
+        return isNaN(parsed) ? 0 : parsed;
+    }
+}
 
 function nthSineZero(func, x) {
     // floor((f(x) - sin^-1(0)) / pi) = floor(f(x) / pi)
