@@ -185,11 +185,11 @@ window.addEventListener("keydown", (event) => {
         keyMap[event.key]();
     }
 
-    // do not allow backspace to delete the node block if the input box is selected
-    // this allows the user to delete values from the input box without deleting the node block
-    let considerBackspace = selectedNodeBlock === null || selectedNodeBlock.inputBox === undefined || selectedNodeBlock.inputBox.selected !== true;
+    // do not delete the node block if the input box is selected
+    // this allows the user to input any values to the input box without deleting the node block
+    let allowDeletion = selectedNodeBlock === null || selectedNodeBlock.inputBox === undefined || selectedNodeBlock.inputBox.selected !== true;
 
-    if ((event.key === "Backspace" && considerBackspace) || event.key === "x" || event.key === "d" || event.key === "Delete") {
+    if (allowDeletion && ["Backspace", "x", "d", "Delete"].includes(event.key)) {
         for (const nodule of selectedNodeBlock.inputs.concat(selectedNodeBlock.outputs)) {
             // add this condition to prevent null pointer exceptions
             if (nodule.connection === null) {
