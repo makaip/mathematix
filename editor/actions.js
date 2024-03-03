@@ -56,7 +56,8 @@ function newVariable() {
     nodeBlocks.push(
         new ValueNode(
             "Variable", "x",
-            [{name: "Value", value: "x"}]
+            [{name: "Value", value: "x"}],
+            false
         )
     );
 

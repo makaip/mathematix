@@ -286,14 +286,15 @@ class Node {
 }
 
 class ValueNode extends Node {
-    constructor(category, operationtype, outputs) {
+    constructor(category, operationtype, outputs, mutableInputBox = true) {
         super(category, operationtype, [], outputs);
 
         this.inputBox = new InputBox(
             this,
             this.x + this.width / 2, this.y + this.height * 2 / 3,
             this.width * 4/5, this.height / 6,
-            this.value
+            this.value,
+            mutableInputBox
         );
 
         this.inputBox.text = operationtype;
@@ -305,7 +306,7 @@ class ValueNode extends Node {
     }
 
     getFormula() {
-        return this.inputBox.getIntValue().toString();
+        return this.inputBox.getStrValue();
     }
 
     getAsymptotes(xMin, xMax) {
@@ -451,8 +452,9 @@ class InputBox {
      * @param width The width of the box.
      * @param height The height of the box.
      * @param text The text to display in the box.
+     * @param selectable Whether the input box can be selected and typed in
      */
-    constructor(parent, x, y, width, height, text) {
+    constructor(parent, x, y, width, height, text, selectable = true) {
         this.parent = parent;
         this.originalParentX = parent.x;
         this.originalParentY = parent.y;
@@ -462,6 +464,7 @@ class InputBox {
         this.width = width;
         this.height = height;
         this.text = text;
+        this.selectable = selectable;
         this.selected = false;
     }
 
@@ -507,6 +510,10 @@ class InputBox {
     }
 
     handleMouseClick(x, y) {
+        if (!this.selectable) {
+            return;
+        }
+
         let xOffset = this.parent.x - this.originalParentX;
         let yOffset = this.parent.y - this.originalParentY;
 
@@ -519,13 +526,13 @@ class InputBox {
         );
     }
 
-    getIntValue() {
+    getStrValue() {
         if (this.text === "x") {
             return "x";
         }
 
         let parsed = parseFloat(this.text);
-        return isNaN(parsed) ? 0 : parsed;
+        return isNaN(parsed) ? 0 : parsed.toString();
     }
 }
 
