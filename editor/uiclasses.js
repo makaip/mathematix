@@ -357,6 +357,11 @@ class FunctionNode extends Node {
         return predictionMap[this.operationtype];
     }
     
+    handleKeyEvent(event) {
+        //this.inputBox.handleKeyEvent(event);
+        // I have no clue what this does its just gonna get rid of an error
+    }
+
     getAsymptotes(xMin, xMax) {
         let input1Formula = this.inputs[0] === undefined ? undefined : this.inputs[0].connection.parent.getFormula();
         let input2Formula = this.inputs[1] === undefined ? undefined : this.inputs[1].connection.parent.getFormula();
@@ -517,8 +522,7 @@ class InputBox {
 
     getIntValue() {
         let parsed = parseFloat(this.text);
-
-        return isNaN(parsed) ? 0 : parsed;
+        return isNaN(parsed) ? this.text : parsed;
     }
 }
 
