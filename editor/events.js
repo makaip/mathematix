@@ -4,8 +4,9 @@ canvas.addEventListener("mousedown", (event) => {
 
         startX = event.clientX - canvas.getBoundingClientRect().left; // idk what's going on around here, but I hope it works
         startY = event.clientY - canvas.getBoundingClientRect().top;
-        handleMenuItemClick(getMenuItemAtPosition(event.clientX - canvas.getBoundingClientRect().left, event.clientY - canvas.getBoundingClientRect().top));
+        handleMenuItemClick(getMenuItemAtPosition(startX, startY));
 
+        let lastNodeBlock = selectedNodeBlock;
         let clickedNodeBlock = null;
         selectedNodeBlock = null;
         for (const nodeBlock of nodeBlocks) {
@@ -24,13 +25,36 @@ canvas.addEventListener("mousedown", (event) => {
             endY = startY;
         }
 
-        if (clickedNodeBlock instanceof FunctionNode) {
+        if (clickedNodeBlock) {
             clickedNodeBlock.cycleNodeType();
         }
 
         if (selectedNodeBlock !== null) {
             resultOfOutputNoduleClicked = selectedNodeBlock.outputNoduleAt(startX, startY);
 
+            if (lastNodeBlock !== null && event.altKey && clickedNodeBlock !== null) {
+                let availableOutput = null;
+                for (let i = lastNodeBlock.outputs.length - 1; i >= 0; i--) {
+                    if (lastNodeBlock.outputs[i].connection === null) {
+                        availableOutput = lastNodeBlock.outputs[i];
+                        break;
+                    }
+                }
+            
+                let availableInput = null;
+                for (let i = clickedNodeBlock.inputs.length - 1; i >= 0; i--) {
+                    if (clickedNodeBlock.inputs[i].connection === null) {
+                        availableInput = clickedNodeBlock.inputs[i];
+                        break;
+                    }
+                }
+            
+                if (availableOutput !== null && availableInput !== null) {
+                    availableOutput.connection = availableInput;
+                    availableInput.connection = availableOutput;
+                }
+            }
+            
             if (resultOfOutputNoduleClicked) {
                 let nodeSelected = resultOfOutputNoduleClicked;
 
