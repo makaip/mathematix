@@ -1,4 +1,27 @@
+// event handlings here
 canvas.addEventListener("mousedown", (event) => {
+    handleMouseDown(event);
+});
+
+canvas.addEventListener("mousemove", (event) => {
+    handleMouseMove(event);
+});
+
+canvas.addEventListener("mouseup", (event) => {
+    handleMouseUp(event);
+});
+
+canvas.addEventListener("mouseout", (event) => {
+    handleMouseOut(event);
+});
+
+window.addEventListener("keydown", (event) => {
+    handleKeyDown(event);
+});
+
+// -----
+
+function handleMouseDown(event) {
     if (event.button === 0) {
         mouseDown = true;
 
@@ -9,6 +32,7 @@ canvas.addEventListener("mousedown", (event) => {
         let lastNodeBlock = selectedNodeBlock;
         let clickedNodeBlock = null;
         selectedNodeBlock = null;
+        
         for (const nodeBlock of nodeBlocks) {
             if (nodeBlock.collidesWithBlock(startX, startY)) {
                 clickedNodeBlock = nodeBlock;
@@ -40,7 +64,7 @@ canvas.addEventListener("mousedown", (event) => {
                         break;
                     }
                 }
-            
+
                 let availableInput = null;
                 for (let i = clickedNodeBlock.inputs.length - 1; i >= 0; i--) {
                     if (clickedNodeBlock.inputs[i].connection === null) {
@@ -48,13 +72,13 @@ canvas.addEventListener("mousedown", (event) => {
                         break;
                     }
                 }
-            
+
                 if (availableOutput !== null && availableInput !== null) {
                     availableOutput.connection = availableInput;
                     availableInput.connection = availableOutput;
                 }
             }
-            
+
             if (resultOfOutputNoduleClicked) {
                 let nodeSelected = resultOfOutputNoduleClicked;
 
@@ -74,9 +98,9 @@ canvas.addEventListener("mousedown", (event) => {
     }
 
     drawGrid();
-});
+}
 
-canvas.addEventListener("mousemove", (event) => {
+function handleMouseMove(event) {
     endX = event.clientX - canvas.getBoundingClientRect().left;
     endY = event.clientY - canvas.getBoundingClientRect().top; // mysterious code breaks when touched; not sure why it's not defined in main.js
     const cursorX = event.clientX - canvas.getBoundingClientRect().left;
@@ -101,7 +125,7 @@ canvas.addEventListener("mousemove", (event) => {
     if (isDraggingLine) {
         lineEndX = endX;
         lineEndY = endY;
-        
+
         if (overNodeBlock !== null) {
             resultOfMouseOverNodule = overNodeBlock.inputNoduleAt(cursorX, cursorY);
         }
@@ -136,11 +160,11 @@ canvas.addEventListener("mousemove", (event) => {
         startY = cursorY;
         drawGrid();
     }
-});
+}
 
-canvas.addEventListener("mouseup", (event) => {
+function handleMouseUp() {
     mouseDown = false;
-    
+
     document.getElementsByTagName("body")[0].style.cursor = "auto";
     if (isDraggingLine) {
         isDraggingLine = false;
@@ -166,23 +190,23 @@ canvas.addEventListener("mouseup", (event) => {
     }
 
     drawGrid();
-});
+}
 
-canvas.addEventListener("mouseout", (event) => {
+function handleMouseOut() {
     if (isDragging) {
         isDragging = false;
         drawGrid();
     }
-});
+}
 
-window.addEventListener("keydown", (event) => {
+function handleKeyDown() {
     let keyMap = {
         "Escape": hideMenu,
         "A": () => showMenu(endX, endY),
         "F": newFunction,
         "R": newInput,
-        "T":newTrigFunction,
-        "U":newUnaryFunction,
+        "T": newTrigFunction,
+        "U": newUnaryFunction,
         "C": newOutput,
         "V": newVariable,
     }
@@ -201,7 +225,7 @@ window.addEventListener("keydown", (event) => {
             if (nodule.connection === null) {
                 continue;
             }
-            
+
             // this is some black magic trickery, but it makes sense if you synapse really hard
             nodule.connection.connection = null;
             nodule.connection = null;
@@ -219,7 +243,8 @@ window.addEventListener("keydown", (event) => {
     drawGrid();
     resetFunctionsToPlot();
     drawGridRenderer();
-});
+}
+
 
 canvas.addEventListener("contextmenu", (event) => {
     event.preventDefault(); // Prevent the default context menu
