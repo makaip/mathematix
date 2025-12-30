@@ -1,86 +1,112 @@
-function resizeCanvasRenderer() {
-    rcanvas.width = rcanvas.clientWidth;
-    rcanvas.height = rcanvas.clientHeight;
-    rcanvasWidth = rcanvas.width;
-    rcanvasHeight = rcanvas.height;
-    drawGridRenderer();
+let functionsToPlot = []; // legacy compatibility layer for editor
+
+function drawGridRenderer() { 
+    if (window.grapher) {
+        // sync functionsToPlot array to grapher
+        window.grapher.clear();
+        for (const funcObj of functionsToPlot) {
+            const func = new PlottableFunction(funcObj.function, funcObj.color); 
+            func.asymptotes = funcObj.asymptotes || [];
+            window.grapher.addFunction(func);
+        }
+    }
 }
 
-// Function to draw the infinite grid and axes
-function drawGridRenderer() {
-    rctx.clearRect(0, 0, rcanvasWidth, rcanvasHeight);
-
-    // Set background color to dark gray
-    rctx.fillStyle = '#1d1d1d'; // Dark gray
-    rctx.fillRect(0, 0, rcanvasWidth, rcanvasHeight);
-
-    // Set grid line color to #282828
-    rctx.strokeStyle = '#282828'; // Darker gray
-    rctx.lineWidth = 1;
-
-    // Draw vertical grid lines
-    for (let x = -rgridSize - 1; x < rcanvasWidth; x += rgridSize) {
-        rctx.beginPath();
-        rctx.moveTo(x - roffsetX % rgridSize, 0);
-        rctx.lineTo(x - roffsetX % rgridSize, rcanvasHeight);
-        rctx.stroke();
+class Grid {
+    constructor(size, backgroundColor = '#1d1d1d', lineColor = '#282828') {
+        this.size = size;
+        this.backgroundColor = backgroundColor;
+        this.lineColor = lineColor;
+        this.axisColor = '#fff';
     }
 
-    // Draw horizontal grid lines
-    for (let y = -rgridSize - 5; y < rcanvasHeight; y += rgridSize) {
-        rctx.beginPath();
-        rctx.moveTo(0, y - roffsetY % rgridSize);
-        rctx.lineTo(rcanvasWidth, y - roffsetY % rgridSize);
-        rctx.stroke();
+    draw(ctx, viewport, canvasWidth, canvasHeight) {
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.fillStyle = this.backgroundColor;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        ctx.strokeStyle = this.lineColor;
+        ctx.lineWidth = 1;
+
+        for (let x = -this.size - 1; x < canvasWidth; x += this.size) {
+            ctx.beginPath();
+            ctx.moveTo(x - viewport.offsetX % this.size, 0);
+            ctx.lineTo(x - viewport.offsetX % this.size, canvasHeight);
+            ctx.stroke();
+        }
+
+        for (let y = -this.size - 5; y < canvasHeight; y += this.size) {
+            ctx.beginPath();
+            ctx.moveTo(0, y - viewport.offsetY % this.size);
+            ctx.lineTo(canvasWidth, y - viewport.offsetY % this.size);
+            ctx.stroke();
+        }
+
+        ctx.strokeStyle = this.axisColor;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, canvasHeight / 2 - viewport.offsetY);
+        ctx.lineTo(canvasWidth, canvasHeight / 2 - viewport.offsetY);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(canvasWidth / 2 - viewport.offsetX, 0);
+        ctx.lineTo(canvasWidth / 2 - viewport.offsetX, canvasHeight);
+        ctx.stroke();
+    }
+}
+
+// sort of weird to have the function handle its own plotting-- may fix this later
+class PlottableFunction { 
+    constructor(expression, color = "#00C49A") {
+        this.expression = expression;
+        this.color = color;
+        this.asymptotes = [];
+        this.visible = true;
     }
 
-    // Draw X-axis
-    rctx.strokeStyle = '#fff';
-    rctx.lineWidth = 2;
-    rctx.beginPath();
-    rctx.moveTo(0, rcanvasHeight / 2 - roffsetY);
-    rctx.lineTo(rcanvasWidth, rcanvasHeight / 2 - roffsetY);
-    rctx.stroke();
+    evaluate(x) {
+        try {
+            return eval(this.expression.replaceAll("x", "(" + x + ")"));
+        } catch (e) {
+            return NaN;
+        }
+    }
 
-    // Draw Y-axis
-    rctx.strokeStyle = '#fff';
-    rctx.lineWidth = 2;
-    rctx.beginPath();
-    rctx.moveTo(rcanvasWidth / 2 - roffsetX, 0);
-    rctx.lineTo(rcanvasWidth / 2 - roffsetX, rcanvasHeight);
-    rctx.stroke();
+    plot(ctx, viewport, canvasWidth, canvasHeight) {
+        if (!this.visible) return;
 
-    rctx.lineWidth = 2.25;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2.25;
+        ctx.beginPath();
 
-    for (const func of functionsToPlot) {
-        rctx.strokeStyle = func["color"] || "#00C49A";
-        rctx.beginPath();
+        let lastRealX = viewport.screenToWorld(0, 0, canvasWidth, canvasHeight).x;
 
-        let lastRealX = getRealX(0);
+        for (let x = 0; x < canvasWidth; x++) {
+            const realX = viewport.screenToWorld(x, 0, canvasWidth, canvasHeight).x;
 
-        // Plot the function points within the canvas bounds
-        for (let x = 0; x < rcanvasWidth; x++) {
-            const realX = getRealX(x);
-
+            // asymptote check
             let isAsymptote = false;
-            for (const asymptote of func["asymptotes"]) {
-                if (lastRealX === asymptote || realX === asymptote || (lastRealX < asymptote && realX > asymptote)) {
+            for (const asymptote of this.asymptotes) {
+                if (lastRealX === asymptote || realX === asymptote ||
+                    (lastRealX < asymptote && realX > asymptote)) {
                     isAsymptote = true;
                 }
             }
 
-            const y = eval(func["function"].replaceAll("x", "(" + realX + ")"));
-            const realY = -y * 40 + (rcanvasHeight / 2 - roffsetY);
+            // eval function from screen X to get y, the conv to screen coords
+            const y = this.evaluate(realX);
+            const realY = -y * 40 + (canvasHeight / 2 - viewport.offsetY);
 
             if (x === 0 || isAsymptote) {
-                rctx.moveTo(x, realY);
+                ctx.moveTo(x, realY);
             } else {
-                rctx.lineTo(x, realY);
+                ctx.lineTo(x, realY);
             }
 
             lastRealX = realX;
         }
 
-        rctx.stroke();
+        ctx.stroke();
     }
 }

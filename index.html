@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Mathematix</title>
     <link rel="icon" type="image/png" href="/assets/logos/10.png">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
+
 <body>
     <div class="navbar">
         <div class="logo-container">
-            <img class="logo" src="./assets/logos/tp-logo2.png">    
+            <img class="logo" src="./assets/logos/tp-logo2.png">
         </div>
-        <h4 style="display: inline" >Mathematix / Untitled-1</h4>
+        <h4 style="display: inline">Mathematix / Untitled-1</h4>
     </div>
     <div class="editor-container">
         <div id="sidebarleft" class="sidebar left" style="width: 250px; padding-right: 10px;" hidden>
-            <button class="icon-button" style="float: right; padding-left: 20px; margin: 0px;" onclick="togglePanel()"><span class="material-symbols-outlined">
-                arrow_back_ios
+            <button class="icon-button" style="float: right; padding-left: 20px; margin: 0px;"
+                onclick="togglePanel()"><span class="material-symbols-outlined">
+                    arrow_back_ios
                 </span></button>
             <br>
             <br>
@@ -27,14 +31,15 @@
             <p style="font-size: 14px;">Node Function: <span class="code" id="propertyFunction">none</span></p>
             <br>
             <h4>World Properties</h4>
-            
+
         </div>
         <canvas id="gridCanvas" width="825" height="770" style="padding-right: 2px"></canvas>
         <canvas id="graphCanvas" width="825" height="770"></canvas>
 
-        <button hidden id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;"><span class="material-symbols-outlined" onclick="togglePanel();" >
-            arrow_forward_ios
-        </span></button>
+        <button hidden id="openpanelbutton" class="icon-button" style="position: absolute; left: 1%; top: 70px;"><span
+                class="material-symbols-outlined" onclick="togglePanel();">
+                arrow_forward_ios
+            </span></button>
 
         <!--
             FIREFOX
@@ -72,8 +77,10 @@
     <script src="editor/main.js"></script>
     <script src="editor/events.js"></script>
 
+    <script src="grapher/viewport.js"></script>
     <script src="grapher/draw.js"></script>
-    <script src="grapher/main.js"></script>
     <script src="grapher/events.js"></script>
+    <script src="grapher/main.js"></script>
 </body>
+
 </html>

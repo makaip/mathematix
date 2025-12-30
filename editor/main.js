@@ -28,6 +28,11 @@ let fps;
 let isDraggingLine = false;
 let lineStartX, lineStartY, lineEndX, lineEndY; // Line dragging
 
+// legacy compatibility for grapher
+let roffsetX = 0;
+let roffsetY = 0;
+let rgridSize = 20;
+
 const menuItems = ['Variable', 'Arithmetic', 'Trigonometry', 'Unary Operators', 'Input', 'Output'];
 
 const nodeBlocks = []; 

@@ -1,44 +1,69 @@
-// Define rcanvas and context
-const rcanvas = document.getElementById('graphCanvas');
-const rctx = rcanvas.getContext('2d');
+class Grapher {
+    constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
 
-// Set the rcanvas resolution to match its CSS size
-rcanvas.width = rcanvas.clientWidth;
-rcanvas.height = rcanvas.clientHeight;
+        this.ctx = this.canvas.getContext('2d');
+        this.viewport = new Viewport();
+        this.grid = new Grid(20);
 
-// Initial grid size and rcanvas dimensions
-let rgridSize = 20;
-let rcanvasWidth = rcanvas.width;
-let rcanvasHeight = rcanvas.height;
+        this.functions = [];
+        this.controller = null;
 
-// Offset values for panning
-let roffsetX = 0;
-let roffsetY = 0;
+        this.init();
+    }
 
-let functionsToPlot = [];
+    init() {
+        this.resize();
 
-// Set the rcanvas rendering mode to "crisp edges" to make it look sharper
-rctx.imageSmoothingEnabled = false;
+        this.ctx.imageSmoothingEnabled = false;
+        this.controller = new GrapherController(this);
 
-function getRealX(x) {
-    return (x - rcanvasWidth / 2 + roffsetX) * 0.025;
+        this.render();
+    }
+
+    resize() {
+        this.canvas.width = this.canvas.clientWidth;
+        this.canvas.height = this.canvas.clientHeight;
+        this.render();
+    }
+
+    render() {
+        this.grid.draw(this.ctx, this.viewport, this.canvas.width, this.canvas.height);
+
+        for (const func of this.functions) {
+            func.plot(this.ctx, this.viewport, this.canvas.width, this.canvas.height);
+        }
+    }
+
+    addFunction(func) {
+        this.functions.push(func);
+        this.render();
+
+        return func;
+    }
+
+    removeFunction(func) {
+        const index = this.functions.indexOf(func);
+
+        if (index > -1) {
+            this.functions.splice(index, 1);
+            this.render();
+        }
+    }
+
+    clear() {
+        this.functions = [];
+        this.render();
+    }
 }
 
-function evaluateFunction(funcString, x) {
-    console.log(funcString);
-    return nerdamer(funcString.replace("x", x));
-}
+const grapher = new Grapher('graphCanvas');
 
-// Push mathematical functions as strings to the functionsToPlot array
-//functionsToPlot.push("(x ** 3)");
-//functionsToPlot.push("Math.sin(x)");
-//functionsToPlot.push("x - 1")
-//functionsToPlot.push("Math.sin(x)")
-//functionsToPlot.push("(x ** 4) - 2 * (x ** 2) - 5")
-//functionsToPlot.push("x ** 2")
+// new test functions
+// grapher.addFunction(new PlottableFunction('x ** 3', '#ff5733'));
+// grapher.addFunction(new PlottableFunction('Math.sin(x)', '#00C49A'));
+// grapher.addFunction(new PlottableFunction('x - 1', '#3498db'));
+// grapher.addFunction(new PlottableFunction('(x ** 4) - 2 * (x ** 2) - 5', '#e74c3c'));
+// grapher.addFunction(new PlottableFunction('x ** 2', '#9b59b6'));
 
-// Initial drawing of the grid
-drawGridRenderer();
-
-
-
+window.grapher = grapher;
