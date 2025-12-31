@@ -130,7 +130,7 @@ class Node {
     drawNodeBase(ctx, x, y) {
         // Draw a rounded rectangle representing the node block
         ctx.fillStyle = '#343434';
-        if (this === selectedNodeBlock) {
+        if (this === selectedNodeBlock || (Array.isArray(selectedNodeBlock) && selectedNodeBlock.includes(this)) || selectedBlocks.includes(this)) {
             // The outline for the selected node block
             ctx.strokeStyle = '#00C49A';
             ctx.lineWidth = 2;

@@ -32,6 +32,7 @@ function handleMouseDown(event) {
         let lastNodeBlock = selectedNodeBlock;
         let clickedNodeBlock = null;
         selectedNodeBlock = null;
+        selectedBlocks.length = 0;
         
         for (const nodeBlock of nodeBlocks) {
             if (nodeBlock.collidesWithBlock(startX, startY)) {
@@ -56,7 +57,7 @@ function handleMouseDown(event) {
         if (selectedNodeBlock !== null) {
             resultOfOutputNoduleClicked = selectedNodeBlock.outputNoduleAt(startX, startY);
 
-            if (lastNodeBlock !== null && event.altKey && clickedNodeBlock !== null) {
+            if (lastNodeBlock !== null && !Array.isArray(lastNodeBlock) && event.altKey && clickedNodeBlock !== null) {
                 let availableOutput = null;
                 for (let i = lastNodeBlock.outputs.length - 1; i >= 0; i--) {
                     if (lastNodeBlock.outputs[i].connection === null) {
@@ -132,13 +133,22 @@ function handleMouseMove(event) {
 
         drawGrid();
     } else if (isDragging) {
-        const deltaX = cursorX - startX;
-        const deltaY = cursorY - startY;
+        selectedBlocks.length = 0;
 
-        if (selectedNodeBlock) {
-            for (const block of selectedNodeBlock) {
-                block.x += deltaX;
-                block.y += deltaY;
+        const boxX = Math.min(startX, endX);
+        const boxY = Math.min(startY, endY);
+        const boxW = Math.abs(endX - startX);
+        const boxH = Math.abs(endY - startY);
+
+        for (const node of nodeBlocks) {
+            const nodeScreenX = node.x + offsetX;
+            const nodeScreenY = node.y + offsetY;
+
+            if (boxX < nodeScreenX + node.width &&
+                boxX + boxW > nodeScreenX &&
+                boxY < nodeScreenY + node.height &&
+                boxY + boxH > nodeScreenY) {
+                selectedBlocks.push(node);
             }
         }
 
@@ -217,26 +227,37 @@ function handleKeyDown() {
 
     // do not delete the node block if the input box is selected
     // this allows the user to input any values to the input box without deleting the node block
-    let allowDeletion = selectedNodeBlock === null || selectedNodeBlock.inputBox === undefined || selectedNodeBlock.inputBox.selected !== true;
+    let allowDeletion = selectedNodeBlock === null || 
+                        (Array.isArray(selectedNodeBlock) ? true : (selectedNodeBlock.inputBox === undefined || selectedNodeBlock.inputBox.selected !== true));
 
     if (allowDeletion && ["Backspace", "x", "d", "Delete"].includes(event.key)) {
-        for (const nodule of selectedNodeBlock.inputs.concat(selectedNodeBlock.outputs)) {
-            // add this condition to prevent null pointer exceptions
-            if (nodule.connection === null) {
-                continue;
+        const blocksToDelete = Array.isArray(selectedNodeBlock) ? [...selectedNodeBlock] : (selectedNodeBlock ? [selectedNodeBlock] : []);
+
+        for (const block of blocksToDelete) {
+            for (const nodule of block.inputs.concat(block.outputs)) {
+                // add this condition to prevent null pointer exceptions
+                if (nodule.connection === null) {
+                    continue;
+                }
+
+                // this is some black magic trickery, but it makes sense if you synapse really hard
+                nodule.connection.connection = null;
+                nodule.connection = null;
             }
 
-            // this is some black magic trickery, but it makes sense if you synapse really hard
-            nodule.connection.connection = null;
-            nodule.connection = null;
+            const index = nodeBlocks.indexOf(block);
+            if (index > -1) {
+                nodeBlocks.splice(index, 1);
+            }
         }
-
-        nodeBlocks.splice(nodeBlocks.indexOf(selectedNodeBlock), 1);
+        
+        selectedNodeBlock = null;
+        selectedBlocks.length = 0;
         drawGrid();
     }
 
 
-    if (selectedNodeBlock !== null) {
+    if (selectedNodeBlock !== null && !Array.isArray(selectedNodeBlock)) {
         selectedNodeBlock.handleKeyEvent(event);
     }
 
@@ -333,10 +354,13 @@ function resetFunctionsToPlot() {
 
     // Draw the function of the selected node block
     if (selectedNodeBlock !== null) {
-        functionsToPlot.push({
-            "function": selectedNodeBlock.getEvalFormula(),
-            "asymptotes": selectedNodeBlock.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
-            "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
-        })
+        const blocks = Array.isArray(selectedNodeBlock) ? selectedNodeBlock : [selectedNodeBlock];
+        for (const block of blocks) {
+            functionsToPlot.push({
+                "function": block.getEvalFormula(),
+                "asymptotes": block.getAsymptotes(roffsetX - rgridSize / 2, roffsetX + rgridSize / 2),
+                "color": "#ff3b65"  // the opposite color of Mathematix Mint Green (tm)
+            });
+        }
     }
 }
